@@ -1,0 +1,77 @@
+{
+	"name": "vscode-regexp-preivew",
+	"displayName": "RegExp Preview and Editor",
+	"description": "VSCode extension based on regexper-static, support new version of vscode",
+	"version": "1.0.0",
+	"publisher": "Lulus",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"galleryBanner": {
+		"color": "#3B3738",
+		"theme": "dark"
+	},
+	"icon": "docs/icon.png",
+	"homepage": "https://github.com/snys98/vscode-regexp-preivew/blob/master/README.md",
+	"bugs": {
+		"url": "https://github.com/snys98/vscode-regexp-preivew/issues",
+		"email": "newlight@qq.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/snys98/vscode-regexp-preivew.git"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.showRegexper",
+		"onCommand:extension.regexpEditor"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.showRegexper",
+				"title": "RegExp Preview"
+			},
+			{
+				"command": "extension.regexpEditor",
+				"title": "RegExp Editor"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorHasSelection",
+					"command": "extension.showRegexper",
+					"group": "1_modification"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^12.0.2",
+		"mocha": "^6.1.4",
+		"typescript": "^3.4.5",
+		"vscode": "^1.1.32"
+	},
+	"__metadata": {
+		"id": "4c4d07a1-7488-464d-9cf7-c178303dcad9",
+		"publisherId": "8750a393-0618-4dd7-b0b0-e190dd9e358f",
+		"publisherDisplayName": "Lulus Young",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"preRelease": false,
+		"installedTimestamp": 1653355785818
+	}
+}

@@ -1,0 +1,149 @@
+{
+	"name": "hardhat-solidity",
+	"publisher": "NomicFoundation",
+	"displayName": "Solidity + Hardhat",
+	"description": "Solidity and Hardhat support for Visual Studio Code",
+	"license": "MIT",
+	"version": "0.4.0",
+	"private": true,
+	"main": "./client/out/extension.js",
+	"module": "./client/out/extension.js",
+	"icon": "docs/images/hardhat-vscode-logo.png",
+	"categories": [
+		"Programming Languages",
+		"Snippets",
+		"Linters",
+		"Formatters"
+	],
+	"extensionKind": [
+		"workspace"
+	],
+	"keywords": [
+		"solidity",
+		"ethereum",
+		"hardhat",
+		"evm",
+		"blockchain",
+		"compiler"
+	],
+	"homepage": "https://hardhat.org/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NomicFoundation/hardhat-vscode"
+	},
+	"bugs": {
+		"url": "https://github.com/NomicFoundation/hardhat-vscode/issues"
+	},
+	"engines": {
+		"vscode": "^1.65.0"
+	},
+	"activationEvents": [
+		"onLanguage:solidity",
+		"workspaceContains:**/hardhat.config.ts"
+	],
+	"scripts": {
+		"build": "tsc -b ./client/tsconfig.json && tsc -b ./server/tsconfig.build.json && tsc -b",
+		"watch": "concurrently -n client,server \"tsc -b -w ./client/tsconfig.json\" \"tsc -b -w ./server/tsconfig.build.json\"",
+		"postinstall": "yarn install --cwd ./client && yarn install --cwd ./server",
+		"test:integration": "yarn run build && node ./out/test/runTests.js",
+		"test:unit": "yarn --cwd ./server run test",
+		"test": "yarn run test:unit && yarn run test:integration",
+		"test:coverage": "yarn --cwd ./server run test:coverage",
+		"lint": "yarn prettier --check && yarn eslint && yarn --cwd ./client lint && yarn --cwd ./server lint",
+		"lint:fix": "yarn prettier --write && yarn eslint --fix && yarn --cwd ./client lint:fix && yarn --cwd ./server lint:fix",
+		"prettier": "prettier *.md *.json \"{docs,syntaxes,.github,.vscode}/**/*.{md,yml,json}\" \"test/**/*.{ts,json}\"",
+		"eslint": "eslint ./test/**/*.ts",
+		"clean": "rimraf ./dist ./out && yarn --cwd ./client clean && yarn --cwd ./server clean",
+		"prepackage": "yarn clean && node ./scripts/bundle.js",
+		"package": "node ./scripts/package.js",
+		"postpackage": "yarn clean && yarn build",
+		"prefullcheck": "yarn clean",
+		"fullcheck": "yarn lint && yarn build && yarn test && yarn package"
+	},
+	"devDependencies": {
+		"@changesets/cli": "2.21.1",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.2.2",
+		"@types/module-alias": "2.0.1",
+		"@types/node": "^16.9.1",
+		"@types/vscode": "^1.65.0",
+		"@typescript-eslint/eslint-plugin": "5.8.0",
+		"@typescript-eslint/parser": "5.8.0",
+		"@vscode/test-electron": "2.1.3",
+		"concurrently": "7.1.0",
+		"esbuild": "0.14.23",
+		"eslint": "8.5.0",
+		"eslint-config-prettier": "8.3.0",
+		"eslint-plugin-import": "2.26.0",
+		"glob": "^7.1.7",
+		"mocha": "^9.1.1",
+		"prettier": "2.5.1",
+		"rimraf": "3.0.2",
+		"typescript": "^4.4.3",
+		"vsce": "2.6.7",
+		"wsrun": "5.2.4",
+		"yarn": "^1.22.11"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^7.0.0"
+	},
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Hardhat",
+			"properties": {
+				"hardhat-language-server.trace.server.verbosity": {
+					"type": "string",
+					"description": "Traces the communication between VS Code and the solidity language server.",
+					"enum": [
+						"off",
+						"message",
+						"verbose"
+					],
+					"default": "off"
+				},
+				"hardhat.telemetry": {
+					"type": "boolean",
+					"markdownDescription": "Allow **Hardhat for Visual Studio Code** to send extension telemetry. This helps us understand how **Hardhat for Visual Studio Code** is used and how it is performing. Read more in our [privacy policy](https://hardhat.org/privacy-policy.html).\n\n&nbsp;\n\n*__Note:__ **Hardhat for Visual Studio Code** respects the global **Telemetry Level** setting, and will only send telemetry if enabled at both global and extension level.*",
+					"default": false
+				}
+			}
+		},
+		"languages": [
+			{
+				"id": "solidity",
+				"aliases": [
+					"Solidity",
+					"solidity"
+				],
+				"extensions": [
+					".sol"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "solidity",
+				"scopeName": "source.solidity",
+				"path": "./syntaxes/solidity.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "solidity",
+				"path": "./snippets/solidity.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "dada159b-1dfe-49fc-a369-0e08ecdff9b3",
+		"publisherId": "973909a1-f7d7-44c0-9261-c2e7903bf2dd",
+		"publisherDisplayName": "Nomic Foundation",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"preRelease": false,
+		"installedTimestamp": 1653633514226
+	}
+}

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const Shaderlab_1=require("./Shaderlab");class ShaderlabDefinitionProvider{provideDefinition(e,r,i){return new Shaderlab_1.default(e,r).getDefinition()}}exports.default=ShaderlabDefinitionProvider;
