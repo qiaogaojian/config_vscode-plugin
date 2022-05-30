@@ -1,0 +1,75 @@
+{
+	"name": "file-size",
+	"displayName": "file-size",
+	"description": "Show the current text file size in the status bar.",
+	"version": "1.0.0",
+	"publisher": "zh9528",
+	"engines": {
+		"vscode": "^1.50.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zhcode-fun/file-size"
+	},
+	"keywords": [
+		"file-size",
+		"filesize",
+		"file",
+		"size",
+		"status bar"
+	],
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"license": "MIT",
+	"main": "./extension.js",
+	"icon": "icon.png",
+	"contributes": {
+		"configuration": [
+			{
+				"title": "file-size",
+				"properties": {
+					"file-size.position": {
+						"type": "string",
+						"default": "right",
+						"description": "set left or right  设置显示位置. E.g \"file-size.position\":\"left\""
+					},
+					"file-size.priority": {
+						"type": "integer",
+						"default": 0,
+						"description": "Higher values mean the item should be shown more to the left. 设置优先级，值越大越往左"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.50.0",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.0",
+		"@types/node": "^12.11.7",
+		"eslint": "^7.9.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.1.3",
+		"typescript": "^4.0.2",
+		"vscode-test": "^1.4.0"
+	},
+	"__metadata": {
+		"id": "9734a8c6-1c74-4259-92ba-e4c3edf4a483",
+		"publisherId": "71280a6f-7240-4520-8420-569f9e905dd1",
+		"publisherDisplayName": "zhcode",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"preRelease": false,
+		"installedTimestamp": 1653728640814
+	}
+}
