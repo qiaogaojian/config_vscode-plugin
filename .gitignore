@@ -13,3 +13,4 @@ extensions/ms-python.python-2022.6.2/pythonFiles/lib/python/debugpy
 extensions/ms-toolsai.jupyter-2022.4.1021342353/pythonFiles/lib/python/pyls_jsonrpc/__pycache__
 extensions/ms-toolsai.jupyter-2022.4.1021342353/pythonFiles/vscode_datascience_helpers/__pycache__
 extensions/ms-toolsai.jupyter-2022.4.1021342353/pythonFiles/vscode_datascience_helpers/daemon/__pycache__
+test
