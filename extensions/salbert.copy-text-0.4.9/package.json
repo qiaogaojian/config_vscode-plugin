@@ -1,0 +1,136 @@
+{
+	"name": "copy-text",
+	"displayName": "Copy Text",
+	"description": "Offers more copy options: Copies text without colors, optionally adds metainfo like document name and date.",
+	"version": "0.4.9",
+	"publisher": "salbert",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"lint": "eslint . --ext .ts,.tsx",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"publish": "vsce publish"
+	},
+	"icon": "images/icon.png",
+	"keywords": [
+		"copy",
+		"text",
+		"plain",
+		"colors",
+		"metainfo"
+	],
+	"galleryBanner": {
+		"color": "#252627",
+		"theme": "dark"
+	},
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"categories": [
+		"Other",
+		"Formatters"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "copy-text.copyTextOnly",
+				"title": "Copy Without Syntax Highlighting"
+			},
+			{
+				"command": "copy-text.copyAndAppendText",
+				"title": "Copy and Append Text Without Syntax Highlighting"
+			},
+			{
+				"command": "copy-text.copyTextWithMetadata",
+				"title": "Copy Text With Metainfo"
+			},
+			{
+				"command": "copy-text.copyAndAppendTextWithMetadata",
+				"title": "Copy and Append Text With Metainfo"
+			},
+			{
+				"command": "copy-text.copyCodeForMarkdown",
+				"title": "Copy Code for Markdown"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "copy-text.copyTextOnly",
+					"key": "ctrl+shift+c",
+					"group": "9_cutcopypaste"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "copy-text.copyTextOnly",
+				"key": "ctrl+shift+c"
+			},
+			{
+				"command": "copy-text.copyAndAppendText",
+				"key": "ctrl+shift+a ctrl+shift+c"
+			},
+			{
+				"command": "copy-text.copyTextWithMetadata",
+				"key": "ctrl+shift+m"
+			},
+			{
+				"command": "copy-text.copyAndAppendTextWithMetadata",
+				"key": "ctrl+shift+a ctrl+shift+m"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Copy text configuration",
+			"properties": {
+				"copy-text.fullPath": {
+					"type": "boolean",
+					"default": false,
+					"description": "When enabled, the full file path is included in the metainfo."
+				},
+				"copy-text.includeDate": {
+					"type": "boolean",
+					"default": true,
+					"description": "When enabled, the date is added to the metainfo."
+				},
+				"copy-text.includeTime": {
+					"type": "boolean",
+					"default": true,
+					"description": "When enabled, the time is added to the metainfo."
+				}
+			}
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.68",
+		"@typescript-eslint/eslint-plugin": "^4.4.1",
+		"@typescript-eslint/parser": "^4.4.1",
+		"eslint": "^7.11.0",
+		"typescript": "^4.0.3",
+		"@types/vscode": "^1.40.0"
+	},
+	"dependencies": {},
+	"bugs": {
+		"url": "https://github.com/s-albert/copy-text/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/s-albert/copy-text.git"
+	},
+	"__metadata": {
+		"id": "25231262-b9a4-4e83-bfc3-340e1e462f25",
+		"publisherId": "7bc01a80-11a1-47ad-a8dc-a4e28f77e044",
+		"publisherDisplayName": "s.albert",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"preRelease": false,
+		"installedTimestamp": 1657774215037
+	}
+}
