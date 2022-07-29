@@ -2420,7 +2420,6 @@
 		"targetPlatform": "undefined",
 		"updated": false,
 		"isPreReleaseVersion": false,
-		"preRelease": false,
-		"installedTimestamp": 1653356154007
+		"preRelease": false
 	}
 }
