@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.JsonRpc.Client</name>
+    </assembly>
+    <members>
+        <member name="P:Meadow.JsonRpc.Client.IJsonRpcClientExtensions.CheckBadTransactionStatus">
+            <summary>
+            If true, all transactions hashes are queried for their receipt, and an exception
+            is thrown for receipts with an unsuccessful status code.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Client.IJsonRpcClientExtensions.ErrorFormatter">
+            <summary>
+            Delegate to format an RPC error that results from a Transaction or Call (including contract deployment transactions).
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Client.IJsonRpcClientExtensions.RawTransactionSigner">
+            <summary>
+            If set, all SendTransaction calls will invoke this delegate and inssue a sendRawTransaction RPC call.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Client.IJsonRpcClientExtensions.TransactionReceiptPollInterval">
+            <summary>
+            If set then <see cref="M:Meadow.JsonRpc.IRpcControllerMinimal.GetTransactionReceipt(Meadow.Core.EthTypes.Hash)"/> will be repeated at this interval until
+            a result is returned.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.Client.JsonRpcClient.InvokeRpcMethod(Newtonsoft.Json.Linq.JObject,System.Type)">
+            <param name="json">Full message data as json object to use as the RPC request data.</param>
+            <param name="taskGenericArgType">The type to convert the json into.</param>
+        </member>
+        <member name="M:Meadow.JsonRpc.Client.JsonRpcClient.ConvertTask(System.Threading.Tasks.Task{System.Object},System.Type)">
+            <summary>
+            Converts a Task&lt;object&gt; to a Task&lt;T&gt; when the T type is only known at runtime.
+            </summary>
+            <param name="objectTask"></param>
+            <param name="desiredTaskType">The type to use when creating the Task&lt;T&gt;.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

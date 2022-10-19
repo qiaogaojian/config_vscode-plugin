@@ -1,0 +1,991 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.JsonRpc</name>
+    </assembly>
+    <members>
+        <member name="T:Meadow.JsonRpc.IRpcController">
+            <summary>
+            Interface specifying all standard Ethereum RPC methods, as well as some 
+            testing/debugging methods commonly found in test node implementations. 
+            And some unique methods implemented by this project. 
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Version">
+            <summary>
+            net_version - Returns the current network id.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#net_version"/>
+            </summary>
+            <returns>
+            String - The current network id. Examples:
+            "1": Ethereum Mainnet
+            "2": Morden Testnet(deprecated)
+            "3": Ropsten Testnet
+            "4": Rinkeby Testnet
+            "42": Kovan Testnet
+            </returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.ProtocolVersion">
+            <summary>
+            eth_protocolVersion - Returns the current ethereum protocol version.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_protocolversion"/>
+            </summary>
+            <returns>String - The current ethereum protocol version.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Mine">
+            <summary>
+            evm_mine - 
+            Special non-standard ganache client methods (not included within the original RPC specification).
+            Force a block to be mined. Takes no parameters. Mines a block independent of whether or not mining is started or stopped.
+            <see href="https://github.com/trufflesuite/ganache-cli#implemented-methods"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Snapshot">
+            <summary>
+            evm_snapshot  - 
+            Special non-standard ganache client methods (not included within the original RPC specification).
+            Snapshot the state of the blockchain at the current block. Takes no parameters. Returns the integer id of the snapshot created.
+            <see href="https://github.com/trufflesuite/ganache-cli#implemented-methods"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Revert(System.UInt64)">
+            <summary>
+            evm_revert  - 
+            Special non-standard ganache client methods (not included within the original RPC specification).
+            Revert the state of the blockchain to a previous snapshot. Takes a single parameter, which is the snapshot id to revert to. 
+            If no snapshot id is passed it will revert to the latest snapshot. Returns true.
+            <see href="https://github.com/trufflesuite/ganache-cli#implemented-methods"/>
+            <param name="snapshotID">The snapshot id to revert to.</param>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.IncreaseTime(System.UInt64)">
+            <summary>
+            evm_increaseTime  - 
+            Special non-standard ganache client methods (not included within the original RPC specification).
+            Jump forward in time. Takes one parameter, which is the amount of time to increase in seconds. Returns the total time adjustment, in seconds.
+            <see href="https://github.com/trufflesuite/ganache-cli#implemented-methods"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetBalance(Meadow.Core.EthTypes.Address,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_getBalance - Returns the balance of the account of given address.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getbalance"/>
+            </summary>
+            <param name="account">20 Bytes - address to check for balance</param>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending".</param>
+            <returns>Eth balance in wei</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.BlockNumber">
+            <summary>
+            eth_blockNumber - Returns the number of most recent block.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_blocknumber"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetBlockByHash(Meadow.Core.EthTypes.Hash,System.Boolean)">
+            <summary>
+            eth_getBlockByHash - Returns information about a block by hash.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblockbyhash"/>
+            </summary>
+            <param name="hash">32 Bytes - Hash of a block.</param>
+            <param name="getFullTransactionObjects">
+            If true it returns the full transaction objects, if false only the hashes of the transactions.
+            </param>
+            <returns>A block object, or null when no block was found.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetBlockByNumber(Meadow.JsonRpc.Types.DefaultBlockParameter,System.Boolean)">
+            <summary>
+            eth_getBlockByNumber - Returns information about a block by block number.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblockbynumber"/>
+            </summary>
+            <param name="getFullTransactionObjects">
+            If true it returns the full transaction objects, if false only the hashes of the transactions.
+            </param>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending".</param>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.SendRawTransaction(System.Byte[])">
+            <summary>
+            eth_sendRawTransaction - Creates new message call transaction or a contract creation for signed transactions.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendrawtransaction"/>
+            </summary>
+            <param name="signedData">The signed transaction data.</param>
+            <returns>The transaction hash, or the zero hash if the transaction is not yet available.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetTransactionByHash(Meadow.Core.EthTypes.Hash)">
+            <summary>
+            eth_getTransactionByHash - Returns the information about a transaction requested by transaction hash.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash"/>
+            </summary>
+            <param name="transactionHash">32 Bytes - hash of a transaction.</param>
+            <returns>A transaction object, or null when no transaction was found.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetTransactionByBlockHashAndIndex(Meadow.Core.EthTypes.Hash,System.UInt64)">
+            <summary>
+            eth_getTransactionByBlockHashAndIndex - Returns information about a transaction by block hash and transaction index position.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyblockhashandindex"/>
+            </summary>
+            <param name="blockHash">32 Bytes - hash of a block.</param>
+            <param name="transactionIndex">Tnteger of the transaction index position.</param>
+            <returns>A transaction object, or null when no transaction was found:</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetBlockTransactionCountByHash(Meadow.Core.EthTypes.Hash)">
+            <summary>
+            eth_getBlockTransactionCountByHash - Returns the number of transactions in a block from a block matching the given block hash.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblocktransactioncountbyhash"/>
+            </summary>
+            <param name="blockHash">32 Bytes - hash of a block</param>
+            <returns>Integer of the number of transactions in this block.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetBlockTransactionCountByNumber(Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_getBlockTransactionCountByNumber - Returns the number of transactions in a block matching the given block number.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblocktransactioncountbynumber"/>
+            </summary>
+            <param name="blockParameter">Integer of a block number, or the string "earliest", "latest" or "pending", as in the default block parameter.</param>
+            <returns>Integer of the number of transactions in this block.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Coinbase">
+            <summary>
+            eth_coinbase - Returns the client coinbase address.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_coinbase"/>
+            </summary>
+            <returns>20 bytes - the current coinbase address.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.NewBlockFilter">
+            <summary>
+            eth_newBlockFilter - Creates a filter in the node, to notify when a new block arrives. To check if the state has changed, call eth_getFilterChanges.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newblockfilter"/>
+            </summary>
+            <returns>A filter id.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetFilterChanges(System.UInt64)">
+            <summary>
+            eth_getFilterChanges - Polling method for a filter, which returns an array of logs which occurred since last poll.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getfilterchanges"/>
+            </summary>
+            <param name="filterID">The filter id.</param>
+            <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetFilterLogs(System.UInt64)">
+            <summary>
+            eth_getFilterLogs - Returns an array of all logs matching filter with given id.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getfilterlogs"/>
+            </summary>
+            <param name="filterID">The filter id.</param>
+            <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetLogs(Meadow.JsonRpc.Types.FilterOptions)">
+            <summary>
+            eth_getlogs - Returns an array of all logs matching a given filter object.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getlogs"/>
+            </summary>
+            <param name="filterOptions">the filter object</param>
+            <returns>Array of log objects, or an empty array if nothing has changed since last poll.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.NewFilter(Meadow.JsonRpc.Types.FilterOptions)">
+            <summary>
+            eth_newFilter - Creates a filter object, based on filter options, to notify when the state changes (logs). 
+            To check if the state has changed, call eth_getFilterChanges.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_newfilter"/>
+            </summary>
+            <param name="filterOptions">the filter object</param>
+            <returns>A filter id.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.UninstallFilter(System.UInt64)">
+            <summary>
+            eth_uninstallFilter - Uninstalls a filter with given id. Should always be called when watch is no longer needed. 
+            Additonally Filters timeout when they aren't requested with eth_getFilterChanges for a period of time.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_uninstallfilter"/>
+            </summary>
+            <param name="filterID">The filter id.</param>
+            <returns>True if the filter was successfully uninstalled, otherwise false.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Sign(Meadow.Core.EthTypes.Address,System.Byte[])">
+            <summary>
+            eth_sign - The sign method calculates an Ethereum specific signature with: sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message))).
+            By adding a prefix to the message makes the calculated signature recognisable as an Ethereum specific signature.This prevents misuse where 
+            a malicious DApp can sign arbitrary data (e.g.transaction) and use the signature to impersonate the victim.
+            Note the address to sign with must be unlocked.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sign"/>
+            </summary>
+            <param name="account">20 Bytes - address.</param>
+            <param name="message">N Bytes - message to sign.</param>
+            <returns>Signature.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Syncing">
+            <summary>
+            eth_syncing - Returns an object with data about the sync status or false.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_syncing"/>
+            </summary>
+            <returns>An object with sync status data or FALSE, when not syncing.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetCode(Meadow.Core.EthTypes.Address,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_getCode - Returns code at a given address.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getcode"/>
+            </summary>
+            <param name="address">20 Bytes - address.</param>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending", see the default block parameter</param>
+            <returns>The code from the given address.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetCompilers">
+            <summary>
+            eth_getCompilers - Returns a list of available compilers in the client.
+            </summary>
+            <returns>Array of available compilers.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Sha3(System.Byte[])">
+            <summary>
+            web3_sha3 - Returns Keccak-256 (not the standardized SHA3-256) of the given data.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#web3_sha3"/>
+            </summary>
+            <param name="data">The data to convert into a SHA3 hash</param>
+            <returns>The SHA3 result of the given string.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.ClientVersion">
+            <summary>
+            web3_clientVersion - Returns the current client version.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#web3_clientversion"/>
+            </summary>
+            <returns>String - The current client version.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.PeerCount">
+            <summary>
+            net_peerCount - Returns number of peers currently connected to the client.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#net_peercount"/>
+            </summary>
+            <returns>Integer of the number of connected peers.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Listening">
+            <summary>
+            net_listening - Returns true if client is actively listening for network connections.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#net_listening"/>
+            </summary>
+            <returns>True when listening, otherwise false.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.Mining">
+            <summary>
+            eth_mining - Returns true if client is actively mining new blocks.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_mining"/>
+            </summary>
+            <returns>Returns true of the client is mining, otherwise false.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.HashRate">
+            <summary>
+            eth_hashrate - Returns the number of hashes per second that the node is mining with.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_hashrate"/>
+            </summary>
+            <returns>Number of hashes per second.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetTransactionCount(Meadow.Core.EthTypes.Address,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_getTransactionCount - Returns the number of transactions sent from an address.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactioncount"/>
+            </summary>
+            <param name="address">Address.</param>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending".</param>
+            <returns>Integer of the number of transactions sent from this address.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.ChainID">
+            <summary>
+            Returns the currently configured chain id, a value used in replay-protected transaction signing as introduced by EIP-155.
+            <see href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-695.md"/>
+            </summary>
+            <returns>Integer of the current chain id.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetCoverageMap(Meadow.Core.EthTypes.Address)">
+            <summary>
+            Obtains a single coverage map which describes code coverage for the contract at the given address.
+            </summary>
+            <param name="contractAddress">The address which we wish to obtain coverage maps for.</param>
+            <returns>Returns the instructionIndex->executionCount map and the jump index array for the contract at the specified address. If a coverage map does not exist, map will be null.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.ClearCoverage(Meadow.Core.EthTypes.Address)">
+            <summary>
+            testing_clearSingleCoverage - Clears a coverage map for a contract at the specified contract address.
+            </summary>
+            <param name="contractAddress">The address of the contract for which we wish to remove a coverage map.</param>
+            <returns>Returns true if a coverage map existed at the contract address, returns false if one did not.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.ClearCoverage">
+            <summary>
+            testing_clearAllCoverage - Clears all coverage maps in our test chain configuration.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.SetCoverageEnabled(System.Boolean)">
+            <summary>
+            testing_setCoverageEnabled - Sets the enabled/disabled status of coverage collection.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetAllCoverageMaps">
+            <summary>
+            Obtains all coverage maps which describe code coverage for all contracts ran since the last code coverage clear.
+            </summary>
+            <returns>Returns an array of tuples which specify contract address, code coverage map (instruction index -> execution count), and the instruction indexes from which we did jump after executing.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.SetTracingEnabled(System.Boolean)">
+            <summary>
+            testing_setTracingEnabled - Sets the enabled/disabled status of debug tracing.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetExecutionTrace">
+            <summary>
+            Obtains the last execution trace, assuming execution tracing was enabled and captured.
+            </summary>
+            <returns>Returns the last execution trace.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.GetHashPreimage(System.Byte[])">
+            <summary>
+            Obtains the pre-image (original data) for a given hash, if recorded in the database.
+            </summary>
+            <returns>Returns the pre-image if one exists, null otherwise.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcController.SetContractSizeCheckDisabled(System.Boolean)">
+            <summary>
+            Enables or disables the size check on deployed contracts.
+            </summary>
+        </member>
+        <member name="T:Meadow.JsonRpc.IRpcControllerMinimal">
+            <summary>
+            An interface specifying a core subset of RPC methods that are typically used by most
+            consumers.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.SendTransaction(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            eth_sendTransaction - Creates new message call transaction or a contract creation, if the data field contains code.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_sendtransaction"/>
+            </summary>
+            <param name="transactionParams">The transaction object.</param>
+            <returns>The transaction hash.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.Call(Meadow.JsonRpc.Types.CallParams,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_call - Executes a new message call immediately without creating a transaction on the block chain.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call"/>
+            </summary>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending".</param>
+            <returns>The return value of executed contract.</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.GetTransactionReceipt(Meadow.Core.EthTypes.Hash)">
+            <summary>
+            eth_getTransactionReceipt - Returns the receipt of a transaction by transaction hash.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt"/>
+            </summary>
+            <param name="transactionHash">32 Bytes - hash of a transaction.</param>
+            <returns>
+            Returns the receipt of a transaction by transaction hash. 
+            Note that the receipt is not available for pending transactions.
+            </returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.EstimateGas(Meadow.JsonRpc.Types.CallParams,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            eth_estimateGas - Generates and returns an estimate of how much gas is necessary to allow the 
+            transaction to complete. The transaction will not be added to the blockchain. Note that the estimate may 
+            be significantly more than the amount of gas actually used by the transaction, for a variety of reasons 
+            including EVM mechanics and node performance.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_estimategas"/>
+            </summary>
+            <param name="callParams">
+            See eth_call parameters, expect that all properties are optional. If no gas limit is specified geth uses the 
+            block gas limit from the pending block as an upper bound. As a result the returned estimate might not be enough 
+            to executed the call/transaction when the amount of gas is higher than the pending block gas limit.
+            </param>
+            <param name="blockParameter">Integer block number, or the string "latest", "earliest" or "pending".</param>
+            <returns>The amount of gas used</returns>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.GasPrice">
+            <summary>
+            eth_gasPrice - Returns the current price per gas in wei.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gasprice"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.IRpcControllerMinimal.Accounts">
+            <summary>
+            eth_accounts - Returns a list of addresses owned by client.
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_accounts"/>
+            </summary>
+            <returns>20 Bytes - addresses owned by the client.</returns>
+        </member>
+        <member name="P:Meadow.JsonRpc.JsonRpcError.ExtraFields">
+            <summary>
+            Properties not deserialized any members
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.JsonRpcErrorCode.ParseError">
+            <summary>
+            Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.JsonRpcErrorCode.InvalidRequest">
+            <summary>
+            The JSON sent is not a valid Request object.
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.JsonRpcErrorCode.MethodNotFound">
+            <summary>
+            The method does not exist / is not available.
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.JsonRpcErrorCode.InvalidParams">
+            <summary>
+            Invalid method parameter(s).
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.JsonRpcErrorCode.InternalError">
+            <summary>
+            Internal JSON-RPC error.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.RpcControllerExtensions.GetUndefinedRpcMethods(Meadow.JsonRpc.IRpcController)">
+            <summary>
+            Returns a list of rpc methods that are not defined in the interface.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Number">
+            <summary>
+            QUANTITY - the block number. null when its pending block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Hash">
+            <summary>
+            DATA, 32 Bytes - hash of the block. null when its pending block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.MixHash">
+            <summary>
+            Hash which proves combined with the nonce that a sufficient amount of computation has been carried out on this block
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.ParentHash">
+            <summary>
+            DATA, 32 Bytes - hash of the parent block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Nonce">
+            <summary>
+            DATA, 8 Bytes - hash of the generated proof-of-work. null when its pending block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Sha3Uncles">
+            <summary>
+            DATA, 32 Bytes - SHA3 of the uncles data in the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.LogsBloom">
+            <summary>
+            DATA, 256 Bytes - the bloom filter for the logs of the block. null when its pending block
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.TransactionsRoot">
+            <summary>
+            DATA, 32 Bytes - the root of the transaction trie of the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.StateRoot">
+            <summary>
+            DATA, 32 Bytes - the root of the final state trie of the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.ReceiptsRoot">
+            <summary>
+            DATA, 32 Bytes - the root of the receipts trie of the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Miner">
+            <summary>
+            DATA, 20 Bytes - the address of the beneficiary to whom the mining rewards were given.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Difficulty">
+            <summary>
+            QUANTITY - integer of the difficulty for this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.TotalDifficulty">
+            <summary>
+            QUANTITY - integer of the total difficulty of the chain until this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.ExtraData">
+            <summary>
+            DATA - the "extra data" field of this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Size">
+            <summary>
+            QUANTITY - integer the size of this block in bytes.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.GasLimit">
+            <summary>
+            QUANTITY - the maximum gas allowed in this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.GasUsed">
+            <summary>
+            QUANTITY - the total used gas by all transactions in this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Timestamp">
+            <summary>
+            QUANTITY - the unix timestamp for when the block was collated.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Transactions">
+            <summary>
+            Array - Array of transaction objects, or 32 Bytes transaction hashes depending on the last given parameter.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.Uncles">
+            <summary>
+            Array - Array of uncle hashes.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Block.ExtraFields">
+            <summary>
+            Properties not deserialized any members
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.Types.BlockParameterType.BlockNumber">
+            <summary>
+            Use <see cref="P:Meadow.JsonRpc.Types.DefaultBlockParameter.BlockNumber"/> for this parameter type
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.DefaultBlockParameter.BlockNumber">
+            <summary>
+            Only set if <see cref="P:Meadow.JsonRpc.Types.DefaultBlockParameter.ParameterType"/> is set to <see cref="F:Meadow.JsonRpc.Types.BlockParameterType.BlockNumber"/>
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.From">
+            <summary>
+            DATA, 20 Bytes - The address the transaction is send from.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.To">
+            <summary>
+            DATA, 20 Bytes - (optional when creating new contract) The address the transaction is directed to.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.Gas">
+            <summary>
+            QUANTITY - (optional, default: 90000) Integer of the gas provided for the transaction execution. It will return unused gas.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.GasPrice">
+            <summary>
+            QUANTITY - (optional, default: To-Be-Determined) Integer of the gasPrice used for each paid gas
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.Value">
+            <summary>
+            QUANTITY - (optional) Integer of the value sent with this transaction
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.CallParams.Data">
+            <summary>
+            Hex string of the compiled code of a contract OR hash of the invoked method signature and encoded parameters
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CompoundCoverageMap.UndeployedMap">
+            <summary>
+            Represents the coverage map for the undeployed/deploying code.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CompoundCoverageMap.DeployedMap">
+            <summary>
+            Represents the coverage map for the deployed code.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CompoundCoverageMap.ContractAddress">
+            <summary>
+            Obtain a relevant contract address from our underlying deployment maps (or returns zero if both deployment maps are null).
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.ContractAddress">
+            <summary>
+            DATA, 20 Bytes - address of the sender.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.Map">
+            <summary>
+            DATA, variable length, same length as code section. The index in the map indicates how many times the instruction at that position in the code was executed.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.JumpOffsets">
+            <summary>
+            DATA, variable length, an array of indexes into <see cref="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.Map"/> which indicate where a jump did occur (jump branch was taken). 
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.NonJumpOffsets">
+            <summary>
+            DATA, variable length, an array of indexes into <see cref="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.Map"/> which indicate where a jump did occur (jump branch was taken). 
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.CoverageMap.Code">
+            <summary>
+            DATA, the code we're mapping on.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTrace.Tracepoints">
+            <summary>
+            Represents the list of trace points in our execution trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTrace.Exceptions">
+            <summary>
+            Represents the list of exceptions in our execution trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTraceException.Message">
+            <summary>
+            DATA, variable length, a string representing the exception message.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTraceException.TraceIndex">
+            <summary>
+            INTEGER, 32-bit, nullable, represents the trace index (if any) at which this occurred. Is null if the exception occurred outside of VM execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.CallData">
+            <summary>
+            The call data set at this trace point.
+            If NULL, then derived from last known value in the trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Code">
+            <summary>
+            The full code segment executed at this trace point (including constructor args if deploying, etc).
+            Hence, this section will treat code segments as the EVM internally does, not discerning higher level structures and splitting them.
+            If NULL, then derived from last known value in the trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.ContractAddress">
+            <summary>
+            DATA, 20 Bytes (Optional) - Address of the contract this execution point takes place in. If NULL, then derived from last known value in the trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.ContractDeployed">
+            <summary>
+            BOOLEAN, indicates whether this execution point was occuring on a deployed contract (true) or a deploying contract (false).
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.GasRemaining">
+            <summary>
+            QUANTITY - The amount of gas remaining for this execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.GasCost">
+            <summary>
+            QUANTITY - The cost of gas for this execution point to complete.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Opcode">
+            <summary>
+            DATA, variable length, a string mnemonic for the operation.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.PC">
+            <summary>
+            UNSIGNED INTEGER, 32-bit, represents the program counter at this point in execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Depth">
+            <summary>
+            UNSIGNED INTEGER, 32-bit, represents the message call depth at this point in execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Memory">
+            <summary>
+            DATA array, variable length (multiple of 32) - (Optional) Represents the EVM memory at this point in execution. NULL if unchanged since last known value in trace.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Stack">
+            <summary>
+            DATA array, variable length (multiple of 32) - Represents the EVM stack at this point in execution.
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.GetContiguousMemory">
+            <summary>
+            Obtains a singular unified/contiguous memory representation, combined from all entries in <see cref="P:Meadow.JsonRpc.Types.Debugging.ExecutionTracePoint.Memory"/>.
+            </summary>
+            <returns>Returns a signular and contiguous representation of memory.</returns>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.Removed">
+            <summary>
+            TAG - true when the log was removed, due to a chain reorganization. false if its a valid log
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.LogIndex">
+            <summary>
+            QUANTITY - integer of the log index position in the block. null when its pending log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.TransactionIndex">
+            <summary>
+            QUANTITY - integer of the transactions index position log was created from. null when its pending log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.TransactionHash">
+            <summary>
+            DATA, 32 Bytes - hash of the transactions this log was created from. null when its pending log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.BlockHash">
+            <summary>
+            DATA, 32 Bytes - hash of the block where this log was in. null when its pending. null when its pending log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.BlockNumber">
+            <summary>
+            QUANTITY - the block number where this log was in. null when its pending. null when its pending log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.Address">
+            <summary>
+            DATA, 20 Bytes - address from which this log originated.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.Data">
+            <summary>
+            DATA - contains one or more 32 Bytes non-indexed arguments of the log.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.Topics">
+            <summary>
+            Array of DATA - Array of 0 to 4 32 Bytes DATA of indexed log arguments. 
+            (In solidity: The first topic is the hash of the signature of the event 
+            (e.g. Deposit(address,bytes32,uint256)), except you declared the event 
+            with the anonymous specifier.)
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterLogObject.ExtraFields">
+            <summary>
+            Properties not deserialized any members
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterOptions.FromBlock">
+            <summary>
+            (optional, default: "latest") Integer block number, or "latest" for 
+            the last mined block or "pending", "earliest" for not yet mined transactions.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterOptions.ToBlock">
+            <summary>
+            (optional, default: "latest") Integer block number, or "latest" for the 
+            last mined block or "pending", "earliest" for not yet mined transactions.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterOptions.Address">
+            <summary>
+            (optional) Contract address or a list of addresses from which logs should originate.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.FilterOptions.Topics">
+            <summary>
+            (optional) Array of 32 Bytes DATA topics. Topics are order-dependent. 
+            Each topic can also be an array of DATA with "or" options.
+            A note on specifying topic filters: Topics are order-dependent. A transaction with a
+            log with topics [A, B] will be matched by the following topic filters:
+                [] "anything"
+                [A] "A in first position (and anything after)"
+                [null, B] "anything in first position AND B in second position (and anything after)"
+                [A, B] "A in first position AND B in second position (and anything after)"
+                [[A, B], [A, B]] "(A OR B) in first position AND (A OR B) in second position (and anything after)"
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.Types.LogObjectResultType.Hashes">
+            <summary>
+            For filters created with eth_newBlockFilter or eth_newPendingTransactionFilter
+            </summary>
+        </member>
+        <member name="F:Meadow.JsonRpc.Types.LogObjectResultType.LogObjects">
+            <summary>
+            For filters created with eth_newFilter
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.LogObjectResult.Hashes">
+            <summary>
+            Only set when <see cref="P:Meadow.JsonRpc.Types.LogObjectResult.ResultType"/> is <see cref="F:Meadow.JsonRpc.Types.LogObjectResultType.Hashes"/>
+            (filters created with eth_newBlockFilter or eth_newPendingTransactionFilter), otherwise null.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.LogObjectResult.LogObjects">
+            <summary>
+            Only set when <see cref="P:Meadow.JsonRpc.Types.LogObjectResult.ResultType"/> is <see cref="F:Meadow.JsonRpc.Types.LogObjectResultType.LogObjects"/> (filters created with eth_newFilter), otherwise null.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.SyncStatus.IsSyncing">
+            <summary>
+            If false then the other properties in this object will be null.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.SyncStatus.StartingBlock">
+            <summary>
+            (Only set if syncing is true).
+            The block at which the import started (will only be reset, after the sync reached his head).
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.SyncStatus.CurrentBlock">
+            <summary>
+            (Only set if syncing is true).
+            The current block, same as eth_blockNumber.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.SyncStatus.HighestBlock">
+            <summary>
+            (Only set if syncing is true).
+            The estimated highest block
+            </summary>
+        </member>
+        <member name="T:Meadow.JsonRpc.Types.TransactionObject">
+            <summary>
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionbyhash"/>
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.Hash">
+            <summary>
+            DATA, 32 Bytes - hash of the transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.Nonce">
+            <summary>
+            QUANTITY - the number of transactions made by the sender prior to this one
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.BlockHash">
+            <summary>
+            DATA, 32 Bytes - hash of the block where this transaction was in. null when its pending.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.BlockNumber">
+            <summary>
+            QUANTITY - block number where this transaction was in. null when its pending.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.TransactionIndex">
+            <summary>
+            QUANTITY - integer of the transactions index position in the block. null when its pending.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.From">
+            <summary>
+            DATA, 20 Bytes - address of the sender.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.To">
+            <summary>
+            DATA, 20 Bytes - address of the receiver. null when its a contract creation transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.Value">
+            <summary>
+            QUANTITY - value transferred in Wei.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.GasPrice">
+            <summary>
+            QUANTITY - gas price provided by the sender in Wei.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.Gas">
+            <summary>
+            QUANTITY - gas provided by the sender.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionObject.Input">
+            <summary>
+            DATA - the data send along with the transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.From">
+            <summary>
+            DATA, 20 Bytes - The address the transaction is send from.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.To">
+            <summary>
+            DATA, 20 Bytes - (optional when creating new contract) The address the transaction is directed to.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.Gas">
+            <summary>
+            QUANTITY - (optional, default: 90000) Integer of the gas provided for the transaction execution. It will return unused gas.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.GasPrice">
+            <summary>
+            QUANTITY - (optional, default: To-Be-Determined) Integer of the gasPrice used for each paid gas
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.Value">
+            <summary>
+            QUANTITY - (optional) Integer of the value sent with this transaction
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.Data">
+            <summary>
+            Hex string of the compiled code of a contract OR hash of the invoked method signature and encoded parameters
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionParams.Nonce">
+            <summary>
+            QUANTITY - (optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
+            </summary>
+        </member>
+        <member name="T:Meadow.JsonRpc.Types.TransactionReceipt">
+            <summary>
+            <see href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt"/>
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.TransactionHash">
+            <summary>
+            DATA, 32 Bytes - hash of the transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.TransactionIndex">
+            <summary>
+            QUANTITY - integer of the transactions index position in the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.BlockHash">
+            <summary>
+            DATA, 32 Bytes - hash of the block where this transaction was in.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.BlockNumber">
+            <summary>
+            QUANTITY - block number where this transaction was in.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.CumulativeGasUsed">
+            <summary>
+            QUANTITY - The total amount of gas used when this transaction was executed in the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.GasUsed">
+            <summary>
+            QUANTITY - The amount of gas used by this specific transaction alone.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.ContractAddress">
+            <summary>
+            DATA, 20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.Logs">
+            <summary>
+            Array - Array of log objects, which this transaction generated.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.LogsBloom">
+            <summary>
+            DATA, 256 Bytes - Bloom filter for light clients to quickly retrieve related logs.
+            </summary>
+        </member>
+        <member name="P:Meadow.JsonRpc.Types.TransactionReceipt.Status">
+            <summary>
+            QUANTITY either 1 (success) or 0 (failure)
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.JsonRpc.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Meadow.JsonRpc.Server.JsonRpcHttpServer">
+            <summary>
+            Supports http and websockets
+            </summary>
+        </member>
+        <member name="M:Meadow.JsonRpc.Server.JsonRpcHttpServer.#ctor(Meadow.JsonRpc.IRpcController,System.Func{Microsoft.AspNetCore.Hosting.IWebHostBuilder,Microsoft.AspNetCore.Hosting.IWebHostBuilder},System.Nullable{System.Int32},System.Net.IPAddress)">
+            <param name="port">If null or unspecified the http server binds to a random port.</param>
+        </member>
+    </members>
+</doc>

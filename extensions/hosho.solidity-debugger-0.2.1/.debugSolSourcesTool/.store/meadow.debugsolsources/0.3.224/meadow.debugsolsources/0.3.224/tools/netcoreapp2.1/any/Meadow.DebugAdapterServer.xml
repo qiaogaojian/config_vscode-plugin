@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.DebugAdapterServer</name>
+    </assembly>
+    <members>
+        <member name="T:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState">
+            <summary>
+            Represents the state/properties of a thread which is debugging solidity code.
+            </summary>
+        </member>
+        <member name="F:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState._significantStepIndexIndex">
+            <summary>
+            Indiciates the index into the significant step list <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.SignificantStepIndices"/>.
+            This is used to walk through all significant steps.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.ThreadId">
+            <summary>
+            The thread id of this thread state.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.CurrentStepIndex">
+            <summary>
+            Indicates the current tracepoint index into the execution trace <see cref="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.ExecutionTrace"/>.
+            This is used to
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.ExecutionTrace">
+            <summary>
+            The current execution trace which is being analyzed on this thread.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.ExecutionTraceAnalysis">
+            <summary>
+            The execution trace analysis currently being analyzed/walked on this thread.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.RpcClient">
+            <summary>
+            The RPC client which entered the debugging session on this thread.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.ExpectingException">
+            <summary>
+            Indicates whether we are expecting exceptions during this execution trace's analysis.
+            Used to determine if we have unhandled exceptions we should pause for.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.Semaphore">
+            <summary>
+            The thread locking object used to pause the test executing thread while debugging is occuring on it's execution trace.
+            </summary>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.DecrementStep">
+            <summary>
+            Decrements the current step to the previous significant step.
+            </summary>
+            <returns>Returns true if the step was decremented. False if we have reached the start of the trace and could not decrement step.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.MeadowDebugAdapterThreadState.IncrementStep">
+            <summary>
+            Increments the current step to the next significant step.
+            </summary>
+            <returns>Returns true if the step was incremented. False if we have reached the end of the trace and could not increment step.</returns>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.ReferenceContainer.IsThreadLinked">
+            <summary>
+            Indicates we are currently debugging/stepping through an execution trace, and there is a thread currently connected.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.ReferenceContainer.CurrentThreadId">
+            <summary>
+            Indicates the identifier of the current thread.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.ReferenceContainer.CurrentStackFrameId">
+            <summary>
+            Indicates the identifier for the current stack frame being analyzed.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.ReferenceContainer.LocalScopeId">
+            <summary>
+            Indicates the identifier for the current stack frame's local scope.
+            </summary>
+        </member>
+        <member name="P:Meadow.DebugAdapterServer.ReferenceContainer.StateScopeId">
+            <summary>
+            Indicates the identifier for the current stack frame's state scope.
+            </summary>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.GetUniqueId">
+            <summary>
+            Obtains a unique ID for a debug adapter component (stack frames, scopes, etc).
+            Used to ensure there are no collisions in chosen IDs.
+            </summary>
+            <returns>Returns a unique ID to be used for a debug adapter component.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.GetStackFrameId(System.Int32)">
+            <summary>
+            Obtains the ID for a stack frame, given an index (where 0 indicates the latest stack frame).
+            Used to ensure stack frames IDs can be recycled per index.
+            </summary>
+            <param name="index">The index of the stack frame to obtain the ID for.</param>
+            <returns>Returns the ID for the given stack frame index.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.TryGetStackFrames(System.Int32,System.Collections.Generic.List{Microsoft.VisualStudio.Shared.VSCodeDebugProtocol.Messages.StackFrame}@)">
+            <summary>
+            Obtains all linked stack frames for a given thread ID.
+            </summary>
+            <param name="threadId">The thread ID to obtain any linked stack frames for.</param>
+            <param name="result">Returns linked stack frames for the given thread ID.</param>
+            <returns>Returns true if stack frames for the given thread ID existed.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.LinkStackFrame(System.Int32,Microsoft.VisualStudio.Shared.VSCodeDebugProtocol.Messages.StackFrame,System.Int32)">
+            <summary>
+            Links a stack frame to a given thread ID, and sets that thread ID as the current/active thread.
+            </summary>
+            <param name="threadId">The ID of the thread to link the given stack frame to.</param>
+            <param name="stackFrame">The stack frame to link to the given thread ID.</param>
+            <param name="traceIndex">The last significant trace index in this frame before entering another.</param>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.SetCurrentStackFrame(System.Int32)">
+            <summary>
+            Sets the current stack frame ID, used to resolve local/state variables in the correct context.
+            </summary>
+            <param name="stackFrameId">The ID of the stack frame which we want to set as the currently selected/active stack frame.</param>
+            <returns>Returns true if the stack frame ID was known, and current stack frame was set.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.LinkSubVariableReference(System.Int32,System.Int32,System.Int32,Meadow.CoverageReport.Debugging.Variables.Pairing.UnderlyingVariableValuePair)">
+            <summary>
+            Links a nested/sub-variable to a parent variable reference ID.
+            </summary>
+            <param name="parentVariableReference">The parent reference ID for this nested variable.</param>
+            <param name="variableReference">The reference ID of nested/sub-variable that is being added.</param>
+            <param name="threadId">The ID of the active thread we are linking variables for.</param>
+            <param name="underlyingVariableValuePair">The underlying variable-value pair for this variable to link to the parent variable reference ID.</param>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.UnlinkSubVariableReference(System.Int32)">
+            <summary>
+            Unlinks the nested/sub-variable from a parent variable reference ID (recursively).
+            </summary>
+            <param name="variableReference">The variable reference ID to unlink all variables/sub-variables recursively for.</param>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.CreateVariable(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Creates a variable object and links all relevant evaluation information for it.
+            </summary>
+            <param name="name">The name of the variable to display.</param>
+            <param name="value">The value of the variable to display.</param>
+            <param name="variablesReference">The variable reference ID for this variable.</param>
+            <param name="type">The type of the variable to create.</param>
+            <returns>Returns a variable object which represents all the provided variable information.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.GetVariableEvaluateResponse(System.String)">
+            <summary>
+            Gets a variable evaluate response for a given expression.
+            </summary>
+            <param name="expression">The variable expression for which to obtain an evaluation response for.</param>
+            <returns>Returns a variable evaluation for the given expression, or null if one could not be found.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.ResolveParentVariable(System.Int32,System.Int32@,Meadow.CoverageReport.Debugging.Variables.Pairing.UnderlyingVariableValuePair@)">
+            <summary>
+            Attempts to resolve a parent variable given the parent variable reference ID, and it's corresponding thread ID.
+            Thus, this is used to resolve nested/child variables.
+            </summary>
+            <param name="variableReference">The parent variable reference ID for which we wish to obtain the variable for.</param>
+            <param name="threadId">The thread ID for the parent variable reference ID.</param>
+            <param name="variableValuePair">The variable value pair for the given variable reference ID.</param>
+            <returns>Returns true if a variable-value pair could be resolved for the given variable reference ID.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.ResolveLocalVariable(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Attemps to resolve a non-nested/top-level local variable given a variable reference ID. If the ID matches the local scope ID,
+            then the thread ID and current trace index is obtained for the stack frame in which this local variable resides.
+            </summary>
+            <param name="variableReference">The parent variable reference ID of the variable, to verify this is the local variable scope.</param>
+            <param name="threadId">The thread ID for the parent variable reference ID.</param>
+            <param name="traceIndex">The last trace index in the current stack frame at which this variable should be resolved.</param>
+            <returns>Returns true if the ID did reference the local variable scope, and we should resolve top level local variables at the given trace index.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.ResolveStateVariable(System.Int32,System.Int32@,System.Int32@)">
+            <summary>
+            Attemps to resolve a non-nested/top-level state variable given a variable reference ID. If the ID matches the state scope ID,
+            then the thread ID and last trace index is obtained for the stack frame in which the state variable is to be resolved.
+            </summary>
+            <param name="variableReference">The parent variable reference ID of the variable, to verify this is the state variable scope.</param>
+            <param name="threadId">The thread ID for the parent variable reference ID.</param>
+            <param name="traceIndex">The last trace index in the current stack frame at which this variable should be resolved.</param>
+            <returns>Returns true if the ID did reference the state variable scope, and we should resolve top level state variables at the given trace index.</returns>
+        </member>
+        <member name="M:Meadow.DebugAdapterServer.ReferenceContainer.UnlinkThreadId(System.Int32)">
+            <summary>
+            Unlinks all references for the given thread ID, and it's underlying stack frame/scope/variable IDs (recusively).
+            </summary>
+            <param name="threadId">The thread ID to unlink all reference for (recursively).</param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.SolCodeGen</name>
+    </assembly>
+    <members>
+        <member name="M:Meadow.SolCodeGen.CodebaseGenerator.GetSourceHashesXor(SolcNet.DataDescription.Output.Contract)">
+            <summary>
+            Returns xor of metadata source hashes. If there are no source hashes, returns the 
+            hash of the json abi string.
+            </summary>
+            <param name="contract"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Meadow.SolCodeGen.CodeGenerators.ContractGenerator.ComponentIdentifier.Identifier">
+            <summary>
+            Variable name to use in C# code
+            </summary>
+        </member>
+        <member name="F:Meadow.SolCodeGen.CodeGenerators.ContractGenerator.ComponentIdentifier.AbiIdentifier">
+            <summary>
+            Original variable name from Solidity / ABI (can be empty or null)
+            </summary>
+        </member>
+        <member name="M:Meadow.SolCodeGen.GeneratedEventMetadata.GetHash(System.Collections.Generic.List{Meadow.SolCodeGen.GeneratedEventMetadata})">
+            <summary>
+            Concats all the event metadata signatures and type names and hashes them.
+            </summary>
+        </member>
+    </members>
+</doc>

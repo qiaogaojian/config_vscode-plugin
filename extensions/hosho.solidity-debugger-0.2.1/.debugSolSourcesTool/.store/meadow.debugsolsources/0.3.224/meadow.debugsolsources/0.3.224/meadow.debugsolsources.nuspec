@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Meadow.DebugSolSources</id>
+    <version>0.3.224</version>
+    <authors>Hosho</authors>
+    <owners>Hosho</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</licenseUrl>
+    <projectUrl>https://github.com/MeadowSuite</projectUrl>
+    <iconUrl>https://github.com/MeadowSuite/Meadow/raw/master/images/meadow-icon-64x64.png?raw=true</iconUrl>
+    <description>Package Description</description>
+    <copyright>© Hosho Group. All Rights Reserved.</copyright>
+    <tags>meadow solidity ethereum truffle ganache</tags>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository url="https://github.com/MeadowSuite" />
+  </metadata>
+</package>
