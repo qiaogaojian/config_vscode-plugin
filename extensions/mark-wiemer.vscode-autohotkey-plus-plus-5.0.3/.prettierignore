@@ -1,0 +1,14 @@
+# From `.gitignore`
+
+# Folders
+.idea/
+.@vscode/test-electron/
+.vscode-test/
+node_modules
+out
+
+# Files
+.vscode/settings.json
+*.vsix
+language/*.tmLanguage.json
+*.exe
