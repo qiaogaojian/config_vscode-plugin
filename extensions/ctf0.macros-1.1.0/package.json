@@ -1,0 +1,91 @@
+{
+	"name": "macros",
+	"displayName": "macros",
+	"description": "automate repetitive actions with custom macros",
+	"version": "1.1.0",
+	"publisher": "ctf0",
+	"repository": "https://github.com/ctf0/macros",
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"icon": "images/icon.png",
+	"main": "./out/main",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Macros configuration",
+			"properties": {
+				"macros.list": {
+					"type": "object"
+				},
+				"macros.qp-ignore": {
+					"type": "array",
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"uniqueItems": true,
+					"description": "exclude commands from the quick-pick"
+				},
+				"macros.qp-allow": {
+					"type": "array",
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"uniqueItems": true,
+					"description": "include commands to the quick-pick"
+				},
+				"macros.langIds": {
+					"type": "array",
+					"default": [
+						"json",
+						"jsonc"
+					],
+					"items": {
+						"type": "string"
+					},
+					"uniqueItems": true,
+					"description": "language ids to show the cmnd names suggestion"
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "macros.execute",
+				"title": "Macros: Execute"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run esbuild-base -- --pure:console.log --minify",
+		"esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+		"esbuild": "npm run esbuild-base -- --sourcemap",
+		"esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+		"watch": "npm run esbuild"
+	},
+	"devDependencies": {
+		"@types/node": "^20.12.7",
+		"typescript": "^5.4.5",
+		"esbuild": "^0.20.2",
+		"@types/vscode": "^1.85.0"
+	},
+	"__metadata": {
+		"id": "4ca3cec6-e447-4853-8df3-75dc96a46481",
+		"publisherId": "83d4da56-3e02-4029-b926-a215a8fd071b",
+		"publisherDisplayName": "ctf0",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1716862735054,
+		"pinned": true,
+		"source": "gallery"
+	}
+}
