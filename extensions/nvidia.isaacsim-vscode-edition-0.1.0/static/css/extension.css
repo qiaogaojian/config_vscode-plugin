@@ -1,0 +1,42 @@
+/* https://code.visualstudio.com/api/references/theme-color */
+
+:root {
+    --ov-element-height: 1.5rem;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+    height: var(--ov-element-height);
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border-color: var(--vscode-button-border);
+}
+
+.input {
+    height: var(--ov-element-height);
+    background: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: var(--vscode-input-border);
+}
+
+::placeholder {
+    color: var(--vscode-input-placeholder-foreground);
+    opacity: 0.5;
+}
+
+.select {
+    height: var(--ov-element-height);
+    background: var(--vscode-dropdown-background);
+    color: var(--vscode-dropdown-foreground);
+    border: var(--vscode-dropdown-border);
+}
+
+strong {
+    height: var(--ov-element-height);
+    display: flex;
+    align-items: center;
+}

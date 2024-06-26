@@ -1,0 +1,1800 @@
+[
+{
+"title":"Bounds",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.bounds as bounds_utils\n",
+"category":"import"
+},
+{
+"title":"compute_aabb",
+"description":"Compute an Axis-Aligned Bounding Box (AABB) for a given `prim_path`\n\nA combined AABB is computed if `include_children` is True\n\n**Args:**\n\n * `bbox_cache` (UsdGeom.BboxCache): Existing Bounding box cache to use for computation\n * `prim_path` (str): prim path to compute AABB for\n * `include_children` (bool, optional): include children of specified prim in calculation. Defaults to False.\n\n**Returns:**\n\n * np.array: Bounding box for this prim, \\[min x, min y, min z, max x, max y, max z\\]\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> # 1 stage unit length cube centered at (0.0, 0.0, 0.0)\n>>> cache = bounds_utils.create_bbox_cache()\n>>> bounds_utils.compute_aabb(cache, prim_path=\"/World/Cube\")\n[-0.5 -0.5 -0.5  0.5  0.5  0.5]\n>>>\n>>> # the same cube rotated 45 degrees around the z-axis\n>>> cache = bounds_utils.create_bbox_cache()\n>>> bounds_utils.compute_aabb(cache, prim_path=\"/World/Cube\")\n[-0.70710678  -0.70710678  -0.5  0.70710678  0.70710678  0.5]\n```\n",
+"snippet":"value = bounds_utils.compute_aabb(bbox_cache=bbox_cache, prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"compute_combined_aabb",
+"description":"Computes a combined Axis-Aligned Bounding Box (AABB) given a list of prim paths\n\n**Args:**\n\n * `bbox_cache` (UsdGeom.BboxCache): Existing Bounding box cache to use for computation\n * `prim_paths` (typing.List\\[str\\]): List of prim paths to compute combined AABB for\n\n**Returns:**\n\n * np.array: Bounding box for input prims, \\[min x, min y, min z, max x, max y, max z\\]\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> # 1 stage unit length cube centered at (0.0, 0.0, 0.0)\n>>> # with a 1 stage unit diameter sphere centered at (-0.5, 0.5, 0.5)\n>>> cache = bounds_utils.create_bbox_cache()\n>>> bounds_utils.compute_combined_aabb(cache, prim_paths=[\"/World/Cube\", \"/World/Sphere\"])\n[-1.  -0.5 -0.5  0.5  1.   1. ]\n```\n",
+"snippet":"value = bounds_utils.compute_combined_aabb(bbox_cache=bbox_cache, prim_paths=prim_paths)\n",
+"category":"function"
+},
+{
+"title":"compute_obb",
+"description":"Computes the Oriented Bounding Box (OBB) of a prim\n\n*Note:*\n\\* The OBB does not guarantee the smallest possible bounding box, it rotates and scales the default AABB.\n\\* The rotation matrix incorporates any scale factors applied to the object.\n\\* The <span class=\"title-ref\">half\\_extent</span> values do not include these scaling effects.\n\n**Args:**\n\n * `bbox_cache` (UsdGeom.BBoxCache): USD Bounding Box Cache object to use for computation\n * `prim_path` (str): Prim path to compute OBB for\n\n**Returns:**\n\n * Tuple\\[np.ndarray, np.ndarray, np.ndarray\\]: A tuple containing the following OBB information: - The centroid of the OBB as a NumPy array. - The axes of the OBB as a 2D NumPy array, where each row represents a different axis. - The half extent of the OBB as a NumPy array.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> # 1 stage unit length cube centered at (0.0, 0.0, 0.0)\n>>> cache = bounds_utils.create_bbox_cache()\n>>> centroid, axes, half_extent = bounds_utils.compute_obb(cache, prim_path=\"/World/Cube\")\n>>> centroid\n[0. 0. 0.]\n>>> axes\n[[1. 0. 0.]\n [0. 1. 0.]\n [0. 0. 1.]]\n>>> half_extent\n[0.5 0.5 0.5]\n>>>\n>>> # the same cube rotated 45 degrees around the z-axis\n>>> cache = bounds_utils.create_bbox_cache()\n>>> centroid, axes, half_extent = bounds_utils.compute_obb(cache, prim_path=\"/World/Cube\")\n>>> centroid\n[0. 0. 0.]\n>>> axes\n[[ 0.70710678  0.70710678  0.        ]\n [-0.70710678  0.70710678  0.        ]\n [ 0.          0.          1.        ]]\n>>> half_extent\n[0.5 0.5 0.5]\n```\n",
+"snippet":"value = bounds_utils.compute_obb(bbox_cache=bbox_cache, prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"compute_obb_corners",
+"description":"Computes the corners of the Oriented Bounding Box (OBB) of a prim\n\n**Args:**\n\n * `bbox_cache` (UsdGeom.BBoxCache): Bounding Box Cache object to use for computation\n * `prim_path` (str): Prim path to compute OBB for\n\n**Returns:**\n\n * np.ndarray: NumPy array of shape (8, 3) containing each corner location of the OBB\n\n    `c_0 = (x_{min}, y_{min}, z_{min})`\n    `c_1 = (x_{min}, y_{min}, z_{max})`\n    `c_2 = (x_{min}, y_{max}, z_{min})`\n    `c_3 = (x_{min}, y_{max}, z_{max})`\n    `c_4 = (x_{max}, y_{min}, z_{min})`\n    `c_5 = (x_{max}, y_{min}, z_{max})`\n    `c_6 = (x_{max}, y_{max}, z_{min})`\n    `c_7 = (x_{max}, y_{max}, z_{max})`\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> cache = bounds_utils.create_bbox_cache()\n>>> bounds_utils.compute_obb_corners(cache, prim_path=\"/World/Cube\")\n[[-0.5 -0.5 -0.5]\n [-0.5 -0.5  0.5]\n [-0.5  0.5 -0.5]\n [-0.5  0.5  0.5]\n [ 0.5 -0.5 -0.5]\n [ 0.5 -0.5  0.5]\n [ 0.5  0.5 -0.5]\n [ 0.5  0.5  0.5]]\n```\n",
+"snippet":"value = bounds_utils.compute_obb_corners(bbox_cache=bbox_cache, prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"create_bbox_cache",
+"description":"Helper function to create a Bounding Box Cache object that can be used for computations\n\n**Args:**\n\n * `time` (Usd.TimeCode, optional): time at which cache should be initialized. Defaults to Usd.TimeCode.Default().\n * `use_extents_hint` (bool, optional): Use existing extents attribute on prim to compute bounding box. Defaults to True.\n\n**Returns:**\n\n * UsdGeom.BboxCache: Initialized bbox cache\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> bounds_utils.create_bbox_cache()\n<pxr.UsdGeom.BBoxCache object at 0x7f6720b8bc90>\n```\n",
+"snippet":"value = bounds_utils.create_bbox_cache()\n",
+"category":"function"
+},
+{
+"title":"get_obb_corners",
+"description":"Computes the corners of the Oriented Bounding Box (OBB) from the given OBB information\n\n**Args:**\n\n * `centroid` (np.ndarray): The centroid of the OBB as a NumPy array.\n * `axes` (np.ndarray): The axes of the OBB as a 2D NumPy array, where each row represents a different axis.\n * `half_extent` (np.ndarray): The half extent of the OBB as a NumPy array.\n\n**Returns:**\n\n * np.ndarray: NumPy array of shape (8, 3) containing each corner location of the OBB\n\n    `c_0 = (x_{min}, y_{min}, z_{min})`\n    `c_1 = (x_{min}, y_{min}, z_{max})`\n    `c_2 = (x_{min}, y_{max}, z_{min})`\n    `c_3 = (x_{min}, y_{max}, z_{max})`\n    `c_4 = (x_{max}, y_{min}, z_{min})`\n    `c_5 = (x_{max}, y_{min}, z_{max})`\n    `c_6 = (x_{max}, y_{max}, z_{min})`\n    `c_7 = (x_{max}, y_{max}, z_{max})`\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>>\n>>> cache = bounds_utils.create_bbox_cache()\n>>> centroid, axes, half_extent = bounds_utils.compute_obb(cache, prim_path=\"/World/Cube\")\n>>> bounds_utils.get_obb_corners(centroid, axes, half_extent)\n[[-0.5 -0.5 -0.5]\n [-0.5 -0.5  0.5]\n [-0.5  0.5 -0.5]\n [-0.5  0.5  0.5]\n [ 0.5 -0.5 -0.5]\n [ 0.5 -0.5  0.5]\n [ 0.5  0.5 -0.5]\n [ 0.5  0.5  0.5]]\n```\n",
+"snippet":"value = bounds_utils.get_obb_corners(centroid=centroid, axes=axes, half_extent=half_extent)\n",
+"category":"function"
+},
+{
+"title":"recompute_extents",
+"description":"Recomputes and overwrites the extents attribute for a UsdGeom.Boundable prim\n\n**Args:**\n\n * `prim` (UsdGeom.Boundable): Input prim to recompute extents for\n * `time` (Usd.TimeCode, optional): timecode to use for computing extents. Defaults to Usd.TimeCode.Default().\n * `include_children` (bool, optional): include children of specified prim in calculation. Defaults to False.\n\n**Raises:**\n\n * ValueError: If prim is not of UsdGeom.Boundable type\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.bounds as bounds_utils\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> prim = stage_utils.get_current_stage().GetPrimAtPath(\"/World/Cube\")\n>>> bounds_utils.recompute_extents(prim)\n```\n",
+"snippet":"bounds_utils.recompute_extents(prim=prim)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Carb",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.carb as carb_utils\n",
+"category":"import"
+},
+{
+"title":"get_carb_setting",
+"description":"Convenience function to get settings.\n\n**Args:**\n\n * `carb_settings` (carb.settings.ISettings): The interface to carb settings.\n * `setting` (str): Name of setting to change.\n\n**Returns:**\n\n * Any: Value for the setting.\n\n---\n**Example:**\n\n```python\n>>> import carb\n>>> import omni.isaac.core.utils.carb as carb_utils\n>>>\n>>> settings = carb.settings.get_settings()\n>>> carb_utils.get_carb_setting(settings, \"/persistent/physics/updateToUsd\")\nFalse\n```\n",
+"snippet":"value = carb_utils.get_carb_setting(carb_settings=carb_settings, setting=setting)\n",
+"category":"function"
+},
+{
+"title":"set_carb_setting",
+"description":"Convenience to set the carb settings.\n\n**Args:**\n\n * `carb_settings` (carb.settings.ISettings): The interface to carb settings.\n * `setting` (str): Name of setting to change.\n * `value` (Any): New value for the setting.\n\n**Raises:**\n\n * TypeError: If the type of value does not match setting type.\n\n---\n**Example:**\n\n```python\n>>> import carb\n>>> import omni.isaac.core.utils.carb as carb_utils\n>>>\n>>> settings = carb.settings.get_settings()\n>>> carb_utils.set_carb_setting(settings, \"/persistent/physics/updateToUsd\", True)\n```\n",
+"snippet":"carb_utils.set_carb_setting(carb_settings=carb_settings, setting=setting, value=value)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Collisions",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.collisions as collisions_utils\n",
+"category":"import"
+},
+{
+"title":"ray_cast",
+"description":"Projects a raycast forward along x axis with specified offset\n\nIf a hit is found within the maximum distance, then the object's prim path and distance to it is returned.\nOtherwise, a None and 10000 is returned.\n\n**Args:**\n\n * `position` (np.array): origin's position for ray cast\n * `orientation` (np.array): origin's orientation for ray cast\n * `offset` (np.array): offset for ray cast\n * `max_dist` (float, optional): maximum distance to test for collisions in stage units. Defaults to 100.0.\n\n**Returns:**\n\n * typing.Tuple\\[typing.Union\\[None, str\\], float\\]: path to geometry that was hit and hit distance, returns None, 10000 if no hit occurred\n",
+"snippet":"value = collisions_utils.ray_cast(position=position, orientation=orientation, offset=offset)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Constants",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.constants as constants_utils\n",
+"category":"import"
+},
+{
+"title":"AXES_INDICES",
+"description":"Mapping from axis name to axis ID",
+"snippet":"constants_utils.AXES_INDICES\n",
+"category":"constant"
+},
+{
+"title":"AXES_TOKEN",
+"description":"Mapping from axis name to axis USD token",
+"snippet":"constants_utils.AXES_TOKEN\n",
+"category":"constant"
+}
+]
+},
+{
+"title":"Distance Metrics",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.distance_metrics as distance_metrics_utils\n",
+"category":"import"
+},
+{
+"title":"rotational_distance_angle",
+"description":"Computes the weighted distance between two rotations using inner product.\n\nNote:\n\n:   If r1 and r2 are GfMatrix3d() objects, the transformation matrices will be transposed in the distance\n    calculations.\n\n**Args:**\n\n * `r1` (typing.Union\\[np.ndarray, Gf.Matrix3d, Gf.Matrix4d\\]): rotation matrices or 4x4 transformation matrices\n * `r2` (typing.Union\\[np.ndarray, Gf.Matrix3d, Gf.Matrix4d\\]): rotation matrices or 4x4 transformation matrices\n\n**Returns:**\n\n * np.ndarray: the magnitude of the angle of rotation from r1 to r2\n",
+"snippet":"value = distance_metrics_utils.rotational_distance_angle(r1=r1, r2=r2)\n",
+"category":"function"
+},
+{
+"title":"rotational_distance_identity_matrix_deviation",
+"description":"Computes the distance between two rotations using deviation from identity matrix.\n\nNote:\n\n:   If r1 and r2 are GfMatrix3d() objects, the transformation matrices will be transposed in the distance\n    calculations.\n\n**Args:**\n\n * `r1` (typing.Union\\[np.ndarray, Gf.Matrix4d, Gf.Matrix3d\\]): rotation matrices or 4x4 transformation matrices\n * `r2` (typing.Union\\[np.ndarray, Gf.Matrix4d, Gf.Matrix3d\\]): rotation matrices or 4x4 transformation matrices\n\n**Returns:**\n\n * np.ndarray: the Frobenius norm \\|I-r1\\*r2\\^T\\|, where I is the identity matrix\n",
+"snippet":"value = distance_metrics_utils.rotational_distance_identity_matrix_deviation(r1=r1, r2=r2)\n",
+"category":"function"
+},
+{
+"title":"rotational_distance_single_axis",
+"description":"Computes the distance between two rotations w.r.t. input axis.\n\nNote:\n\n:   If r1 and r2 are GfMatrix3d() objects, the transformation matrices will be transposed in the distance\n    calculations.\n\nUsage:\n\n:   If the robot were holding a cup aligned with its z-axis,\n    it would be important to align the z-axis of the robot with\n    the z-axis of the world frame. This could be accomplished by\n    letting\n\n    -r1 be the rotation of the robot end effector  \n    -r2 be any rotation matrix for a rotation about the z axis  \n    -axis = \\[0,0,1\\]\n\n**Args:**\n\n * `r1` (typing.Union\\[np.ndarray, Gf.Matrix4d, Gf.Matrix3d\\]): rotation matrices or 4x4 transformation matrices\n * `r2` (typing.Union\\[np.ndarray, Gf.Matrix4d, Gf.Matrix3d\\]): rotation matrices or 4x4 transformation matrices\n * `axis` (np.ndarray): a 3d vector that will be rotated by r1 and r2\n\n**Returns:**\n\n * np.ndarray: the angle between (r1 @ axis) and (r2 @ axis)\n",
+"snippet":"value = distance_metrics_utils.rotational_distance_single_axis(r1=r1, r2=r2, axis=axis)\n",
+"category":"function"
+},
+{
+"title":"weighted_translational_distance",
+"description":"Computes the weighted distance between two translation vectors.\n\nThe distance calculation has the form sqrt(x.T W x), where\n\n\\- x is the vector difference between t1 and t2.  \n- W is a weight matrix.\n\nGiven the identity weight matrix, this is equivalent to the \\|t1-t2\\|.\n\nUsage:\n\n:   This formulation can be used to weight an arbitrary axis of the translation difference.\n    Letting x = t1-t2 = a1\\*b1 + a2\\*b2 + a3\\*b3 (where b1,b2,b3 are column basis vectors, and a1,a2,a3 are constants),\n    When W = I: x.T W x = sqrt(a1\\^2 + a2\\^2 + a3\\^2).\n    To weight the b1 axis by 2, let W take the form (R.T @ (\\[4,1,1\\]@I) @ R) where:\n\n    \\- I is the identity matrix.  \n    - R is a rotation matrix of the form \\[b1,b2,b3\\].T\n\n    This is effectively equivalent to \\|\\[2\\*e1,e2,e3\\] @ \\[b1,b2,b3\\].T @ x\\| = sqrt(4\\*a1\\^2 + a2\\^2 + a3\\^2).\n\n    \\- e1,e2,e3 are the elementary basis vectors.\n\n**Args:**\n\n * `t1` (typing.Union\\[np.ndarray, Gf.Matrix4d\\]): 3d translation vectors or 4x4 transformation matrices\n * `t2` (typing.Union\\[np.ndarray, Gf.Matrix4d\\]): 3d translation vectors or 4x4 transformation matrices\n * `weight_matrix` (np.ndarray, optional): a 3x3 positive semidefinite matrix of weights. Defaults to np.eye(3).\n\n**Returns:**\n\n * np.ndarray: the weighted norm of the difference (t1-t2)\n",
+"snippet":"value = distance_metrics_utils.weighted_translational_distance(t1=t1, t2=t2)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Extensions",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.extensions as extensions_utils\n",
+"category":"import"
+},
+{
+"title":"disable_extension",
+"description":"Unload an extension.\n\n**Args:**\n\n * `extension_name` (str): name of the extension\n\n**Returns:**\n\n * bool: True if extension could be unloaded, False otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.extensions as extensions_utils\n>>>\n>>> extensions_utils.disable_extension(\"omni.kit.window.stage\")\nTrue\n```\n",
+"snippet":"value = extensions_utils.disable_extension(extension_name=extension_name)\n",
+"category":"function"
+},
+{
+"title":"enable_extension",
+"description":"Load an extension from the extension manager.\n\n**Args:**\n\n * `extension_name` (str): name of the extension\n\n**Returns:**\n\n * bool: True if extension could be loaded, False otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.extensions as extensions_utils\n>>>\n>>> extensions_utils.enable_extension(\"omni.kit.window.stage\")\nTrue\n```\n",
+"snippet":"value = extensions_utils.enable_extension(extension_name=extension_name)\n",
+"category":"function"
+},
+{
+"title":"get_extension_id",
+"description":"Get extension id for a loaded extension\n\n**Args:**\n\n * `extension_name` (str): name of the extension\n\n**Returns:**\n\n * str: Full extension id\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.extensions as extensions_utils\n>>>\n>>> extensions_utils.get_extension_id(\"omni.kit.window.stage\")\nomni.kit.window.stage-2.4.3\n```\n",
+"snippet":"value = extensions_utils.get_extension_id(extension_name=extension_name)\n",
+"category":"function"
+},
+{
+"title":"get_extension_path",
+"description":"Get extension path for a loaded extension by its full id\n\n**Args:**\n\n * `ext_id` (str): full id of extension\n\n**Returns:**\n\n * str: Path to loaded extension root directory\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.extensions as extensions_utils\n>>>\n>>> ext_id = extensions_utils.get_extension_id(\"omni.kit.window.stage\")\n>>> extensions_utils.get_extension_path(ext_id)\n/home/user/.local/share/ov/pkg/isaac_sim-<version>/kit/exts/omni.kit.window.stage\n```\n",
+"snippet":"value = extensions_utils.get_extension_path(ext_id=ext_id)\n",
+"category":"function"
+},
+{
+"title":"get_extension_path_from_name",
+"description":"Get extension path for a loaded extension by its name\n\n**Args:**\n\n * `extension_name` (str): name of the extension\n\n**Returns:**\n\n * str: Path to loaded extension root directory\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.extensions as extensions_utils\n>>>\n>>> extensions_utils.get_extension_path_from_name(\"omni.kit.window.stage\")\n/home/user/.local/share/ov/pkg/isaac_sim-<version>/kit/exts/omni.kit.window.stage\n```\n",
+"snippet":"value = extensions_utils.get_extension_path_from_name(extension_name=extension_name)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Math",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.math as math_utils\n",
+"category":"import"
+},
+{
+"title":"cross",
+"description":"Computes the cross-product between two 3-dimensional vectors.\n\n**Args:**\n\n * `a` (np.ndarray, list): A 3-dimensional vector\n * `b` (np.ndarray, list): A 3-dimensional vector\n\n**Returns:**\n\n * np.ndarray: Cross product between input vectors.\n",
+"snippet":"value = math_utils.cross(a=a, b=b)\n",
+"category":"function"
+},
+{
+"title":"normalize",
+"description":"Normalizes the vector inline (and also returns it).\n",
+"snippet":"math_utils.normalize(v=v)\n",
+"category":"function"
+},
+{
+"title":"normalized",
+"description":"Returns a normalized copy of the provided vector.\n",
+"snippet":"math_utils.normalized(v=v)\n",
+"category":"function"
+},
+{
+"title":"radians_to_degrees",
+"description":"Converts input angles from radians to degrees.\n\n**Args:**\n\n * `rad_angles` (np.ndarray): Input array of angles (in radians).\n\n**Returns:**\n\n * np.ndarray: Array of angles in degrees.\n",
+"snippet":"value = math_utils.radians_to_degrees(rad_angles=rad_angles)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Mesh",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.mesh as mesh_utils\n",
+"category":"import"
+},
+{
+"title":"get_mesh_vertices_relative_to",
+"description":"Get vertices of the mesh prim in the coordinate system of the given prim.\n\n**Args:**\n\n * `mesh_prim` (UsdGeom.Mesh): mesh prim to get the vertice points.\n * `coord_prim` (Usd.Prim): prim used as relative coordinate.\n\n**Returns:**\n\n * np.ndarray: vertices of the mesh in the coordinate system of the given prim. Shape is (N, 3).\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.mesh as mesh_utils\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # 1 stage unit length cube centered at (0.0, 0.0, 0.0)\n>>> mesh_prim = stage_utils.get_current_stage().GetPrimAtPath(\"/World/Cube\")\n>>> # 1 stage unit diameter sphere centered at (1.0, 1.0, 1.0)\n>>> coord_prim = stage_utils.get_current_stage().GetPrimAtPath(\"/World/Sphere\")\n>>>\n>>> mesh_utils.get_mesh_vertices_relative_to(mesh_prim, coord_prim)\n[[-1.5 -1.5 -0.5]\n [-0.5 -1.5 -0.5]\n [-1.5 -0.5 -0.5]\n [-0.5 -0.5 -0.5]\n [-1.5 -1.5 -1.5]\n [-0.5 -1.5 -1.5]\n [-1.5 -0.5 -1.5]\n [-0.5 -0.5 -1.5]]\n```\n",
+"snippet":"value = mesh_utils.get_mesh_vertices_relative_to(mesh_prim=mesh_prim, coord_prim=coord_prim)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Nucleus",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.nucleus as nucleus_utils\n",
+"category":"import"
+},
+{
+"title":"build_server_list",
+"description":"Return list with all known servers to check\n\n**Returns:**\n\n * -   `all_servers` (typing.List): List of servers found\n",
+"snippet":"value = nucleus_utils.build_server_list()\n",
+"category":"function"
+},
+{
+"title":"check_server",
+"description":"Check a specific server for a path\n\n**Args:**\n\n * `server` (str): Name of Nucleus server\n * `path` (str): Path to search\n * `timeout` (float): Default value: 10 seconds\n\n**Returns:**\n\n * bool: True if folder is found\n",
+"snippet":"value = nucleus_utils.check_server(server=server, path=path)\n",
+"category":"function"
+},
+{
+"title":"check_server_async",
+"description":"Check a specific server for a path (asynchronous version).\n\n**Args:**\n\n * `server` (str): Name of Nucleus server\n * `path` (str): Path to search\n * `timeout` (float): Default value: 10 seconds\n\n**Returns:**\n\n * bool: True if folder is found\n",
+"snippet":"value = nucleus_utils.check_server_async(server=server, path=path)\n",
+"category":"function"
+},
+{
+"title":"create_folder",
+"description":"Create a folder on server\n\n**Args:**\n\n * `server` (str): Name of Nucleus server\n * `path` (str): Path to folder\n\n**Returns:**\n\n * bool: True if folder is created successfully\n",
+"snippet":"value = nucleus_utils.create_folder(server=server, path=path)\n",
+"category":"function"
+},
+{
+"title":"delete_folder",
+"description":"Remove folder and all of its contents\n\n**Args:**\n\n * `server` (str): Name of Nucleus server\n * `path` (str): Path to folder\n\n**Returns:**\n\n * bool: True if folder is deleted successfully\n",
+"snippet":"value = nucleus_utils.delete_folder(server=server, path=path)\n",
+"category":"function"
+},
+{
+"title":"download_assets_async",
+"description":"Download assets from S3 bucket\n\n**Args:**\n\n * `src` (str): URL of S3 bucket as source\n\n * \n\n        `dst` (str): URL of Nucleus server to copy assets to\n\n        :   progress\\_callback: Callback function to keep track of progress of copy\n\n * `concurrency` (int): Number of concurrent copy operations. Default value: 3\n\n * `copy_behaviour` (omni.client.\\_omniclient.CopyBehavior): Behavior if the destination exists. Default value: OVERWRITE\n\n * `copy_after_delete` (bool): True if destination needs to be deleted before a copy. Default value: True\n\n * `timeout` (float): Default value: 300 seconds\n\n**Returns:**\n\n * -   `Result` (omni.client.\\_omniclient.Result): Result of copy\n",
+"snippet":"value = nucleus_utils.download_assets_async(src=src, dst=dst, progress_callback=progress_callback)\n",
+"category":"function"
+},
+{
+"title":"find_nucleus_server",
+"description":"Attempts to determine best Nucleus server to use based on existing mountedDrives setting and the\ndefault server specified in json config at \"/persistent/isaac/asset\\_root/\". Call is blocking\n\n**Args:**\n\n * `suffix` (str): Path to folder to search for. Default value: /Isaac\n\n**Returns:**\n\n * bool: True if Nucleus server with suffix is found \\* `url` (str): URL of found Nucleus\n",
+"snippet":"value = nucleus_utils.find_nucleus_server(suffix=suffix)\n",
+"category":"function"
+},
+{
+"title":"get_assets_root_path",
+"description":"Tries to find the root path to the Isaac Sim assets on a Nucleus server\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL of Nucleus server with root path to assets folder.\n\n        :   Returns None if Nucleus server not found.\n",
+"snippet":"value = nucleus_utils.get_assets_root_path()\n",
+"category":"function"
+},
+{
+"title":"get_assets_root_path_async",
+"description":"Tries to find the root path to the Isaac Sim assets on a Nucleus server (asynchronous version).\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL of Nucleus server with root path to assets folder.\n\n        :   Returns None if Nucleus server not found.\n",
+"snippet":"value = nucleus_utils.get_assets_root_path_async()\n",
+"category":"function"
+},
+{
+"title":"get_assets_server",
+"description":"Tries to find a server with the Isaac Sim assets\n\n**Returns:**\n\n * -   `url` (str): URL of Nucleus server with the Isaac Sim assets Returns None if Nucleus server not found.\n",
+"snippet":"value = nucleus_utils.get_assets_server()\n",
+"category":"function"
+},
+{
+"title":"get_full_asset_path",
+"description":"Tries to find the full asset path on connected servers\n\n**Args:**\n\n * `path` (str): Path of asset from root to verify\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL or full path to assets.\n\n        :   Returns None if assets not found.\n",
+"snippet":"value = nucleus_utils.get_full_asset_path(path=path)\n",
+"category":"function"
+},
+{
+"title":"get_full_asset_path_async",
+"description":"Tries to find the full asset path on connected servers (asynchronous version).\n\n**Args:**\n\n * `path` (str): Path of asset from root to verify\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL or full path to assets.\n\n        :   Returns None if assets not found.\n",
+"snippet":"value = nucleus_utils.get_full_asset_path_async(path=path)\n",
+"category":"function"
+},
+{
+"title":"get_isaac_asset_root_path",
+"description":"Tries to find the root path to the Isaac Sim assets\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL or root path to Isaac Sim assets folder.\n\n        :   Returns None if Isaac Sim assets not found.\n",
+"snippet":"value = nucleus_utils.get_isaac_asset_root_path()\n",
+"category":"function"
+},
+{
+"title":"get_nvidia_asset_root_path",
+"description":"Tries to find the root path to the NVIDIA assets\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL or root path to NVIDIA assets folder.\n\n        :   Returns None if NVIDIA assets not found.\n",
+"snippet":"value = nucleus_utils.get_nvidia_asset_root_path()\n",
+"category":"function"
+},
+{
+"title":"get_server_path",
+"description":"Tries to find a Nucleus server with specific path\n\n**Args:**\n\n * `suffix` (str): Path to folder to search for.\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL of Nucleus server with path to folder.\n\n        :   Returns None if Nucleus server not found.\n",
+"snippet":"value = nucleus_utils.get_server_path()\n",
+"category":"function"
+},
+{
+"title":"get_server_path_async",
+"description":"Tries to find a Nucleus server with specific path (asynchronous version).\n\n**Args:**\n\n * `suffix` (str): Path to folder to search for.\n\n**Returns:**\n\n * -   \n\n        `url` (str): URL of Nucleus server with path to folder.\n\n        :   Returns None if Nucleus server not found.\n",
+"snippet":"value = nucleus_utils.get_server_path_async()\n",
+"category":"function"
+},
+{
+"title":"get_url_root",
+"description":"Get root from URL or path\nArgs:\n\\* `url` (str): full http or omniverse path\n\n**Returns:**\n\n * str: Root path or URL or Nucleus server\n",
+"snippet":"value = nucleus_utils.get_url_root(url=url)\n",
+"category":"function"
+},
+{
+"title":"is_dir_async",
+"description":"Check if path is a folder\n\n**Args:**\n\n * `path` (str): Path to folder\n\n**Returns:**\n\n * bool: True if path is a folder\n",
+"snippet":"value = nucleus_utils.is_dir_async(path=path)\n",
+"category":"function"
+},
+{
+"title":"is_file",
+"description":"Check if path is a file\n\n**Args:**\n\n * `path` (str): Path to file\n\n**Returns:**\n\n * bool: True if path is a file\n",
+"snippet":"value = nucleus_utils.is_file(path=path)\n",
+"category":"function"
+},
+{
+"title":"is_file_async",
+"description":"Check if path is a file\n\n**Args:**\n\n * `path` (str): Path to file\n\n**Returns:**\n\n * bool: True if path is a file\n",
+"snippet":"value = nucleus_utils.is_file_async(path=path)\n",
+"category":"function"
+},
+{
+"title":"list_folder",
+"description":"List files and sub-folders from root path\n\n**Args:**\n\n * `path` (str): Path to root folder\n\n**Raises:**\n\n * Exception: When unable to find files under the path.\n\n**Returns:**\n\n * -   `files` (typing.List): List of path to each file\n * `dirs` (typing.List): List of path to each sub-folder\n",
+"snippet":"value = nucleus_utils.list_folder(path=path)\n",
+"category":"function"
+},
+{
+"title":"recursive_list_folder",
+"description":"Recursively list all files\n\n**Args:**\n\n * `path` (str): Path to folder\n\n**Returns:**\n\n * -   `paths` (typing.List): List of path to each file\n",
+"snippet":"value = nucleus_utils.recursive_list_folder(path=path)\n",
+"category":"function"
+},
+{
+"title":"verify_asset_root_path",
+"description":"Attempts to determine Isaac assets version and check if there are updates.\n(asynchronous version)\n\n**Args:**\n\n * `path` (str): URL or path of asset root to verify\n\n**Returns:**\n\n * omni.client.Result: OK if Assets verified \\* `ver` (str): Version of Isaac Sim assets\n",
+"snippet":"value = nucleus_utils.verify_asset_root_path(path=path)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Numpy",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.numpy as numpy_utils\n",
+"category":"import"
+},
+{
+"title":"as_type",
+"description":"",
+"snippet":"numpy_utils.as_type(data=data, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"assign",
+"description":"",
+"snippet":"numpy_utils.assign(src=src, dst=dst, indices=indices)\n",
+"category":"function"
+},
+{
+"title":"assign_pose",
+"description":"",
+"snippet":"numpy_utils.assign_pose(current_positions=current_positions, current_orientations=current_orientations, positions=positions, orientations=orientations, indices=indices)\n",
+"category":"function"
+},
+{
+"title":"clone_tensor",
+"description":"",
+"snippet":"numpy_utils.clone_tensor(data=data)\n",
+"category":"function"
+},
+{
+"title":"convert",
+"description":"",
+"snippet":"numpy_utils.convert(data=data)\n",
+"category":"function"
+},
+{
+"title":"cos",
+"description":"",
+"snippet":"numpy_utils.cos(data=data)\n",
+"category":"function"
+},
+{
+"title":"create_tensor_from_list",
+"description":"",
+"snippet":"numpy_utils.create_tensor_from_list(data=data, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"create_zeros_tensor",
+"description":"",
+"snippet":"numpy_utils.create_zeros_tensor(shape=shape, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"deg2rad",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `degree_value` (np.ndarray): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * np.ndarray: \\_[description]()\n",
+"snippet":"value = numpy_utils.deg2rad(degree_value=degree_value)\n",
+"category":"function"
+},
+{
+"title":"euler_angles_to_quats",
+"description":"Vectorized version of converting euler angles to quaternion (scalar first)\n\n**Args:**\n\n    euler\\_angles np.ndarray: euler angles with shape (N, 3) or (3,) representation XYZ in extrinsic coordinates \\* `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True. \\* `degrees` (bool, optional): True if degrees, False if radians. Defaults to False.\n\n**Returns:**\n\n * np.ndarray: quaternions representation of the angles (N, 4) or (4,) - scalar first.\n",
+"snippet":"value = numpy_utils.euler_angles_to_quats(euler_angles=euler_angles)\n",
+"category":"function"
+},
+{
+"title":"expand_dims",
+"description":"",
+"snippet":"numpy_utils.expand_dims(data=data, axis=axis)\n",
+"category":"function"
+},
+{
+"title":"get_local_from_world",
+"description":"",
+"snippet":"numpy_utils.get_local_from_world(parent_transforms=parent_transforms, positions=positions, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"get_pose",
+"description":"",
+"snippet":"numpy_utils.get_pose(positions=positions, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"get_world_from_local",
+"description":"",
+"snippet":"numpy_utils.get_world_from_local(parent_transforms=parent_transforms, translations=translations, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"gf_quat_to_tensor",
+"description":"Converts a pxr Quaternion type to a numpy array following \\[w, x, y, z\\] convention.\n\n**Args:**\n\n * `orientation` (typing.Union\\[Gf.Quatd, Gf.Quatf, Gf.Quaternion\\]): \\[description\\]\n\n**Returns:**\n\n * np.ndarray: \\[description\\]\n",
+"snippet":"value = numpy_utils.gf_quat_to_tensor(orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"inverse",
+"description":"",
+"snippet":"numpy_utils.inverse(data=data)\n",
+"category":"function"
+},
+{
+"title":"matmul",
+"description":"",
+"snippet":"numpy_utils.matmul(matrix_a=matrix_a, matrix_b=matrix_b)\n",
+"category":"function"
+},
+{
+"title":"move_data",
+"description":"",
+"snippet":"numpy_utils.move_data(data=data)\n",
+"category":"function"
+},
+{
+"title":"pad",
+"description":"",
+"snippet":"numpy_utils.pad(data=data, pad_width=pad_width)\n",
+"category":"function"
+},
+{
+"title":"quats_to_euler_angles",
+"description":"Vectorized version of converting quaternions (scalar first) to euler angles\n\n**Args:**\n\n * `quaternions` (np.ndarray): quaternions with shape (N, 4) or (4,) - scalar first\n * `degrees` (bool, optional): Return euler angles in degrees if True, radians if False. Defaults to False.\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * np.ndarray: Euler angles in extrinsic or intrinsic coordinates XYZ order with shape (N, 3) or (3,) corresponding to the quaternion rotations\n",
+"snippet":"value = numpy_utils.quats_to_euler_angles(quaternions=quaternions)\n",
+"category":"function"
+},
+{
+"title":"quats_to_rot_matrices",
+"description":"Vectorized version of converting quaternions to rotation matrices\n\n**Args:**\n\n * `quaternions` (np.ndarray): quaternions with shape (N, 4) or (4,) and scalar first\n\n**Returns:**\n\n * np.ndarray: N Rotation matrices with shape (N, 3, 3) or (3, 3)\n",
+"snippet":"value = numpy_utils.quats_to_rot_matrices(quaternions=quaternions)\n",
+"category":"function"
+},
+{
+"title":"quats_to_rotvecs",
+"description":"Vectorized version of converting quaternions to rotation vectors\n\n**Args:**\n\n * `quaternions` (np.ndarray): quaternions with shape (N, 4) or (4,) and scalar first\n\n**Returns:**\n\n * np.ndarray: N rotation vectors with shape (N,3) or (3,). The magnitude of the rotation vector describes the magnitude of the rotation. The normalized rotation vector represents the axis of rotation.\n",
+"snippet":"value = numpy_utils.quats_to_rotvecs(quaternions=quaternions)\n",
+"category":"function"
+},
+{
+"title":"rad2deg",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `radian_value` (np.ndarray): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * np.ndarray: \\_[description]()\n",
+"snippet":"value = numpy_utils.rad2deg(radian_value=radian_value)\n",
+"category":"function"
+},
+{
+"title":"resolve_indices",
+"description":"",
+"snippet":"numpy_utils.resolve_indices(indices=indices, count=count)\n",
+"category":"function"
+},
+{
+"title":"rot_matrices_to_quats",
+"description":"Vectorized version of converting rotation matrices to quaternions\n\n**Args:**\n\n * `rotation_matrices` (np.ndarray): N Rotation matrices with shape (N, 3, 3) or (3, 3)\n\n**Returns:**\n\n * np.ndarray: quaternion representation of the rotation matrices (N, 4) or (4,) - scalar first\n",
+"snippet":"value = numpy_utils.rot_matrices_to_quats(rotation_matrices=rotation_matrices)\n",
+"category":"function"
+},
+{
+"title":"rotvecs_to_quats",
+"description":"Vectorized version of converting rotation vectors to quaternions\n\n**Args:**\n\n * `rotation_vectors` (np.ndarray): N rotation vectors with shape (N, 3) or (3,). The magnitude of the rotation vector describes the magnitude of the rotation. The normalized rotation vector represents the axis of rotation.\n * `degrees` (bool): The magnitude of the rotation vector will be interpreted as degrees if True, and radians if False. Defaults to False.\n\n**Returns:**\n\n * np.ndarray: quaternion representation of the rotation matrices (N, 4) or (4,) - scalar first\n",
+"snippet":"value = numpy_utils.rotvecs_to_quats(rotation_vectors=rotation_vectors)\n",
+"category":"function"
+},
+{
+"title":"sin",
+"description":"",
+"snippet":"numpy_utils.sin(data=data)\n",
+"category":"function"
+},
+{
+"title":"tensor_cat",
+"description":"",
+"snippet":"numpy_utils.tensor_cat(data=data)\n",
+"category":"function"
+},
+{
+"title":"tensor_stack",
+"description":"",
+"snippet":"numpy_utils.tensor_stack(data=data)\n",
+"category":"function"
+},
+{
+"title":"tf_matrices_from_poses",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `translations` (Union\\[np.ndarray, torch.Tensor\\]): translations with shape (N, 3).\n * `orientations` (Union\\[np.ndarray, torch.Tensor\\]): quaternion representation (scalar first) with shape (N, 4).\n\n**Returns:**\n\n * Union\\[np.ndarray, torch.Tensor\\]: transformation matrices with shape (N, 4, 4)\n",
+"snippet":"value = numpy_utils.tf_matrices_from_poses(translations=translations, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"to_list",
+"description":"",
+"snippet":"numpy_utils.to_list(data=data)\n",
+"category":"function"
+},
+{
+"title":"to_numpy",
+"description":"",
+"snippet":"numpy_utils.to_numpy(data=data)\n",
+"category":"function"
+},
+{
+"title":"transpose_2d",
+"description":"",
+"snippet":"numpy_utils.transpose_2d(data=data)\n",
+"category":"function"
+},
+{
+"title":"wxyz2xyzw",
+"description":"",
+"snippet":"numpy_utils.wxyz2xyzw(q=q)\n",
+"category":"function"
+},
+{
+"title":"xyzw2wxyz",
+"description":"",
+"snippet":"numpy_utils.xyzw2wxyz(q=q)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Physics",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.physics as physics_utils\n",
+"category":"import"
+},
+{
+"title":"get_rigid_body_enabled",
+"description":"Get the `physics:rigidBodyEnabled` attribute from the USD Prim at the given path\n\n**Args:**\n\n * `prim_path` (str): The path to the USD Prim\n\n**Returns:**\n\n * Any: The value of `physics:rigidBodyEnabled` attribute if it exists, and None if it does not exist.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.physics as physics_utils\n>>>\n>>> # prim without the Physics' Rigid Body property\n>>> physics_utils.get_rigid_body_enabled(\"/World/Cube\")\nNone\n>>> # prim with the physics Rigid Body property added and enabled\n>>> physics_utils.get_rigid_body_enabled(\"/World/Cube\")\nTrue\n```\n",
+"snippet":"value = physics_utils.get_rigid_body_enabled(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"set_rigid_body_enabled",
+"description":"If it exists, set the `physics:rigidBodyEnabled` attribute on the USD Prim at the given path\n\n*Note:*\nIf the prim does not have the physics Rigid Body property added, calling this function will have no effect\n\n**Args:**\n\n * `_value` (Any): Value to set `physics:rigidBodyEnabled` attribute to\n * `prim_path` (str): The path to the USD Prim\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.physics as physics_utils\n>>>\n>>> physics_utils.set_rigid_body_enabled(False, \"/World/Cube\")\n```\n",
+"snippet":"physics_utils.set_rigid_body_enabled(_value=_value, prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"simulate_async",
+"description":"Helper function to simulate async for `seconds * steps_per_sec frames`.\n\n**Args:**\n\n * `seconds` (float): time in seconds to simulate for\n * `steps_per_sec` (int, optional): steps per second. Defaults to 60.\n * `callback` (Callable, optional): optional function to run every step. Defaults to None.\n\n---\n**Example:**\n\n```python\n>>> import asyncio\n>>> import omni.isaac.core.utils.physics as physics_utils\n>>> from omni.kit.async_engine import run_coroutine\n>>>\n>>> async def task():\n...     # simulate 1 second with 120 steps per second\n...     await physics_utils.simulate_async(1, steps_per_sec=120)\n...\n>>> run_coroutine(task())\n```\n\n```python\n>>> import asyncio\n>>> import omni.isaac.core.utils.physics as physics_utils\n>>> from omni.kit.async_engine import run_coroutine\n>>>\n>>> def callback(*args, **kwargs):\n...     print(\"callback:\", args, kwargs)\n...\n>>> async def task():\n...     # simulate 1 second with 120 steps per second and call the callback on each step\n...     await physics_utils.simulate_async(1, 120, callback)\n...\n>>> run_coroutine(task())\n```\n",
+"snippet":"physics_utils.simulate_async(seconds=seconds)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Prims",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.prims as prims_utils\n",
+"category":"import"
+},
+{
+"title":"create_prim",
+"description":"Create a prim into current USD stage.\n\nThe method applies specified transforms, the semantic label and set specified attributes.\n\n**Args:**\n\n * `prim_path` (str): The path of the new prim.\n * `prim_type` (str): Prim type name\n * `position` (typing.Sequence\\[float\\], optional): prim position (applied last)\n * `translation` (typing.Sequence\\[float\\], optional): prim translation (applied last)\n * `orientation` (typing.Sequence\\[float\\], optional): prim rotation as quaternion\n * `scale` (np.ndarray (3), optional): scaling factor in x, y, z.\n * `usd_path` (str, optional): Path to the USD that this prim will reference.\n * `semantic_label` (str, optional): Semantic label.\n * `semantic_type` (str, optional): set to \"class\" unless otherwise specified.\n * `attributes` (dict, optional): Key-value pairs of prim attributes to set.\n\n**Raises:**\n\n * Exception: If there is already a prim at the prim\\_path\n\n**Returns:**\n\n * Usd.Prim: The created USD prim.\n\n---\n**Example:**\n\n```python\n>>> import numpy as np\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # create a cube (/World/Cube) of size 2 centered at (1.0, 0.5, 0.0)\n>>> prims_utils.create_prim(\n...     prim_path=\"/World/Cube\",\n...     prim_type=\"Cube\",\n...     position=np.array([1.0, 0.5, 0.0]),\n...     attributes={\"size\": 2.0}\n... )\nUsd.Prim(</World/Cube>)\n```\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # load an USD file (franka.usd) to the stage under the path /World/panda\n>>> prims_utils.create_prim(\n...     prim_path=\"/World/panda\",\n...     prim_type=\"Xform\",\n...     usd_path=\"/home/<user>/Documents/Assets/Robots/Franka/franka.usd\"\n... )\nUsd.Prim(</World/panda>)\n```\n",
+"snippet":"value = prims_utils.create_prim(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"define_prim",
+"description":"Create a USD Prim at the given prim\\_path of type prim\\_type unless one already exists\n\n*Note:*\nThis method will create a prim of the specified type in the specified path.\nTo apply a transformation (position, orientation, scale), set attributes or\nload an USD file while creating the prim use the `create_prim` function.\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `prim_type` (str, optional): The type of the prim to create. Defaults to \"Xform\".\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Raises:**\n\n * Exception: If there is already a prim at the prim\\_path\n\n**Returns:**\n\n * Usd.Prim: The created USD prim.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.define_prim(\"/World/Shapes\", prim_type=\"Xform\")\nUsd.Prim(</World/Shapes>)\n```\n",
+"snippet":"value = prims_utils.define_prim(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"delete_prim",
+"description":"Remove the USD Prim and its descendants from the scene if able\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.delete_prim(\"/World/Cube\")\n```\n",
+"snippet":"prims_utils.delete_prim(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"find_matching_prim_paths",
+"description":"Find all the matching prim paths in the stage based on Regex expression.\n\n**Args:**\n\n * `prim_path_regex` (str): The Regex expression for prim path.\n\n**Returns:**\n\n * typing.List\\[str\\]: List of prim paths that match input expression.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/env/Cube, /World/env_01/Cube, /World/env_02/Cube\n>>> # get only the prim Cube paths from env_01 and env_02\n>>> prims_utils.find_matching_prim_paths(\"/World/env_.*/Cube\")\n['/World/env_01/Cube', '/World/env_02/Cube']\n```\n",
+"snippet":"value = prims_utils.find_matching_prim_paths(prim_path_regex=prim_path_regex)\n",
+"category":"function"
+},
+{
+"title":"get_all_matching_child_prims",
+"description":"Performs a breadth-first search starting from the root and returns all the prims matching the predicate.\n\n**Args:**\n\n * `prim_path` (str): root prim path to start traversal from.\n * `predicate` (typing.Callable\\[\\[str\\], bool\\]): predicate that checks the prim path of a prim and returns a boolean.\n * `depth` (typing.Optional\\[int\\]): maximum depth for traversal, should be bigger than zero if specified. Defaults to None (i.e: traversal till the end of the tree).\n\n**Returns:**\n\n * typing.List\\[Usd.Prim\\]: A list containing the root and children prims matching specified predicate.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # get all hidden prims\n>>> predicate = lambda path: prims_utils.is_prim_hidden_in_stage(path)  # True if the prim at path is hidden\n>>> prims_utils.get_all_matching_child_prims(\"/\", predicate)\n[Usd.Prim(</OmniverseKit_Persp>),\n Usd.Prim(</OmniverseKit_Front>),\n Usd.Prim(</OmniverseKit_Top>),\n Usd.Prim(</OmniverseKit_Right>),\n Usd.Prim(</Render>)]\n```\n",
+"snippet":"value = prims_utils.get_all_matching_child_prims(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_first_matching_child_prim",
+"description":"Recursively get the first USD Prim at the path string that passes the predicate function\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `predicate` (typing.Callable\\[\\[str\\], bool\\]): Function to test the prims against\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Returns:**\n\n * Usd.Prim: The first prim or child of the prim, as defined by GetChildren, that passes the predicate\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> # Get the first child prim of type Cube\n>>> predicate = lambda path: prims_utils.get_prim_type_name(path) == \"Cube\"\n>>> prims_utils.get_first_matching_child_prim(\"/\", predicate)\nUsd.Prim(</World/Cube>)\n```\n",
+"snippet":"value = prims_utils.get_first_matching_child_prim(prim_path=prim_path, predicate=predicate)\n",
+"category":"function"
+},
+{
+"title":"get_first_matching_parent_prim",
+"description":"Recursively get the first USD Prim at the parent path string that passes the predicate function\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `predicate` (typing.Callable\\[\\[str\\], bool\\]): Function to test the prims against\n\n**Returns:**\n\n * str: The first prim on the parent path, as defined by GetParent, that passes the predicate\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Get the first parent of Cube prim of type Xform\n>>> predicate = lambda path: prims_utils.get_prim_type_name(path) == \"Xform\"\n>>> prims_utils.get_first_matching_parent_prim(\"/World/Cube\", predicate)\nUsd.Prim(</World>)\n```\n",
+"snippet":"value = prims_utils.get_first_matching_parent_prim(prim_path=prim_path, predicate=predicate)\n",
+"category":"function"
+},
+{
+"title":"get_prim_at_path",
+"description":"Get the USD or Fabric Prim at a given path string\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage.\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Returns:**\n\n * typing.Union\\[Usd.Prim, usdrt.Usd.\\_Usd.Prim\\]: USD or Fabric Prim object at the given path in the current stage.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_at_path(\"/World/Cube\")\nUsd.Prim(</World/Cube>)\n```\n",
+"snippet":"value = prims_utils.get_prim_at_path(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_prim_attribute_names",
+"description":"Get all the attribute names of a prim at the path\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Raises:**\n\n * Exception: If there is not a valid prim at the given path\n\n**Returns:**\n\n * typing.List\\[str\\]: List of the prim attribute names\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_attribute_names(\"/World/Cube\")\n['doubleSided', 'extent', 'orientation', 'primvars:displayColor', 'primvars:displayOpacity',\n 'purpose', 'size', 'visibility', 'xformOp:orient', 'xformOp:scale', 'xformOp:translate', 'xformOpOrder']\n```\n",
+"snippet":"value = prims_utils.get_prim_attribute_names(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_prim_attribute_value",
+"description":"Get a prim attribute value\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `attribute_name` (str): name of the attribute to get\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Raises:**\n\n * Exception: If there is not a valid prim at the given path\n\n**Returns:**\n\n * typing.Any: Prim attribute value\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_attribute_value(\"/World/Cube\", attribute_name=\"size\")\n1.0\n```\n",
+"snippet":"value = prims_utils.get_prim_attribute_value(prim_path=prim_path, attribute_name=attribute_name)\n",
+"category":"function"
+},
+{
+"title":"get_prim_children",
+"description":"Return the call of the USD Prim's GetChildren member function\n\n**Args:**\n\n * `prim` (Usd.Prim): The parent USD Prim\n\n**Returns:**\n\n * typing.List\\[Usd.Prim\\]: A list of the prim's children.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> # Get all prims under the prim World\n>>> prim = prims_utils.get_prim_at_path(\"/World\")\n>>> prims_utils.get_prim_children(prim)\n[Usd.Prim(</World/Cube>), Usd.Prim(</World/Cube_01>), Usd.Prim(</World/Cube_02>)]\n```\n",
+"snippet":"value = prims_utils.get_prim_children(prim=prim)\n",
+"category":"function"
+},
+{
+"title":"get_prim_object_type",
+"description":"Get the dynamic control object type of the USD Prim at the given path.\n\nIf the prim at the path is of Dynamic Control type e.g.: rigid\\_body, joint, dof, articulation, attractor, d6joint,\nthen the corresponding string returned. If is an Xformable prim, then \"xform\" is returned. Otherwise None\nis returned.\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n\n**Raises:**\n\n * Exception: If the USD Prim is not a supported type.\n\n**Returns:**\n\n * str: String corresponding to the object type.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_object_type(\"/World/Cube\")\nxform\n```\n",
+"snippet":"value = prims_utils.get_prim_object_type(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_prim_parent",
+"description":"Return the call of the USD Prim's GetChildren member function\n\n**Args:**\n\n * `prim` (Usd.Prim): The USD Prim to call GetParent on\n\n**Returns:**\n\n * Usd.Prim: The prim's parent returned from GetParent\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Get the prim Cube's parent\n>>> prim = prims_utils.get_prim_at_path(\"/World/Cube\")\n>>> prims_utils.get_prim_parent(prim)\nUsd.Prim(</World>)\n```\n",
+"snippet":"value = prims_utils.get_prim_parent(prim=prim)\n",
+"category":"function"
+},
+{
+"title":"get_prim_path",
+"description":"Get the path of a given USD prim.\n\n**Args:**\n\n * `prim` (Usd.Prim): The input USD prim.\n\n**Returns:**\n\n * str: The path to the input prim.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prim = prims_utils.get_prim_at_path(\"/World/Cube\")  # Usd.Prim(</World/Cube>)\n>>> prims_utils.get_prim_path(prim)\n/World/Cube\n```\n",
+"snippet":"value = prims_utils.get_prim_path(prim=prim)\n",
+"category":"function"
+},
+{
+"title":"get_prim_property",
+"description":"Get the attribute of the USD Prim at the given path\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `property_name` (str): name of the attribute to get\n\n**Returns:**\n\n * typing.Any: The attribute if it exists, None otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_property(\"/World/Cube\", property_name=\"size\")\n1.0\n```\n",
+"snippet":"value = prims_utils.get_prim_property(prim_path=prim_path, property_name=property_name)\n",
+"category":"function"
+},
+{
+"title":"get_prim_type_name",
+"description":"Get the TypeName of the USD Prim at the path if it is valid\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Raises:**\n\n * Exception: If there is not a valid prim at the given path\n\n**Returns:**\n\n * str: The TypeName of the USD Prim at the path string\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prims_utils.get_prim_type_name(\"/World/Cube\")\nCube\n```\n",
+"snippet":"value = prims_utils.get_prim_type_name(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_ancestral",
+"description":"Check if any of the prims ancestors were brought in as a reference\n\n**Args:**\n\n * `prim_path` (str): The path to the USD prim.\n\n**Returns:**\n\n * True if prim is part of a referenced prim, false otherwise.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # /World/Cube is a prim created\n>>> prims_utils.is_prim_ancestral(\"/World/Cube\")\nFalse\n>>> # /World/panda is an USD file loaded (as reference) under that path\n>>> prims_utils.is_prim_ancestral(\"/World/panda\")\nFalse\n>>> prims_utils.is_prim_ancestral(\"/World/panda/panda_link0\")\nTrue\n```\n",
+"snippet":"value = prims_utils.is_prim_ancestral(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_hidden_in_stage",
+"description":"Checks if the prim is hidden in the USd stage or not.\n\n**Args:**\n\n * `prim_path` (str): The path to the USD prim.\n\n**Returns:**\n\n * True if prim is hidden from stage window, False if not hidden.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # prim without the 'hide_in_stage_window' metadata\n>>> prims_utils.is_prim_hidden_in_stage(\"/World/Cube\")\nNone\n>>> # prim with the 'hide_in_stage_window' metadata set to True\n>>> prims_utils.is_prim_hidden_in_stage(\"/World/Cube\")\nTrue\n```\n",
+"snippet":"value = prims_utils.is_prim_hidden_in_stage(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_no_delete",
+"description":"Checks whether a prim can be deleted or not from USD stage.\n\n**Args:**\n\n * `prim_path` (str): The path to the USD prim.\n\n**Returns:**\n\n * True if prim cannot be deleted, False if it can\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # prim without the 'no_delete' metadata\n>>> prims_utils.is_prim_no_delete(\"/World/Cube\")\nNone\n>>> # prim with the 'no_delete' metadata set to True\n>>> prims_utils.is_prim_no_delete(\"/World/Cube\")\nTrue\n```\n",
+"snippet":"value = prims_utils.is_prim_no_delete(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_non_root_articulation_link",
+"description":"Used to query if the prim\\_path corresponds to a link in an articulation which is a non root link.\n\n**Args:**\n\n * `prim_path` (str): prim\\_path to query\n\n**Returns:**\n\n * bool: True if the prim path corresponds to a link in an articulation which is a non root link and can't have a transformation applied to it.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # /World/panda contains the prim tree for the Franka panda robot.\n>>> # The prim on this path has the Physics Articulation Root property applied\n>>> prims_utils.is_prim_non_root_articulation_link(\"/World/panda\")\nFalse\n>>> prims_utils.is_prim_non_root_articulation_link(\"/World/panda/panda_link0\")\nTrue\n```\n",
+"snippet":"value = prims_utils.is_prim_non_root_articulation_link(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_path_valid",
+"description":"Check if a path has a valid USD Prim at it\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n**Returns:**\n\n * bool: True if the path points to a valid prim\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube\n>>> prims_utils.is_prim_path_valid(\"/World/Cube\")\nTrue\n>>> prims_utils.is_prim_path_valid(\"/World/Cube/\")\nFalse\n>>> prims_utils.is_prim_path_valid(\"/World/Sphere\")  # it doesn't exist\nFalse\n```\n",
+"snippet":"value = prims_utils.is_prim_path_valid(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"is_prim_root_path",
+"description":"Checks if the input prim path is root or not.\n\n**Args:**\n\n * `prim_path` (str): The path to the USD prim.\n\n**Returns:**\n\n * True if the prim path is \"/\", False otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube\n>>> prims_utils.is_prim_root_path(\"/\")\nTrue\n>>> prims_utils.is_prim_root_path(\"/World\")\nFalse\n>>> prims_utils.is_prim_root_path(\"/World/Cube\")\nFalse\n```\n",
+"snippet":"value = prims_utils.is_prim_root_path(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"move_prim",
+"description":"Run the Move command to change a prims USD Path in the stage\n\n**Args:**\n\n * `path_from` (str): Path of the USD Prim you wish to move\n * `path_to` (str): Final destination of the prim\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Move the prim Cube outside the prim World\n>>> prims_utils.move_prim(\"/World/Cube\", \"/Cube\")\n```\n",
+"snippet":"prims_utils.move_prim(path_from=path_from, path_to=path_to)\n",
+"category":"function"
+},
+{
+"title":"query_parent_path",
+"description":"Check if one of the ancestors of the prim at the prim\\_path can pass the predicate\n\n**Args:**\n\n * `prim_path` (str): path to the USD Prim for which to check the ancestors\n * `predicate` (typing.Callable\\[\\[str\\], bool\\]): The condition that must be True about the ancestors\n\n**Returns:**\n\n * bool: True if there is an ancestor that can pass the predicate, False otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Check is the prim Cube has an ancestor of type Xform\n>>> predicate = lambda path: prims_utils.get_prim_type_name(path) == \"Xform\"\n>>> prims_utils.query_parent_path(\"/World/Cube\", predicate)\nTrue\n```\n",
+"snippet":"value = prims_utils.query_parent_path(prim_path=prim_path, predicate=predicate)\n",
+"category":"function"
+},
+{
+"title":"set_prim_attribute_value",
+"description":"Set a prim attribute value\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `attribute_name` (str): name of the attribute to set\n * `value` (typing.Any): value to set the attribute to\n * `fabric` (bool, optional): True for fabric stage and False for USD stage. Defaults to False.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Set the Cube size to 5.0\n>>> prims_utils.set_prim_attribute_value(\"/World/Cube\", attribute_name=\"size\", value=5.0)\n```\n",
+"snippet":"prims_utils.set_prim_attribute_value(prim_path=prim_path, attribute_name=attribute_name, value=value)\n",
+"category":"function"
+},
+{
+"title":"set_prim_hide_in_stage_window",
+"description":"Set `hide_in_stage_window` metadata for a prim\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to set\n * `hide` (bool): True to hide in stage window, false to show\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prim = prims_utils.get_prim_at_path(\"/World/Cube\")\n>>> prims_utils.set_prim_hide_in_stage_window(prim, True)\n```\n",
+"snippet":"prims_utils.set_prim_hide_in_stage_window(prim=prim, hide=hide)\n",
+"category":"function"
+},
+{
+"title":"set_prim_no_delete",
+"description":"Set `no_delete` metadata for a prim\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to set\n * `no_delete` (bool):True to make prim undeletable in stage window, false to allow deletion\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> prim = prims_utils.get_prim_at_path(\"/World/Cube\")\n>>> prims_utils.set_prim_no_delete(prim, True)\n```\n",
+"snippet":"prims_utils.set_prim_no_delete(prim=prim, no_delete=no_delete)\n",
+"category":"function"
+},
+{
+"title":"set_prim_property",
+"description":"Set the attribute of the USD Prim at the path\n\n**Args:**\n\n * `prim_path` (str): path of the prim in the stage\n * `property_name` (str): name of the attribute to set\n * `property_value` (typing.Any): value to set the attribute to\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Set the Cube size to 5.0\n>>> prims_utils.set_prim_property(\"/World/Cube\", property_name=\"size\", property_value=5.0)\n```\n",
+"snippet":"prims_utils.set_prim_property(prim_path=prim_path, property_name=property_name, property_value=property_value)\n",
+"category":"function"
+},
+{
+"title":"set_prim_visibility",
+"description":"Sets the visibility of the prim in the opened stage.\n\n*Note:*\nThe method does this through the USD API.\n\n**Args:**\n\n * `prim` (Usd.Prim): the USD prim\n * `visible` (bool): flag to set the visibility of the usd prim in stage.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube. Make the Cube not visible\n>>> prim = prims_utils.get_prim_at_path(\"/World/Cube\")\n>>> prims_utils.set_prim_visibility(prim, False)\n```\n",
+"snippet":"prims_utils.set_prim_visibility(prim=prim, visible=visible)\n",
+"category":"function"
+},
+{
+"title":"set_targets",
+"description":"Set targets for a prim relationship attribute\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to create and set attribute on\n * `attribute` (str): Relationship attribute to create\n * `target_prim_paths` (list): list of targets to set\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.prims as prims_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> # Set each prim Cube to the relationship targetPrim of the prim World\n>>> prim = prims_utils.get_prim_at_path(\"/World\")\n>>> targets = [\"/World/Cube\", \"/World/Cube_01\", \"/World/Cube_02\"]\n>>> prims_utils.set_targets(prim, \"targetPrim\", targets)\n```\n",
+"snippet":"prims_utils.set_targets(prim=prim, attribute=attribute, target_prim_paths=target_prim_paths)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Random",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.random as random_utils\n",
+"category":"import"
+},
+{
+"title":"get_random_translation_from_camera",
+"description":"Get a random translation from the camera, in the camera's frame, that's in view of the camera.\n\n**Args:**\n\n * `min_distance` (float): minimum distance away from the camera (along the optical axis) of the random translation.\n * `max_distance` (float): maximum distance away from the camera (along the optical axis) of the random translation.\n * `fov_x` (float): field of view of the camera in the x-direction in radians.\n * `fov_y` (float): field of view of the camera in the y-direction in radians.\n * `fraction_to_screen_edge` (float): maximum allowed fraction to the edge of the screen the translated point may appear when viewed from the camera. A value of 0 corresponds to the translated point being centered in the camera's view (on the optical axis), whereas a value of 1 corresponds to the translated point being on the edge of the screen in the camera's view.\n\n**Returns:**\n\n * np.ndarray: random translation from the camera, in the camera's frame, that's in view of the camera. Shape is (3, ).\n",
+"snippet":"value = random_utils.get_random_translation_from_camera(min_distance=min_distance, max_distance=max_distance, fov_x=fov_x, fov_y=fov_y, fraction_to_screen_edge=fraction_to_screen_edge)\n",
+"category":"function"
+},
+{
+"title":"get_random_values_in_range",
+"description":"Get an array of random values where each element is between the corresponding min\\_range and max\\_range element.\n\n**Args:**\n\n * `min_range` (np.ndarray): minimum values for each corresponding element of the array of random values. Shape is (num\\_values, ).\n * `max_range` (np.ndarray): maximum values for each corresponding element of the array of random values. Shape is (num\\_values, ).\n\n**Returns:**\n\n * np.ndarray: array of random values. Shape is (num\\_values, ).\n",
+"snippet":"value = random_utils.get_random_values_in_range(min_range=min_range, max_range=max_range)\n",
+"category":"function"
+},
+{
+"title":"get_random_world_pose_in_view",
+"description":"Get a pose defined in the world frame that's in view of the camera.\n\n**Args:**\n\n * `camera_prim` (Usd.Prim): prim path of the camera.\n * `min_distance` (float): minimum distance away from the camera (along the optical axis) of the random translation.\n * `max_distance` (float): maximum distance away from the camera (along the optical axis) of the random translation.\n * `fov_x` (float): field of view of the camera in the x-direction in radians.\n * `fov_y` (float): field of view of the camera in the y-direction in radians.\n * `fraction_to_screen_edge` (float): maximum allowed fraction to the edge of the screen the translated point may appear when viewed from the camera. A value of 0 corresponds to the translated point being centered in the camera's view (on the optical axis), whereas a value of 1 corresponds to the translated point being on the edge of the screen in the camera's view.\n * `coord_prim` (Usd.Prim): prim whose frame the orientation is defined with respect to.\n * `min_rotation_range` (np.ndarray): minimum XYZ Euler angles of the random pose, defined with respect to the frame of the prim at coord\\_prim. Shape is (3, ).\n * `max_rotation_range` (np.ndarray): maximum XYZ Euler angles of the random pose, defined with respect to the frame of the prim at coord\\_prim.\n\n**Returns:**\n\n * Tuple\\[np.ndarray, np.ndarray\\]: first index is position in the world frame. Shape is (3, ). Second index is quaternion orientation in the world frame. Quaternion is scalar-first (w, x, y, z). Shape is (4, ).\n",
+"snippet":"value = random_utils.get_random_world_pose_in_view(camera_prim=camera_prim, min_distance=min_distance, max_distance=max_distance, fov_x=fov_x, fov_y=fov_y, fraction_to_screen_edge=fraction_to_screen_edge, coord_prim=coord_prim, min_rotation_range=min_rotation_range, max_rotation_range=max_rotation_range)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Render Product",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.render_product as render_product_utils\n",
+"category":"import"
+},
+{
+"title":"add_aov",
+"description":"Adds an AOV/Render Var to an existing render product\n\n**Args:**\n\n * `render_product_path` (str): path to the render product prim\n * `aov_name` (str): Name of the render var we want to add to this render product\n\n**Raises:**\n\n * RuntimeError: If the render product path is invalid\n    RuntimeError: If the renderVar could not be created\n    RuntimeError: If the renderVar could not be added to the render product\n",
+"snippet":"render_product_utils.add_aov(render_product_path=render_product_path, aov_name=aov_name)\n",
+"category":"function"
+},
+{
+"title":"create_hydra_texture",
+"description":"",
+"snippet":"render_product_utils.create_hydra_texture(resolution=resolution, camera_prim_path=camera_prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_camera_prim_path",
+"description":"Get the current camera for a render product\n\n**Args:**\n\n * `render_product_path` (str): path to the render product prim\n\n**Raises:**\n\n * RuntimeError: If the render product path is invalid\n\n**Returns:**\n\n * str : Path to the camera prim attached to this render product\n",
+"snippet":"render_product_utils.get_camera_prim_path(render_product_path=render_product_path)\n",
+"category":"function"
+},
+{
+"title":"get_resolution",
+"description":"Get resolution for a render product\n\n**Args:**\n\n * `render_product_path` (str): path to the render product prim\n\n**Raises:**\n\n * RuntimeError: If the render product path is invalid\n\n**Returns:**\n\n * Tuple\\[int\\]: (width,height)\n",
+"snippet":"render_product_utils.get_resolution(render_product_path=render_product_path)\n",
+"category":"function"
+},
+{
+"title":"set_camera_prim_path",
+"description":"Sets the camera prim path for a render product\n\n**Args:**\n\n * `render_product_path` (str): path to the render product prim\n * `camera_prim_path` (str): path to the camera prim\n\n**Raises:**\n\n * RuntimeError: If the render product path is invalid\n",
+"snippet":"render_product_utils.set_camera_prim_path(render_product_path=render_product_path, camera_prim_path=camera_prim_path)\n",
+"category":"function"
+},
+{
+"title":"set_resolution",
+"description":"Set resolution for a render product\n\n**Args:**\n\n * `render_product_path` (str): path to the render product prim\n * `resolution` (Tuple\\[float\\]): width,height for render product\n\n**Raises:**\n\n * RuntimeError: If the render product path is invalid\n",
+"snippet":"render_product_utils.set_resolution(render_product_path=render_product_path, resolution=resolution)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Rotations",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.rotations as rotations_utils\n",
+"category":"import"
+},
+{
+"title":"euler_angles_to_quat",
+"description":"Convert Euler angles to quaternion.\n\n**Args:**\n\n * `euler_angles` (np.ndarray): Euler XYZ angles.\n * `degrees` (bool, optional): Whether input angles are in degrees. Defaults to False.\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * np.ndarray: quaternion (w, x, y, z).\n",
+"snippet":"value = rotations_utils.euler_angles_to_quat(euler_angles=euler_angles)\n",
+"category":"function"
+},
+{
+"title":"euler_to_rot_matrix",
+"description":"Convert Euler XYZ or ZYX angles to rotation matrix.\n\n**Args:**\n\n * `euler_angles` (np.ndarray): Euler angles.\n * `degrees` (bool, optional): Whether passed angles are in degrees.\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * np.ndarray: A 3x3 rotation matrix in its extrinsic or intrinsic form depends on the extrinsic argument.\n",
+"snippet":"value = rotations_utils.euler_to_rot_matrix(euler_angles=euler_angles)\n",
+"category":"function"
+},
+{
+"title":"gf_quat_to_np_array",
+"description":"Converts a pxr Quaternion type to a numpy array following \\[w, x, y, z\\] convention.\n\n**Args:**\n\n * `orientation` (typing.Union\\[Gf.Quatd, Gf.Quatf, Gf.Quaternion\\]): Input quaternion object.\n\n**Returns:**\n\n * np.ndarray: A (4,) quaternion array in (w, x, y, z).\n",
+"snippet":"value = rotations_utils.gf_quat_to_np_array(orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"gf_rotation_to_np_array",
+"description":"Converts a pxr Rotation type to a numpy array following \\[w, x, y, z\\] convention.\n\n**Args:**\n\n * `orientation` (Gf.Rotation): Pxr rotation object.\n\n**Returns:**\n\n * np.ndarray: A (4,) quaternion array in (w, x, y, z).\n",
+"snippet":"value = rotations_utils.gf_rotation_to_np_array(orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"lookat_to_quatf",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `camera` (Gf.Vec3f): \\[description\\]\n * `target` (Gf.Vec3f): \\[description\\]\n * `up` (Gf.Vec3f): \\[description\\]\n\n**Returns:**\n\n * Gf.Quatf: Pxr quaternion object.\n",
+"snippet":"value = rotations_utils.lookat_to_quatf(camera=camera, target=target, up=up)\n",
+"category":"function"
+},
+{
+"title":"matrix_to_euler_angles",
+"description":"Convert rotation matrix to Euler XYZ extrinsic or intrinsic angles.\n\n**Args:**\n\n * `mat` (np.ndarray): A 3x3 rotation matrix.\n * `degrees` (bool, optional): Whether returned angles should be in degrees.\n * `extrinsic` (bool, optional): True if the rotation matrix follows the extrinsic matrix convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic matrix conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * np.ndarray: Euler XYZ angles (intrinsic form) if extrinsic is False and Euler XYZ angles (extrinsic form) if extrinsic is True.\n",
+"snippet":"value = rotations_utils.matrix_to_euler_angles(mat=mat)\n",
+"category":"function"
+},
+{
+"title":"quat_to_euler_angles",
+"description":"Convert input quaternion to Euler XYZ or ZYX angles.\n\n**Args:**\n\n * `quat` (np.ndarray): Input quaternion (w, x, y, z).\n * `degrees` (bool, optional): Whether returned angles should be in degrees. Defaults to False.\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * np.ndarray: Euler XYZ angles (intrinsic form) if extrinsic is False and Euler XYZ angles (extrinsic form) if extrinsic is True.\n",
+"snippet":"value = rotations_utils.quat_to_euler_angles(quat=quat)\n",
+"category":"function"
+},
+{
+"title":"quat_to_rot_matrix",
+"description":"Convert input quaternion to rotation matrix.\n\n**Args:**\n\n * `quat` (np.ndarray): Input quaternion (w, x, y, z).\n\n**Returns:**\n\n * np.ndarray: A 3x3 rotation matrix.\n",
+"snippet":"value = rotations_utils.quat_to_rot_matrix(quat=quat)\n",
+"category":"function"
+},
+{
+"title":"rot_matrix_to_quat",
+"description":"Convert rotation matrix to Quaternion.\n\n**Args:**\n\n * `mat` (np.ndarray): A 3x3 rotation matrix.\n\n**Returns:**\n\n * np.ndarray: quaternion (w, x, y, z).\n",
+"snippet":"value = rotations_utils.rot_matrix_to_quat(mat=mat)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Semantics",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.semantics as semantics_utils\n",
+"category":"import"
+},
+{
+"title":"add_update_semantics",
+"description":"Apply a semantic label to a prim or update an existing label\n\n**Args:**\n\n * `prim` (Usd.Prim): Usd Prim to add or update semantics on\n\n * `semantic_label` (str): The label we want to apply\n\n * `type_label` (str): The type of semantic information we are specifying (default = \"class\")\n\n * \n\n        `suffix` (str): Additional suffix used to specify multiple semantic attribute names.\n\n        :   By default the semantic attribute name is \"Semantics\", and to specify additional\n            attributes a suffix can be provided. Simple string concatenation is used :\"Semantics\" + suffix (default = \"\")\n",
+"snippet":"semantics_utils.add_update_semantics(prim=prim, semantic_label=semantic_label)\n",
+"category":"function"
+},
+{
+"title":"get_semantics",
+"description":"Returns semantics that are applied to a prim\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to return semantics for\n\n**Returns:**\n\n * Dict\\[str, Tuple\\[str,str\\]\\]: Dictionary containing the name of the applied semantic, and the type and data associated with that semantic.\n",
+"snippet":"value = semantics_utils.get_semantics(prim=prim)\n",
+"category":"function"
+},
+{
+"title":"remove_all_semantics",
+"description":"Removes all semantic tags from a given prim and its children\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to remove any applied semantic APIs on\n * `recursive` (bool, optional): Also traverse children and remove semantics recursively. Defaults to False.\n",
+"snippet":"semantics_utils.remove_all_semantics(prim=prim)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Stage",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.stage as stage_utils\n",
+"category":"import"
+},
+{
+"title":"add_reference_to_stage",
+"description":"Add USD reference to the opened stage at specified prim path.\n\n**Args:**\n\n * `usd_path` (str): The path to USD file.\n * `prim_path` (str): The prim path to attach reference.\n * `prim_type` (str, optional): The type of prim. Defaults to \"Xform\".\n\n**Raises:**\n\n * FileNotFoundError: When input USD file is found at specified path.\n\n**Returns:**\n\n * Usd.Prim: The USD prim at specified prim path.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # load an USD file (franka.usd) to the stage under the path /World/panda\n>>> stage_utils.add_reference_to_stage(\n...     usd_path=\"/home/<user>/Documents/Assets/Robots/Franka/franka.usd\",\n...     prim_path=\"/World/panda\"\n... )\nUsd.Prim(</World/panda>)\n```\n",
+"snippet":"value = stage_utils.add_reference_to_stage(usd_path=usd_path, prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"clear_stage",
+"description":"Deletes all prims in the stage without populating the undo command buffer\n\n**Args:**\n\n * `predicate` (typing.Optional\\[typing.Callable\\[\\[str\\], bool\\]\\], optional): user defined function that takes a prim\\_path (str) as input and returns True/False if the prim should/shouldn't be deleted. If predicate is None, a default is used that deletes all prims\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # clear the whole stage\n>>> stage_utils.clear_stage()\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> # Delete only the prims of type Cube\n>>> predicate = lambda path: prims_utils.get_prim_type_name(path) == \"Cube\"\n>>> stage_utils.clear_stage(predicate)  # after the execution the stage will be /World\n```\n",
+"snippet":"stage_utils.clear_stage()\n",
+"category":"function"
+},
+{
+"title":"close_stage",
+"description":"Closes the current opened USD stage.\n\n*Note:*\nOnce the stage is closed, it is necessary to open a new stage or create a new one in order to work on it.\n\n**Args:**\n\n * `callback_fn` (typing.Callable, optional): Callback function to call while closing. Defaults to None.\n\n**Returns:**\n\n * bool: True if operation is successful, otherwise false.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.close_stage()\nTrue\n```\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> def callback(*args, **kwargs):\n...     print(\"callback:\", args, kwargs)\n...\n>>> stage_utils.close_stage(callback)\nTrue\n>>> stage_utils.close_stage(callback)\ncallback: (False, 'Stage opening or closing already in progress!!') {}\nFalse\n```\n",
+"snippet":"value = stage_utils.close_stage()\n",
+"category":"function"
+},
+{
+"title":"create_new_stage",
+"description":"Create a new stage.\n\n**Returns:**\n\n * Usd.Stage: The created USD stage.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.create_new_stage()\nTrue\n```\n",
+"snippet":"value = stage_utils.create_new_stage()\n",
+"category":"function"
+},
+{
+"title":"create_new_stage_async",
+"description":"Create a new stage (asynchronous version).\n\n---\n**Example:**\n\n```python\n>>> import asyncio\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>> from omni.kit.async_engine import run_coroutine\n>>>\n>>> async def task():\n...     await stage_utils.create_new_stage_async()\n...\n>>> run_coroutine(task())\n```\n",
+"snippet":"stage_utils.create_new_stage_async()\n",
+"category":"function"
+},
+{
+"title":"get_current_stage",
+"description":"Get the current open USD or Fabric stage\n\n**Args:**\n\n * `fabric` (bool, optional): True to get the fabric stage. False to get the USD stage. Defaults to False.\n\n**Returns:**\n\n * typing.Union\\[Usd.Stage, usdrt.Usd.\\_Usd.Stage\\]: The USD or Fabric stage as specified by the input arg fabric.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.get_current_stage()\nUsd.Stage.Open(rootLayer=Sdf.Find('anon:0x7fba6c04f840:World7.usd'), sessionLayer=Sdf.Find('anon:0x7fba6c01c5c0:World7-session.usda'), pathResolverContext=<invalid repr>)\n```\n",
+"snippet":"value = stage_utils.get_current_stage()\n",
+"category":"function"
+},
+{
+"title":"get_next_free_path",
+"description":"Returns the next free usd path for the current stage\n\n**Args:**\n\n * `path` (str): path we want to check\n * `parent` (str, optional): Parent prim for the given path. Defaults to None.\n\n**Returns:**\n\n * str: a new path that is guaranteed to not exist on the current stage\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01.\n>>> # Get the next available path for /World/Cube\n>>> stage_utils.get_next_free_path(\"/World/Cube\")\n/World/Cube_02\n```\n",
+"snippet":"value = stage_utils.get_next_free_path(path=path)\n",
+"category":"function"
+},
+{
+"title":"get_stage_units",
+"description":"Get the stage meters per unit currently set\n\nThe most common units and their values are listed in the following table:\n\n| Unit             | Value  |\n|------------------|--------|\n| kilometer (km)   | 1000.0 |\n| meters (m)       | 1.0    |\n| inch (in)        | 0.0254 |\n| centimeters (cm) | 0.01   |\n| millimeter (mm)  | 0.001  |\n\n**Returns:**\n\n * float: current stage meters per unit\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.get_stage_units()\n1.0\n```\n",
+"snippet":"value = stage_utils.get_stage_units()\n",
+"category":"function"
+},
+{
+"title":"get_stage_up_axis",
+"description":"Get the current up-axis of USD stage.\n\n**Returns:**\n\n * str: The up-axis of the stage.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.get_stage_up_axis()\nZ\n```\n",
+"snippet":"value = stage_utils.get_stage_up_axis()\n",
+"category":"function"
+},
+{
+"title":"is_stage_loading",
+"description":"Convenience function to see if any files are being loaded.\n\n**Returns:**\n\n * bool: True if loading, False otherwise\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.is_stage_loading()\nFalse\n```\n",
+"snippet":"value = stage_utils.is_stage_loading()\n",
+"category":"function"
+},
+{
+"title":"open_stage",
+"description":"Open the given usd file and replace currently opened stage.\n\n**Args:**\n\n * `usd_path` (str): Path to the USD file to open.\n\n**Raises:**\n\n * ValueError: When input path is not a supported file type by USD.\n\n**Returns:**\n\n * bool: True if operation is successful, otherwise false.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.open_stage(\"/home/<user>/Documents/Assets/Robots/Franka/franka.usd\")\nTrue\n```\n",
+"snippet":"value = stage_utils.open_stage(usd_path=usd_path)\n",
+"category":"function"
+},
+{
+"title":"open_stage_async",
+"description":"Open the given usd file and replace currently opened stage (asynchronous version).\n\n**Args:**\n\n * `usd_path` (str): Path to the USD file to open.\n\n**Raises:**\n\n * ValueError: When input path is not a supported file type by USD.\n\n**Returns:**\n\n * bool: True if operation is successful, otherwise false.\n\n---\n**Example:**\n\n```python\n>>> import asyncio\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>> from omni.kit.async_engine import run_coroutine\n>>>\n>>> async def task():\n...     await stage_utils.open_stage_async(\"/home/<user>/Documents/Assets/Robots/Franka/franka.usd\")\n...\n>>> run_coroutine(task())\n```\n",
+"snippet":"value = stage_utils.open_stage_async(usd_path=usd_path)\n",
+"category":"function"
+},
+{
+"title":"print_stage_prim_paths",
+"description":"Traverses the stage and prints all prim (hidden or not) paths.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> stage_utils.print_stage_prim_paths()\n/Render\n/World\n/World/Cube\n/World/Cube_01\n/World/Cube_02\n/OmniverseKit_Persp\n/OmniverseKit_Front\n/OmniverseKit_Top\n/OmniverseKit_Right\n```\n",
+"snippet":"stage_utils.print_stage_prim_paths()\n",
+"category":"function"
+},
+{
+"title":"save_stage",
+"description":"Save usd file to path, it will be overwritten with the current stage\n\n**Args:**\n\n * `usd_path` (str): File path to save the current stage to\n * `save_and_reload_in_place` (bool, optional): use `save_as_stage` to save and reload the root layer in place. Defaults to True.\n\n**Raises:**\n\n * ValueError: When input path is not a supported file type by USD.\n\n**Returns:**\n\n * bool: True if operation is successful, otherwise false.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.save_stage(\"/home/<user>/Documents/Save/stage.usd\")\nTrue\n```\n",
+"snippet":"value = stage_utils.save_stage(usd_path=usd_path)\n",
+"category":"function"
+},
+{
+"title":"set_livesync_stage",
+"description":"Save the stage and set the Live Sync mode for real-time live editing of shared files on a Nucleus server\n\n**Args:**\n\n * `usd_path` (str): path to enable live sync for, it will be overwritten with the current stage\n * `enable` (bool): True to enable livesync, false to disable livesync\n\n**Returns:**\n\n * bool: True if operation is successful, otherwise false.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.set_livesync_stage(\"omniverse://localhost/Users/Live/stage.usd\", enable=True)\nserver omniverse://localhost: ConnectionStatus.CONNECTING\nserver omniverse://localhost: ConnectionStatus.CONNECTED\nTrue\n```\n",
+"snippet":"value = stage_utils.set_livesync_stage(usd_path=usd_path, enable=enable)\n",
+"category":"function"
+},
+{
+"title":"set_stage_units",
+"description":"Set the stage meters per unit\n\nThe most common units and their values are listed in the following table:\n\n| Unit             | Value  |\n|------------------|--------|\n| kilometer (km)   | 1000.0 |\n| meters (m)       | 1.0    |\n| inch (in)        | 0.0254 |\n| centimeters (cm) | 0.01   |\n| millimeter (mm)  | 0.001  |\n\n**Args:**\n\n * `stage_units_in_meters` (float): units for stage\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.set_stage_units(1.0)\n```\n",
+"snippet":"stage_utils.set_stage_units(stage_units_in_meters=stage_units_in_meters)\n",
+"category":"function"
+},
+{
+"title":"set_stage_up_axis",
+"description":"Change the up axis of the current stage\n\n**Args:**\n\n * `axis` (UsdGeom.Tokens, optional): valid values are `\"x\"`, `\"y\"` and `\"z\"`\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # set stage up axis to Y-up\n>>> stage_utils.set_stage_up_axis(\"y\")\n```\n",
+"snippet":"stage_utils.set_stage_up_axis()\n",
+"category":"function"
+},
+{
+"title":"traverse_stage",
+"description":"Traverse through prims (hidden or not) in the opened Usd stage.\n\n**Returns:**\n\n * typing.Iterable: Generator which yields prims from the stage in depth-first-traversal order.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> # given the stage: /World/Cube, /World/Cube_01, /World/Cube_02.\n>>> # Traverse through prims in the stage\n>>> for prim in stage_utils.traverse_stage():\n>>>     print(prim)\nUsd.Prim(</World>)\nUsd.Prim(</World/Cube>)\nUsd.Prim(</World/Cube_01>)\nUsd.Prim(</World/Cube_02>)\nUsd.Prim(</OmniverseKit_Persp>)\nUsd.Prim(</OmniverseKit_Front>)\nUsd.Prim(</OmniverseKit_Top>)\nUsd.Prim(</OmniverseKit_Right>)\nUsd.Prim(</Render>)\n```\n",
+"snippet":"value = stage_utils.traverse_stage()\n",
+"category":"function"
+},
+{
+"title":"update_stage",
+"description":"Update the current USD stage.\n\n---\n**Example:**\n\n```python\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>>\n>>> stage_utils.update_stage()\n```\n",
+"snippet":"stage_utils.update_stage()\n",
+"category":"function"
+},
+{
+"title":"update_stage_async",
+"description":"Update the current USD stage (asynchronous version).\n\n---\n**Example:**\n\n```python\n>>> import asyncio\n>>> import omni.isaac.core.utils.stage as stage_utils\n>>> from omni.kit.async_engine import run_coroutine\n>>>\n>>> async def task():\n...     await stage_utils.update_stage_async()\n...\n>>> run_coroutine(task())\n```\n",
+"snippet":"stage_utils.update_stage_async()\n",
+"category":"function"
+}
+]
+},
+{
+"title":"String",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.string as string_utils\n",
+"category":"import"
+},
+{
+"title":"find_root_prim_path_from_regex",
+"description":"Find the first prim above the regex pattern prim and its position.\n\n**Args:**\n\n * `prim_path_regex` (str): full prim path including the regex pattern prim.\n\n**Returns:**\n\n * Tuple\\[str, int\\]: First position is the prim path to the parent of the regex prim. Second position represents the level of the regex prim in the USD stage tree representation.\n",
+"snippet":"value = string_utils.find_root_prim_path_from_regex(prim_path_regex=prim_path_regex)\n",
+"category":"function"
+},
+{
+"title":"find_unique_string_name",
+"description":"Find a unique string name based on the predicate function provided.\n\nThe string is appended with \"\\_N\", where N is a natural number till the resultant string\nis unique.\n\n**Args:**\n\n * `initial_name` (str): The initial string name.\n * `is_unique_fn` (Callable\\[\\[str\\], bool\\]): The predicate function to validate against.\n\n**Returns:**\n\n * str: A unique string based on input function.\n",
+"snippet":"value = string_utils.find_unique_string_name(initial_name=initial_name, is_unique_fn=is_unique_fn)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Transformations",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.transformations as transformations_utils\n",
+"category":"import"
+},
+{
+"title":"get_relative_transform",
+"description":"Get the relative transformation matrix from the source prim to the target prim.\n\n**Args:**\n\n * `source_prim` (Usd.Prim): source prim from which frame to compute the relative transform.\n * `target_prim` (Usd.Prim): target prim to which frame to compute the relative transform.\n\n**Returns:**\n\n * np.ndarray: Column-major transformation matrix with shape (4, 4).\n",
+"snippet":"value = transformations_utils.get_relative_transform(source_prim=source_prim, target_prim=target_prim)\n",
+"category":"function"
+},
+{
+"title":"get_transform_with_normalized_rotation",
+"description":"Get the transform after normalizing rotation component.\n\n**Args:**\n\n * `transform` (np.ndarray): transformation matrix with shape (4, 4).\n\n**Returns:**\n\n * np.ndarray: transformation matrix with normalized rotation with shape (4, 4).\n",
+"snippet":"value = transformations_utils.get_transform_with_normalized_rotation(transform=transform)\n",
+"category":"function"
+},
+{
+"title":"get_translation_from_target",
+"description":"Get a translation with respect to the target's frame, from a translation in the source's frame.\n\n**Args:**\n\n * `translation_from_source` (np.ndarray): translation from the frame of the prim at source\\_path. Shape is (3, ).\n * `source_prim` (Usd.Prim): prim path of the prim whose frame the original/untransformed translation (translation\\_from\\_source) is defined with respect to.\n * `target_prim` (Usd.Prim): prim path of the prim whose frame corresponds to the target frame that the returned translation will be defined with respect to.\n\n**Returns:**\n\n * np.ndarray: translation with respect to the target's frame. Shape is (3, ).\n",
+"snippet":"value = transformations_utils.get_translation_from_target(translation_from_source=translation_from_source, source_prim=source_prim, target_prim=target_prim)\n",
+"category":"function"
+},
+{
+"title":"get_world_pose_from_relative",
+"description":"Get a pose defined in the world frame from a pose defined relative to the frame of the coord\\_prim.\n\n**Args:**\n\n * `coord_prim` (Usd.Prim): path of the prim whose frame the relative pose is defined with respect to.\n * `relative_translation` (np.ndarray): translation relative to the frame of the prim at prim\\_path. Shape is (3, ).\n * `relative_orientation` (np.ndarray): quaternion orientation relative to the frame of the prim at prim\\_path. Quaternion is scalar-first (w, x, y, z). Shape is (4, ).\n\n**Returns:**\n\n * Tuple\\[np.ndarray, np.ndarray\\]: first index is position in the world frame. Shape is (3, ). Second index is quaternion orientation in the world frame. Quaternion is scalar-first (w, x, y, z). Shape is (4, ).\n",
+"snippet":"value = transformations_utils.get_world_pose_from_relative(coord_prim=coord_prim, relative_translation=relative_translation, relative_orientation=relative_orientation)\n",
+"category":"function"
+},
+{
+"title":"pose_from_tf_matrix",
+"description":"Gets pose corresponding to input transformation matrix.\n\n**Args:**\n\n * `transformation` (np.ndarray): Column-major transformation matrix. shape is (4, 4).\n\n**Returns:**\n\n * Tuple\\[np.ndarray, np.ndarray\\]: first index is translation corresponding to transformation. shape is (3, ). second index is quaternion orientation corresponding to transformation. quaternion is scalar-first (w, x, y, z). shape is (4, ).\n",
+"snippet":"value = transformations_utils.pose_from_tf_matrix(transformation=transformation)\n",
+"category":"function"
+},
+{
+"title":"tf_matrices_from_poses",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `translations` (Union\\[np.ndarray, torch.Tensor\\]): translations with shape (N, 3).\n * `orientations` (Union\\[np.ndarray, torch.Tensor\\]): quaternion representation (scalar first) with shape (N, 4).\n\n**Returns:**\n\n * Union\\[np.ndarray, torch.Tensor\\]: transformation matrices with shape (N, 4, 4)\n",
+"snippet":"value = transformations_utils.tf_matrices_from_poses(translations=translations, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"tf_matrix_from_pose",
+"description":"Compute input pose to transformation matrix.\n\n**Args:**\n\n * `pos` (Sequence\\[float\\]): The translation vector.\n * `rot` (Sequence\\[float\\]): The orientation quaternion.\n\n**Returns:**\n\n * np.ndarray: A 4x4 matrix.\n",
+"snippet":"value = transformations_utils.tf_matrix_from_pose(translation=translation, orientation=orientation)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Torch",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.torch as torch_utils\n",
+"category":"import"
+},
+{
+"title":"as_type",
+"description":"",
+"snippet":"torch_utils.as_type(data=data, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"assign",
+"description":"",
+"snippet":"torch_utils.assign(src=src, dst=dst, indices=indices)\n",
+"category":"function"
+},
+{
+"title":"assign_pose",
+"description":"",
+"snippet":"torch_utils.assign_pose(current_positions=current_positions, current_orientations=current_orientations, positions=positions, orientations=orientations, indices=indices, device=device)\n",
+"category":"function"
+},
+{
+"title":"clone_tensor",
+"description":"",
+"snippet":"torch_utils.clone_tensor(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"convert",
+"description":"",
+"snippet":"torch_utils.convert(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"cos",
+"description":"",
+"snippet":"torch_utils.cos(data=data)\n",
+"category":"function"
+},
+{
+"title":"create_tensor_from_list",
+"description":"",
+"snippet":"torch_utils.create_tensor_from_list(data=data, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"create_zeros_tensor",
+"description":"",
+"snippet":"torch_utils.create_zeros_tensor(shape=shape, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"deg2rad",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `degree_value` (torch.Tensor): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * torch.Tensor: \\_[description]()\n",
+"snippet":"value = torch_utils.deg2rad(degree_value=degree_value)\n",
+"category":"function"
+},
+{
+"title":"euler_angles_to_quats",
+"description":"Vectorized version of converting euler angles to quaternion (scalar first)\n\n**Args:**\n\n * `euler_angles` (typing.Union\\[np.ndarray, torch.Tensor\\]): euler angles with shape (N, 3)\n * `degrees` (bool, optional): True if degrees, False if radians. Defaults to False.\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n\n**Returns:**\n\n * typing.Union\\[np.ndarray, torch.Tensor\\]: quaternions representation of the angles (N, 4) - scalar first.\n",
+"snippet":"value = torch_utils.euler_angles_to_quats(euler_angles=euler_angles)\n",
+"category":"function"
+},
+{
+"title":"expand_dims",
+"description":"",
+"snippet":"torch_utils.expand_dims(data=data, axis=axis)\n",
+"category":"function"
+},
+{
+"title":"get_local_from_world",
+"description":"",
+"snippet":"torch_utils.get_local_from_world(parent_transforms=parent_transforms, positions=positions, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"get_pose",
+"description":"",
+"snippet":"torch_utils.get_pose(positions=positions, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"get_world_from_local",
+"description":"",
+"snippet":"torch_utils.get_world_from_local(parent_transforms=parent_transforms, translations=translations, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"gf_quat_to_tensor",
+"description":"Converts a pxr Quaternion type to a torch array (scalar first).\n\n**Args:**\n\n * `orientation` (typing.Union\\[Gf.Quatd, Gf.Quatf, Gf.Quaternion\\]): \\[description\\]\n\n**Returns:**\n\n * torch.Tensor: \\[description\\]\n",
+"snippet":"value = torch_utils.gf_quat_to_tensor(orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"inverse",
+"description":"",
+"snippet":"torch_utils.inverse(data=data)\n",
+"category":"function"
+},
+{
+"title":"matmul",
+"description":"",
+"snippet":"torch_utils.matmul(matrix_a=matrix_a, matrix_b=matrix_b)\n",
+"category":"function"
+},
+{
+"title":"move_data",
+"description":"",
+"snippet":"torch_utils.move_data(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"normalise_quat_in_pose",
+"description":"Takes a pose and normalises the quaternion portion of it.\n\n**Args:**\n\n    pose: shape N, 7\n\n**Returns:**\n\n * Pose with normalised quat. Shape N, 7\n",
+"snippet":"torch_utils.normalise_quat_in_pose(pose=pose)\n",
+"category":"function"
+},
+{
+"title":"normalise_quat_in_pose",
+"description":"Takes a pose and normalises the quaternion portion of it.\n\n**Args:**\n\n    pose: shape N, 7\n\n**Returns:**\n\n * Pose with normalised quat. Shape N, 7\n",
+"snippet":"torch_utils.normalise_quat_in_pose(pose=pose)\n",
+"category":"function"
+},
+{
+"title":"pad",
+"description":"",
+"snippet":"torch_utils.pad(data=data, pad_width=pad_width)\n",
+"category":"function"
+},
+{
+"title":"rad2deg",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `radian_value` (torch.Tensor): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * torch.Tensor: \\_[description]()\n",
+"snippet":"value = torch_utils.rad2deg(radian_value=radian_value)\n",
+"category":"function"
+},
+{
+"title":"resolve_indices",
+"description":"",
+"snippet":"torch_utils.resolve_indices(indices=indices, count=count, device=device)\n",
+"category":"function"
+},
+{
+"title":"rot_matrices_to_quats",
+"description":"Vectorized version of converting rotation matrices to quaternions\n\n**Args:**\n\n * `rotation_matrices` (torch.Tensor): N Rotation matrices with shape (N, 3, 3) or (3, 3)\n\n**Returns:**\n\n * torch.Tensor: quaternion representation of the rotation matrices (N, 4) or (4,) - scalar first\n",
+"snippet":"value = torch_utils.rot_matrices_to_quats(rotation_matrices=rotation_matrices)\n",
+"category":"function"
+},
+{
+"title":"set_seed",
+"description":"set seed across modules\n",
+"snippet":"torch_utils.set_seed(seed=seed)\n",
+"category":"function"
+},
+{
+"title":"sin",
+"description":"",
+"snippet":"torch_utils.sin(data=data)\n",
+"category":"function"
+},
+{
+"title":"tensor_cat",
+"description":"",
+"snippet":"torch_utils.tensor_cat(data=data)\n",
+"category":"function"
+},
+{
+"title":"tensor_stack",
+"description":"",
+"snippet":"torch_utils.tensor_stack(data=data)\n",
+"category":"function"
+},
+{
+"title":"tf_matrices_from_poses",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `translations` (Union\\[np.ndarray, torch.Tensor\\]): translations with shape (N, 3).\n * `orientations` (Union\\[np.ndarray, torch.Tensor\\]): quaternion representation (scalar first) with shape (N, 4).\n\n**Returns:**\n\n * Union\\[np.ndarray, torch.Tensor\\]: transformation matrices with shape (N, 4, 4)\n",
+"snippet":"value = torch_utils.tf_matrices_from_poses(translations=translations, orientations=orientations)\n",
+"category":"function"
+},
+{
+"title":"to_list",
+"description":"",
+"snippet":"torch_utils.to_list(data=data)\n",
+"category":"function"
+},
+{
+"title":"to_numpy",
+"description":"",
+"snippet":"torch_utils.to_numpy(data=data)\n",
+"category":"function"
+},
+{
+"title":"transpose_2d",
+"description":"",
+"snippet":"torch_utils.transpose_2d(data=data)\n",
+"category":"function"
+},
+{
+"title":"unscale_np",
+"description":"",
+"snippet":"torch_utils.unscale_np(x=x, lower=lower, upper=upper)\n",
+"category":"function"
+},
+{
+"title":"wxyz2xyzw",
+"description":"",
+"snippet":"torch_utils.wxyz2xyzw(q=q)\n",
+"category":"function"
+},
+{
+"title":"xyzw2wxyz",
+"description":"",
+"snippet":"torch_utils.xyzw2wxyz(q=q)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Types",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.types as types_utils\n",
+"category":"import"
+},
+{
+"title":"ArticulationAction",
+"snippets":[
+{
+"title":"ArticulationAction",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `joint_positions` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n * `joint_velocities` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n * `joint_efforts` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n",
+"snippet":"articulation_action = ArticulationAction()\n",
+"category":"class"
+},
+{
+"title":"get_dict",
+"description":"\\[summary\\]\n\n**Returns:**\n\n * dict: \\[description\\]\n",
+"snippet":"dict = articulation_action.get_dict()\n",
+"category":"method"
+},
+{
+"title":"get_dof_action",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `index` (int): \\[description\\]\n\n**Returns:**\n\n * dict: \\[description\\]\n",
+"snippet":"dof_action = articulation_action.get_dof_action(index=index)\n",
+"category":"method"
+},
+{
+"title":"get_length",
+"description":"\\[summary\\]\n\n**Returns:**\n\n * Optional\\[int\\]: \\[description\\]\n",
+"snippet":"length = articulation_action.get_length()\n",
+"category":"method"
+}
+]
+},
+{
+"title":"ArticulationActions",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `joint_positions` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n * `joint_velocities` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n * `joint_efforts` (Optional\\[Union\\[List, np.ndarray\\]\\], optional): \\[description\\]. Defaults to None.\n",
+"snippet":"articulation_actions = ArticulationActions()\n",
+"category":"class"
+},
+{
+"title":"DataFrame",
+"snippets":[
+{
+"title":"DataFrame",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `current_time_step` (int): \\[description\\]\n * `current_time` (float): \\[description\\]\n * `data` (dict): \\[description\\]\n",
+"snippet":"data_frame = DataFrame(current_time_step=current_time_step, current_time=current_time, data=data)\n",
+"category":"class"
+},
+{
+"title":"get_dict",
+"description":"\\[summary\\]\n\n**Returns:**\n\n * dict: \\[description\\]\n",
+"snippet":"dict = data_frame.get_dict()\n",
+"category":"method"
+}
+]
+},
+{
+"title":"DOFInfo",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `prim_path` (str): \\[description\\]\n * `handle` (int): \\[description\\]\n * `prim` (Usd.Prim): \\[description\\]\n * `index` (int): \\[description\\]\n",
+"snippet":"dof_Info = DOFInfo(prim_path=prim_path, handle=handle, prim=prim, index=index)\n",
+"category":"class"
+},
+{
+"title":"DynamicState",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `position` (np.ndarray): \\[description\\]\n * `orientation` (np.ndarray): \\[description\\]\n",
+"snippet":"dynamic_state = DynamicState(position=position, orientation=orientation, linear_velocity=linear_velocity, angular_velocity=angular_velocity)\n",
+"category":"class"
+},
+{
+"title":"DynamicsViewState",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `position` (np.ndarray): \\[description\\]\n * `orientation` (np.ndarray): \\[description\\]\n",
+"snippet":"dynamics_view_state = DynamicsViewState(positions=positions, orientations=orientations, linear_velocities=linear_velocities, angular_velocities=angular_velocities)\n",
+"category":"class"
+},
+{
+"title":"JointsState",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `positions` (np.ndarray): \\[description\\]\n * `velocities` (np.ndarray): \\[description\\]\n * `efforts` (np.ndarray): \\[description\\]\n",
+"snippet":"joints_state = JointsState(positions=positions, velocities=velocities, efforts=efforts)\n",
+"category":"class"
+},
+{
+"title":"XFormPrimState",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `position` (np.ndarray): \\[description\\]\n * `orientation` (np.ndarray): \\[description\\]\n",
+"snippet":"xform_prim_state = XFormPrimState(position=position, orientation=orientation)\n",
+"category":"class"
+},
+{
+"title":"XFormPrimViewState",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `positions` (Union\\[np.ndarray, torch.Tensor\\]): positions with shape of (N, 3).\n * `orientations` (Union\\[np.ndarray, torch.Tensor\\]): quaternion representation of orientation (scalar first) with shape (N, 4).\n",
+"snippet":"xform_prim_view_state = XFormPrimViewState(positions=positions, orientations=orientations)\n",
+"category":"class"
+}
+]
+},
+{
+"title":"Viewports",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.viewports as viewports_utils\n",
+"category":"import"
+},
+{
+"title":"add_aov_to_viewport",
+"description":"",
+"snippet":"viewports_utils.add_aov_to_viewport(viewport_api=viewport_api, aov_name=aov_name)\n",
+"category":"function"
+},
+{
+"title":"backproject_depth",
+"description":"Backproject depth image to image space\n\n**Args:**\n\n * `depth_image` (np.array): Depth image buffer\n * `viewport_api` (Any): Handle to viewport api\n * `max_clip_depth` (float): Depth values larger than this will be clipped\n\n**Returns:**\n\n * np.array: \\[description\\]\n",
+"snippet":"value = viewports_utils.backproject_depth(depth_image=depth_image, viewport_api=viewport_api, max_clip_depth=max_clip_depth)\n",
+"category":"function"
+},
+{
+"title":"create_viewport_for_camera",
+"description":"Create a new viewport and peg it to a specific camera specified by camera\\_prim\\_path. If the viewport already exists with the specified viewport\\_name, that viewport will be replaced with the new camera view.\n\n**Args:**\n\n * `viewport_name` (str): name of the viewport. If not provided, it will default to camera name.\n * `camera_prim_path` (str): name of the prim path of the camera\n * `width` (int): width of the viewport window, in pixels.\n * `height` (int): height of the viewport window, in pixels.\n * `position_x` (int): location x of the viewport window.\n * `position_y` (int): location y of the viewport window.\n",
+"snippet":"viewports_utils.create_viewport_for_camera(viewport_name=viewport_name, camera_prim_path=camera_prim_path)\n",
+"category":"function"
+},
+{
+"title":"destroy_all_viewports",
+"description":"Destroys all viewport windows\n\n**Args:**\n\n * `usd_context_name` (str, optional): usd context to use. Defaults to None.\n * `destroy_main_viewport` (bool, optional): set to true to not destroy the default viewport. Defaults to False.\n",
+"snippet":"viewports_utils.destroy_all_viewports()\n",
+"category":"function"
+},
+{
+"title":"get_id_from_index",
+"description":"Get the viewport id for a given index.\nThis function was added for backwards compatibility for VP2 as viewport IDs are not the same as the viewport index\n\n**Args:**\n\n * `index` (\\_[type]()): viewport index to retrieve ID for\n\n**Returns:**\n\n * viewport id : Returns None if window index was not found\n",
+"snippet":"viewports_utils.get_id_from_index(index=index)\n",
+"category":"function"
+},
+{
+"title":"get_intrinsics_matrix",
+"description":"Get intrinsic matrix for the camera attached to a specific viewport\n\n**Args:**\n\n * `viewport` (Any): Handle to viewport api\n\n**Returns:**\n\n * np.ndarray: the intrinsic matrix associated with the specified viewport The following image convention is assumed: +x should point to the right in the image +y should point down in the image\n",
+"snippet":"value = viewports_utils.get_intrinsics_matrix(viewport_api=viewport_api)\n",
+"category":"function"
+},
+{
+"title":"get_viewport_names",
+"description":"Get list of all viewport names\n\n**Args:**\n\n * `usd_context_name` (str, optional): usd context to use. Defaults to None.\n\n**Returns:**\n\n * List\\[str\\]: List of viewport names\n",
+"snippet":"value = viewports_utils.get_viewport_names()\n",
+"category":"function"
+},
+{
+"title":"get_window_from_id",
+"description":"Find window that matches a given viewport id\n\n**Args:**\n\n * `id` (\\_[type]()): Viewport ID to get window for\n * `usd_context_name` (str, optional): usd context to use. Defaults to None.\n\n**Returns:**\n\n * Window : Returns None if window with matching ID was not found\n",
+"snippet":"viewports_utils.get_window_from_id(id=id)\n",
+"category":"function"
+},
+{
+"title":"project_depth_to_worldspace",
+"description":"Project depth image to world space\n\n**Args:**\n\n * `depth_image` (np.array): Depth image buffer\n * `viewport_api` (Any): Handle to viewport api\n * `max_clip_depth` (float): Depth values larger than this will be clipped\n\n**Returns:**\n\n * List\\[carb.Float3\\]: List of points from depth in world space\n",
+"snippet":"value = viewports_utils.project_depth_to_worldspace(depth_image=depth_image, viewport_api=viewport_api, max_clip_depth=max_clip_depth)\n",
+"category":"function"
+},
+{
+"title":"set_camera_view",
+"description":"Set the location and target for a camera prim in the stage given its path\n\n**Args:**\n\n * `eye` (np.ndarray): Location of camera.\n * `target` (np.ndarray,): Location of camera target.\n * `camera_prim_path` (str, optional): Path to camera prim being set. Defaults to \"/OmniverseKit\\_Persp\".\n",
+"snippet":"viewports_utils.set_camera_view(eye=eye, target=target)\n",
+"category":"function"
+},
+{
+"title":"set_intrinsics_matrix",
+"description":"Set intrinsic matrix for the camera attached to a specific viewport\n\nNote:\n\n:   We assume cx and cy are centered in the camera\n    horizontal\\_aperture\\_offset and vertical\\_aperture\\_offset are computed and set on the camera prim but are not used\n\n**Args:**\n\n * `viewport` (Any): Handle to viewport api\n * `intrinsics_matrix` (np.ndarray): A 3x3 intrinsic matrix\n * `focal_length` (float, optional): Default focal length to use when computing aperture values. Defaults to 1.0.\n\n**Raises:**\n\n * ValueError: If intrinsic matrix is not a 3x3 matrix.\n    ValueError: If camera prim is not valid\n",
+"snippet":"viewports_utils.set_intrinsics_matrix(viewport_api=viewport_api, intrinsics_matrix=intrinsics_matrix)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"XForms",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.xforms as xforms_utils\n",
+"category":"import"
+},
+{
+"title":"clear_xform_ops",
+"description":"Remove all xform ops from input prim.\n\n**Args:**\n\n * `prim` (Usd.Prim): The input USD prim.\n",
+"snippet":"xforms_utils.clear_xform_ops(prim=prim)\n",
+"category":"function"
+},
+{
+"title":"get_local_pose",
+"description":"",
+"snippet":"xforms_utils.get_local_pose(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"get_world_pose",
+"description":"",
+"snippet":"xforms_utils.get_world_pose(prim_path=prim_path)\n",
+"category":"function"
+},
+{
+"title":"reset_and_set_xform_ops",
+"description":"Reset xform ops to isaac sim defaults, and set their values\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to reset\n * `translation` (Gf.Vec3d): translation to set\n * `orientation` (Gf.Quatd): orientation to set\n * `scale` (Gf.Vec3d, optional): scale to set. Defaults to Gf.Vec3d(\\[1.0, 1.0, 1.0\\]).\n",
+"snippet":"xforms_utils.reset_and_set_xform_ops(prim=prim, translation=translation, orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"reset_xform_ops",
+"description":"Reset xform ops for a prim to isaac sim defaults,\n\n**Args:**\n\n * `prim` (Usd.Prim): Prim to reset xform ops on\n",
+"snippet":"xforms_utils.reset_xform_ops(prim=prim)\n",
+"category":"function"
+}
+]
+},
+{
+"title":"Warp",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.core.utils.warp as warp_utils\n",
+"category":"import"
+},
+{
+"title":"arange",
+"description":"",
+"snippet":"warp_utils.arange(n=n)\n",
+"category":"function"
+},
+{
+"title":"assign",
+"description":"",
+"snippet":"warp_utils.assign(src=src, dst=dst, indices=indices)\n",
+"category":"function"
+},
+{
+"title":"assign_pose",
+"description":"",
+"snippet":"warp_utils.assign_pose(current_positions=current_positions, current_orientations=current_orientations, positions=positions, orientations=orientations, indices=indices, device=device, pose=pose)\n",
+"category":"function"
+},
+{
+"title":"clone_tensor",
+"description":"",
+"snippet":"warp_utils.clone_tensor(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"convert",
+"description":"",
+"snippet":"warp_utils.convert(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"create_tensor_from_list",
+"description":"",
+"snippet":"warp_utils.create_tensor_from_list(data=data, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"create_zeros_tensor",
+"description":"",
+"snippet":"warp_utils.create_zeros_tensor(shape=shape, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"deg2rad",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `degree_value` (torch.Tensor): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * wp.types.array: \\_[description]()\n",
+"snippet":"value = warp_utils.deg2rad(degree_value=degree_value)\n",
+"category":"function"
+},
+{
+"title":"euler_angles_to_quats",
+"description":"Vectorized version of converting euler angles to quaternion (scalar first)\n\n**Args:**\n\n * `euler_angles` (wp.types.array): euler angles with shape (N, 3)\n * `extrinsic` (bool, optional): True if the euler angles follows the extrinsic angles convention (equivalent to ZYX ordering but returned in the reverse) and False if it follows the intrinsic angles conventions (equivalent to XYZ ordering). Defaults to True.\n * `degrees` (bool, optional): True if degrees, False if radians. Defaults to False.\n\n**Returns:**\n\n * wp.types.array: quaternions representation of the angles (N, 4) - scalar first.\n",
+"snippet":"value = warp_utils.euler_angles_to_quats(euler_angles=euler_angles)\n",
+"category":"function"
+},
+{
+"title":"expand_dims",
+"description":"",
+"snippet":"warp_utils.expand_dims(data=data, axis=axis)\n",
+"category":"function"
+},
+{
+"title":"get_local_from_world",
+"description":"",
+"snippet":"warp_utils.get_local_from_world(parent_transforms=parent_transforms, positions=positions, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"get_pose",
+"description":"",
+"snippet":"warp_utils.get_pose(positions=positions, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"get_type",
+"description":"",
+"snippet":"warp_utils.get_type(dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"get_world_from_local",
+"description":"",
+"snippet":"warp_utils.get_world_from_local(parent_transforms=parent_transforms, translations=translations, orientations=orientations, device=device)\n",
+"category":"function"
+},
+{
+"title":"gf_quat_to_tensor",
+"description":"Converts a pxr Quaternion type to a torch array (scalar first).\n\n**Args:**\n\n * `orientation` (typing.Union\\[Gf.Quatd, Gf.Quatf, Gf.Quaternion\\]): \\[description\\]\n\n**Returns:**\n\n * wp.types.array: quaternion tensor\n",
+"snippet":"value = warp_utils.gf_quat_to_tensor(orientation=orientation)\n",
+"category":"function"
+},
+{
+"title":"move_data",
+"description":"",
+"snippet":"warp_utils.move_data(data=data, device=device)\n",
+"category":"function"
+},
+{
+"title":"ones",
+"description":"",
+"snippet":"warp_utils.ones(n=n, dtype=dtype)\n",
+"category":"function"
+},
+{
+"title":"rad2deg",
+"description":"\\_[summary]()\n\n**Args:**\n\n * `radian_value` (wp.types.array): \\_[description]()\n * `device` (\\_[type](), optional): \\_[description](). Defaults to None.\n\n**Returns:**\n\n * wp.types.array: \\_[description]()\n",
+"snippet":"value = warp_utils.rad2deg(radian_value=radian_value)\n",
+"category":"function"
+},
+{
+"title":"resolve_indices",
+"description":"",
+"snippet":"warp_utils.resolve_indices(indices=indices, count=count, device=device)\n",
+"category":"function"
+},
+{
+"title":"tensor_cat",
+"description":"",
+"snippet":"warp_utils.tensor_cat(data=data)\n",
+"category":"function"
+},
+{
+"title":"to_list",
+"description":"",
+"snippet":"warp_utils.to_list(data=data)\n",
+"category":"function"
+},
+{
+"title":"wxyz2xyzw",
+"description":"",
+"snippet":"warp_utils.wxyz2xyzw(q=q)\n",
+"category":"function"
+},
+{
+"title":"xyzw2wxyz",
+"description":"",
+"snippet":"warp_utils.xyzw2wxyz(q=q)\n",
+"category":"function"
+}
+]
+}
+]

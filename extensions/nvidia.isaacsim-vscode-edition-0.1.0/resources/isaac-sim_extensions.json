@@ -1,0 +1,22 @@
+{
+    "resources": [
+        {
+            "internal": true,
+            "title": "Extensions API (homepage)",
+            "description": "Isaac Sim: Extensions API",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim"
+        },
+        {
+            "internal": true,
+            "title": "Core",
+            "description": "Isaac Sim core API [omni.isaac.core]",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.core/docs/index.html"
+        },
+        {
+            "internal": true,
+            "title": "Simulation Application",
+            "description": "This extension provides convenience functions when running in pure python mode",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.kit/docs/index.html"
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+[
+{
+"title":"SimulationApp",
+"snippets":[
+{
+"title":"import ...",
+"description":"Import class",
+"snippet":"from omni.isaac.kit import SimulationApp\n",
+"category":"import"
+},
+{
+"title":"SimulationApp",
+"description":"Helper class to launch Omniverse Toolkit.\n\nOmniverse loads various plugins at runtime which cannot be imported unless\nthe Toolkit is already running. Thus, it is necessary to launch the Toolkit first from\nyour python application and then import everything else.\n\nUsage:\n\n```python\n# At top of your application\nfrom omni.isaac.kit import SimulationApp\nconfig = { width: \"1280\", height: \"720\", headless: False,\n}\nsimulation_app = SimulationApp(config)\n\n# Rest of the code follows\n...\nsimulation_app.close()\n```\n\nNote: The settings in `DEFAULT_LAUNCHER_CONFIG` are overwritten by those in `config`.\n\nArguments:\n\n:   -   `config` (dict): A dictionary containing the configuration for the app. (default: None)\n * `experience` (str): Path to the application config loaded by the launcher (default: \"\", will load app/omni.isaac.sim.python.kit if left blank)\n",
+"snippet":"simulation_app = SimulationApp()\n",
+"category":"class"
+},
+{
+"title":"app",
+"description":"omni.kit.app.IApp: omniverse kit application object\n",
+"snippet":"app = simulation_app.app\n",
+"category":"property"
+},
+{
+"title":"close",
+"description":"Close the running Omniverse Toolkit.\n",
+"snippet":"simulation_app.close()\n",
+"category":"method"
+},
+{
+"title":"context",
+"description":"omni.usd.UsdContext: the current USD context\n",
+"snippet":"context = simulation_app.context\n",
+"category":"property"
+},
+{
+"title":"is_exiting",
+"description":"bool: True if close() was called previously, False otherwise\n",
+"snippet":"value = simulation_app.is_exiting()\n",
+"category":"method"
+},
+{
+"title":"is_running",
+"description":"bool: convenience function to see if app is running. True if running, False otherwise\n",
+"snippet":"value = simulation_app.is_running()\n",
+"category":"method"
+},
+{
+"title":"reset_render_settings",
+"description":"Reset render settings to those in config.\n\nNote:\n\n:   This should be used in case a new stage is opened and the desired config needs\n    to be re-applied.\n",
+"snippet":"simulation_app.reset_render_settings()\n",
+"category":"method"
+},
+{
+"title":"set_setting",
+"description":"Set a carbonite setting\n\n**Args:**\n\n * \n\n        `setting` (str): carb setting path\n\n        :   value: value to set the setting to, type is used to properly set the setting.\n",
+"snippet":"simulation_app.set_setting(setting=setting, value=value)\n",
+"category":"method"
+},
+{
+"title":"update",
+"description":"Convenience function to step the application forward one frame\n",
+"snippet":"simulation_app.update()\n",
+"category":"method"
+}
+]
+}
+]

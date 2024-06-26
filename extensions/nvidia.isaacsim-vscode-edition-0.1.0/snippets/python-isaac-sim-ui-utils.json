@@ -1,0 +1,200 @@
+[
+{
+"title":"import ...",
+"description":"Import module",
+"snippet":"import omni.isaac.ui as ui_utils\n",
+"category":"import"
+},
+{
+"title":"add_folder_picker_btn",
+"description":"",
+"snippet":"ui_utils.add_folder_picker_btn(on_click_fn=on_click_fn)\n",
+"category":"function"
+},
+{
+"title":"add_folder_picker_icon",
+"description":"",
+"snippet":"ui_utils.add_folder_picker_icon(on_click_fn=on_click_fn)\n",
+"category":"function"
+},
+{
+"title":"add_line_rect_flourish",
+"description":"Aesthetic element that adds a Line + Rectangle after all UI elements in the row.\n\n**Args:**\n\n * `draw_line` (bool, optional): Set false to only draw rectangle. Defaults to True.\n",
+"snippet":"ui_utils.add_line_rect_flourish()\n",
+"category":"function"
+},
+{
+"title":"add_separator",
+"description":"Aesthetic element to adds a Line Separator.\n",
+"snippet":"ui_utils.add_separator()\n",
+"category":"function"
+},
+{
+"title":"btn_builder",
+"description":"Creates a stylized button.\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"button\".\n * `text` (str, optional): Text rendered on the button. Defaults to \"button\".\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (Callable, optional): Call-back function when clicked. Defaults to None.\n\n**Returns:**\n\n * ui.Button: Button\n",
+"snippet":"ui_utils.btn_builder()\n",
+"category":"function"
+},
+{
+"title":"build_header",
+"description":"Title Header with Quick Access Utility Buttons.\n",
+"snippet":"ui_utils.build_header(ext_path=ext_path, file_path=file_path)\n",
+"category":"function"
+},
+{
+"title":"build_info_frame",
+"description":"Info Frame with Overview, Instructions, and Metadata for an Extension\n",
+"snippet":"ui_utils.build_info_frame()\n",
+"category":"function"
+},
+{
+"title":"build_simple_search",
+"description":"A Simple Search Bar + TreeView Widget.\n\nPass a list of items through the model, and a custom on\\_click\\_fn through the delegate.\n\nReturns the SearchWidget so user can destroy it on\\_shutdown.\n\n> Args:\n\nlabel (str, optional): Label to the left of the UI element. Defaults to \"\".\ntype (str, optional): Type of UI element. Defaults to \"search\".\nmodel (ui.AbstractItemModel, optional): Item Model for Search. Defaults to None.\ndelegate (ui.AbstractItemDelegate, optional): Item Delegate for Search. Defaults to None.\ntooltip (str, optional): Tooltip to display over the Label. Defaults to \"\".\n\n> Returns:\n\nTuple(Search Widget, Treeview):\n",
+"snippet":"ui_utils.build_simple_search()\n",
+"category":"function"
+},
+{
+"title":"cb_builder",
+"description":"Creates a Stylized Checkbox\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"checkbox\".\n * `default_val` (bool, optional): Checked is True, Unchecked is False. Defaults to False.\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (Callable, optional): Call-back function when clicked. Defaults to None.\n\n**Returns:**\n\n * ui.SimpleBoolModel: model\n",
+"snippet":"ui_utils.cb_builder()\n",
+"category":"function"
+},
+{
+"title":"color_picker_builder",
+"description":"Creates a Color Picker Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"color\\_picker\".\n * `default_val` (list, optional): List of (R,G,B,A) default values. Defaults to \\[1.0, 1.0, 1.0, 1.0\\].\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"Color Picker\".\n\n**Returns:**\n\n * AbstractItemModel: ui.ColorWidget.model\n",
+"snippet":"ui_utils.color_picker_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_cb_dropdown_builder",
+"description":"Creates a Stylized Dropdown Combobox with an Enable Checkbox\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"checkbox\\_dropdown\".\n * `default_val` (list, optional): list(cb\\_default, dropdown\\_default). Defaults to \\[False, 0\\].\n * `items` (list, optional): List of items for dropdown box. Defaults to \\[\"Option 1\", \"Option 2\", \"Option 3\"\\].\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (list, optional): List of callback functions. Defaults to \\[lambda x: None, None\\].\n\n**Returns:**\n\n * Tuple(ui.SimpleBoolModel, ui.ComboBox): (cb\\_model, combobox)\n",
+"snippet":"ui_utils.combo_cb_dropdown_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_cb_plot_builder",
+"description":"Creates a Checkbox-Enabled dyanamic plot\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `default_val` (bool, optional): Checkbox default. Defaults to False.\n * `on_clicked_fn` (Callable, optional): Checkbox Callback function. Defaults to lambda x: None.\n * `data` (list(), optional): Data to plat. Defaults to None.\n * `min` (int, optional): Min Y Value. Defaults to -1.\n * `max` (int, optional): Max Y Value. Defaults to 1.\n * `type` (ui.Type, optional): Plot Type. Defaults to ui.Type.LINE.\n * `value_stride` (int, optional): Width of plot stride. Defaults to 1.\n * `color` (int, optional): Plot color. Defaults to None.\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n\n**Returns:**\n\n * list(SimpleBoolModel, ui.Plot): (cb\\_model, plot)\n",
+"snippet":"ui_utils.combo_cb_plot_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_cb_scrolling_frame_builder",
+"description":"Creates a Labeled, Checkbox-enabled Scrolling Frame with CopyToClipboard button\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"cb\\_scrolling\\_frame\".\n * `default_val` (list, optional): List of Checkbox and Frame Defaults. Defaults to \\[False, \"No Data\"\\].\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (Callable, optional): Callback function when clicked. Defaults to lambda x : None.\n\n**Returns:**\n\n * list(SimpleBoolModel, ui.Label): (model, label)\n",
+"snippet":"ui_utils.combo_cb_scrolling_frame_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_cb_str_builder",
+"description":"Creates a Stylized Checkbox + Stringfield Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"checkbox\\_stringfield\".\n * `default_val` (str, optional): Text to initialize in Stringfield. Defaults to \\[False, \" \"\\].\n * `tooltip` (str, optional): Tooltip to display over the UI elements. Defaults to \"\".\n * `use_folder_picker` (bool, optional): Add a folder picker button to the right. Defaults to False.\n * `read_only` (bool, optional): Prevents editing. Defaults to False.\n\n**Returns:**\n\n * Tuple(ui.SimpleBoolModel, AbstractValueModel): (cb\\_model, str\\_field\\_model)\n",
+"snippet":"ui_utils.combo_cb_str_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_cb_xyz_plot_builder",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n\n * `default_val` (bool, optional): Checkbox default. Defaults to False.\n\n * \n\n        `on_clicked_fn` (Callable, optional): Checkbox Callback function. Defaults to lambda x: None.\n\n        :   data list(), optional): Data to plat. Defaults to None.\n\n * `min` (int, optional): Min Y Value. Defaults to -1.\n\n * `max` (int, optional): Max Y Value. Defaults to 1.\n\n * `type` (ui.Type, optional): Plot Type. Defaults to ui.Type.LINE.\n\n * `value_stride` (int, optional): Width of plot stride. Defaults to 1.\n\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n\n**Returns:**\n\n * Tuple(list(ui.Plot), list(AbstractValueModel)): (\\[plot\\_0, plot\\_1, plot\\_2\\], \\[val\\_model\\_x, val\\_model\\_y, val\\_model\\_z\\])\n",
+"snippet":"ui_utils.combo_cb_xyz_plot_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_floatfield_slider_builder",
+"description":"Creates a Stylized FloatField + FloatSlider Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"floatfield\\_stringfield\".\n * `default_val` (float, optional): Default Value. Defaults to 0.5.\n * `min` (int, optional): Minimum Value. Defaults to 0.\n * `max` (int, optional): Maximum Value. Defaults to 1.\n * `step` (float, optional): Step. Defaults to 0.01.\n * `tooltip` (list, optional): List of tooltips. Defaults to \\[\"\", \"\"\\].\n\n**Returns:**\n\n * Tuple(AbstractValueModel, IntSlider): (flt\\_field\\_model, flt\\_slider\\_model)\n",
+"snippet":"ui_utils.combo_floatfield_slider_builder()\n",
+"category":"function"
+},
+{
+"title":"combo_intfield_slider_builder",
+"description":"Creates a Stylized IntField + Stringfield Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"intfield\\_stringfield\".\n * `default_val` (float, optional): Default Value. Defaults to 0.5.\n * `min` (int, optional): Minimum Value. Defaults to 0.\n * `max` (int, optional): Maximum Value. Defaults to 1.\n * `step` (float, optional): Step. Defaults to 0.01.\n * `tooltip` (list, optional): List of tooltips. Defaults to \\[\"\", \"\"\\].\n\n**Returns:**\n\n * Tuple(AbstractValueModel, IntSlider): (flt\\_field\\_model, flt\\_slider\\_model)\n",
+"snippet":"ui_utils.combo_intfield_slider_builder()\n",
+"category":"function"
+},
+{
+"title":"dropdown_builder",
+"description":"Creates a Stylized Dropdown Combobox\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"dropdown\".\n * `default_val` (int, optional): Default index of dropdown items. Defaults to 0.\n * `items` (list, optional): List of items for dropdown box. Defaults to \\[\"Option 1\", \"Option 2\", \"Option 3\"\\].\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (Callable, optional): Call-back function when clicked. Defaults to None.\n\n**Returns:**\n\n * AbstractItemModel: model\n",
+"snippet":"ui_utils.dropdown_builder()\n",
+"category":"function"
+},
+{
+"title":"float_builder",
+"description":"Creates a Stylized Floatfield Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"floatfield\".\n * `default_val` (int, optional): Default Value of UI element. Defaults to 0.\n * `tooltip` (str, optional): Tooltip to display over the UI elements. Defaults to \"\".\n\n**Returns:**\n\n * AbstractValueModel: model\n",
+"snippet":"ui_utils.float_builder()\n",
+"category":"function"
+},
+{
+"title":"format_tt",
+"description":"",
+"snippet":"ui_utils.format_tt(tt=tt)\n",
+"category":"function"
+},
+{
+"title":"int_builder",
+"description":"Creates a Stylized Intfield Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"intfield\".\n * `default_val` (int, optional): Default Value of UI element. Defaults to 0.\n * `tooltip` (str, optional): Tooltip to display over the UI elements. Defaults to \"\".\n * `min` (int, optional): Minimum limit for int field. Defaults to sys.maxsize \\* -1\n * `max` (int, optional): Maximum limit for int field. Defaults to sys.maxsize \\* 1\n\n**Returns:**\n\n * AbstractValueModel: model\n",
+"snippet":"ui_utils.int_builder()\n",
+"category":"function"
+},
+{
+"title":"multi_btn_builder",
+"description":"Creates a Row of Stylized Buttons\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"multi\\_button\".\n * `count` (int, optional): Number of UI elements to create. Defaults to 2.\n * `text` (list, optional): List of text rendered on the UI elements. Defaults to \\[\"button\", \"button\"\\].\n * `tooltip` (list, optional): List of tooltips to display over the UI elements. Defaults to \\[\"\", \"\", \"\"\\].\n * `on_clicked_fn` (list, optional): List of call-backs function when clicked. Defaults to \\[None, None\\].\n\n**Returns:**\n\n * list(ui.Button): List of Buttons\n",
+"snippet":"ui_utils.multi_btn_builder()\n",
+"category":"function"
+},
+{
+"title":"multi_cb_builder",
+"description":"Creates a Row of Stylized Checkboxes.\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"multi\\_checkbox\".\n * `count` (int, optional): Number of UI elements to create. Defaults to 2.\n * `text` (list, optional): List of text rendered on the UI elements. Defaults to \\[\" \", \" \"\\].\n * `default_val` (list, optional): List of default values. Checked is True, Unchecked is False. Defaults to \\[False, False\\].\n * `tooltip` (list, optional): List of tooltips to display over the UI elements. Defaults to \\[\"\", \"\", \"\"\\].\n * `on_clicked_fn` (list, optional): List of call-backs function when clicked. Defaults to \\[None, None\\].\n\n**Returns:**\n\n * list(ui.SimpleBoolModel): List of models\n",
+"snippet":"ui_utils.multi_cb_builder()\n",
+"category":"function"
+},
+{
+"title":"multi_dropdown_builder",
+"description":"Creates a Stylized Multi-Dropdown Combobox\n\n**Returns:**\n\n * AbstractItemModel: model\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"multi\\_dropdown\".\n * `count` (int, optional): Number of UI elements. Defaults to 2.\n * `default_val` (list(int), optional): List of default indices of dropdown items. Defaults to 0.. Defaults to \\[0, 0\\].\n * `items` (list(list), optional): List of list of items for dropdown boxes. Defaults to \\[\\[\"Option 1\", \"Option 2\", \"Option 3\"\\], \\[\"Option A\", \"Option B\", \"Option C\"\\]\\].\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (list(Callable), optional): List of call-back function when clicked. Defaults to \\[None, None\\].\n\n**Returns:**\n\n * list(AbstractItemModel): list(models)\n",
+"snippet":"ui_utils.multi_dropdown_builder()\n",
+"category":"function"
+},
+{
+"title":"plot_builder",
+"description":"Creates a stylized static plot\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `data` (list(float), optional): Data to plot. Defaults to None.\n * `min` (int, optional): Minimum Y Value. Defaults to -1.\n * `max` (int, optional): Maximum Y Value. Defaults to 1.\n * `type` (ui.Type, optional): Plot Type. Defaults to ui.Type.LINE.\n * `value_stride` (int, optional): Width of plot stride. Defaults to 1.\n * `color` (int, optional): Plot color. Defaults to None.\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n\n**Returns:**\n\n * ui.Plot: plot\n",
+"snippet":"ui_utils.plot_builder()\n",
+"category":"function"
+},
+{
+"title":"progress_bar_builder",
+"description":"Creates a Progress Bar Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"progress\\_bar\".\n * `default_val` (int, optional): Starting Value. Defaults to 0.\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"Progress\".\n\n**Returns:**\n\n * AbstractValueModel: ui.ProgressBar().model\n",
+"snippet":"ui_utils.progress_bar_builder()\n",
+"category":"function"
+},
+{
+"title":"scrolling_frame_builder",
+"description":"Creates a Labeled Scrolling Frame with CopyToClipboard button\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"scrolling\\_frame\".\n * `default_val` (str, optional): Default Text. Defaults to \"No Data\".\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n\n**Returns:**\n\n * ui.Label: label\n",
+"snippet":"ui_utils.scrolling_frame_builder()\n",
+"category":"function"
+},
+{
+"title":"setup_ui_headers",
+"description":"Creates the Standard UI Elements at the top of each Isaac Extension.\n\n**Args:**\n\n * `ext_id` (str): Extension ID.\n * `file_path` (str): File path to source code.\n * `title` (str, optional): Name of Extension. Defaults to \"My Custom Extension\".\n * `doc_link` (str, optional): Hyperlink to Documentation. Defaults to \"<https://docs.omniverse.nvidia.com/isaacsim/latest/index.html>\".\n * `overview` (str, optional): Overview Text explaining the Extension. Defaults to \"\".\n",
+"snippet":"ui_utils.setup_ui_headers(ext_id=ext_id, file_path=file_path)\n",
+"category":"function"
+},
+{
+"title":"state_btn_builder",
+"description":"Creates a State Change Button that changes text when pressed.\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"button\".\n * `a_text` (str, optional): Text rendered on the button for State A. Defaults to \"STATE A\".\n * `b_text` (str, optional): Text rendered on the button for State B. Defaults to \"STATE B\".\n * `tooltip` (str, optional): Tooltip to display over the Label. Defaults to \"\".\n * `on_clicked_fn` (Callable, optional): Call-back function when clicked. Defaults to None.\n",
+"snippet":"ui_utils.state_btn_builder()\n",
+"category":"function"
+},
+{
+"title":"str_builder",
+"description":"Creates a Stylized Stringfield Widget\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"stringfield\".\n * `default_val` (str, optional): Text to initialize in Stringfield. Defaults to \" \".\n * `tooltip` (str, optional): Tooltip to display over the UI elements. Defaults to \"\".\n * `use_folder_picker` (bool, optional): Add a folder picker button to the right. Defaults to False.\n * `read_only` (bool, optional): Prevents editing. Defaults to False.\n * `item_filter_fn` (Callable, optional): filter function to pass to the FilePicker\n * `bookmark_label` (str, optional): bookmark label to pass to the FilePicker\n * `bookmark_path` (str, optional): bookmark path to pass to the FilePicker\n\n**Returns:**\n\n * AbstractValueModel: model of Stringfield\n",
+"snippet":"ui_utils.str_builder()\n",
+"category":"function"
+},
+{
+"title":"xyz_builder",
+"description":"\\[summary\\]\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `type` (str, optional): Type of UI element. Defaults to \"\".\n * `axis_count` (int, optional): Number of Axes to Display. Max 4. Defaults to 3.\n * `default_val` (list, optional): List of default values. Defaults to \\[0.0, 0.0, 0.0, 0.0\\].\n * `min` (float, optional): Minimum Float Value. Defaults to float(\"-inf\").\n * `max` (float, optional): Maximum Float Value. Defaults to float(\"inf\").\n * `step` (float, optional): Step. Defaults to 0.001.\n * `on_value_changed_fn` (list, optional): List of callback functions for each axes. Defaults to \\[None, None, None, None\\].\n\n**Returns:**\n\n * list(AbstractValueModel): list(model)\n",
+"snippet":"ui_utils.xyz_builder()\n",
+"category":"function"
+},
+{
+"title":"xyz_plot_builder",
+"description":"Creates a stylized static XYZ plot\n\n**Args:**\n\n * `label` (str, optional): Label to the left of the UI element. Defaults to \"\".\n * `data` (list(float), optional): Data to plot. Defaults to \\[\\].\n * `min` (int, optional): Minimum Y Value. Defaults to -1.\n * `max` (int, optional): Maximum Y Value. Defaults to \"\".\n * `tooltip` (str, optional): Tooltip to display over the Label.. Defaults to \"\".\n\n**Returns:**\n\n * list(ui.Plot): list(x\\_plot, y\\_plot, z\\_plot)\n",
+"snippet":"ui_utils.xyz_plot_builder()\n",
+"category":"function"
+}
+]

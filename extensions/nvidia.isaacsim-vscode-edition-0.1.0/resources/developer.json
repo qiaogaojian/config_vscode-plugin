@@ -1,0 +1,82 @@
+{
+    "resources": [
+        {
+            "internal": true,
+            "title": "Kit (documentation search)",
+            "description": "Kit documentation search",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/"
+        },
+        {
+            "internal": true,
+            "title": "Kit code examples",
+            "description": "Kit/USD code examples",
+            "url": "https://docs.omniverse.nvidia.com/dev-guide/latest/programmer_ref.html"
+        },
+        {
+            "internal": true,
+            "title": "Kit programming manual",
+            "description": "Kit programming manual",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/kit-manual"
+        },
+        {
+            "internal": true,
+            "title": "Kit: Extensions",
+            "description": "Extensions",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/kit-manual/latest/guide/extensions_basic.html"
+        },
+        {
+            "internal": true,
+            "title": "Kit: OmniGraph",
+            "description": "OmniGraph framework",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/omni.graph.docs"
+        },
+        {
+            "internal": true,
+            "title": "Kit: Omni::UI",
+            "description": "Omniverse's UI toolkit for creating beautiful and flexible graphical user interfaces",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/omni.ui"
+        },
+        {
+            "internal": true,
+            "title": "Kit: SceneUI",
+            "description": "SceneUI helps build great-looking 3d manipulators and 3d helpers",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/omni.ui.scene"
+        },
+        {
+            "internal": true,
+            "title": "PhysX 5 SDK",
+            "description": "NVIDIA PhysX SDK version 5",
+            "url": "https://nvidia-omniverse.github.io/PhysX/physx"
+        },
+        {
+            "internal": true,
+            "title": "Python scripting component",
+            "description": "Python scripting component",
+            "url": "https://docs.omniverse.nvidia.com/extensions/latest/ext_python-scripting-component.html"
+        },
+        {
+            "internal": true,
+            "title": "USD API reference",
+            "description": "Universal Scene Description (USD) API reference",
+            "url": "https://openusd.org/release/api/index.html"
+        },
+        {
+            "internal": true,
+            "title": "USD data types",
+            "description": " USD basic data types",
+            "url": "https://docs.omniverse.nvidia.com/usd/latest/technical_reference/usd-types.html"
+        },
+        {
+            "internal": true,
+            "title": "USD Python snippets",
+            "description": "Universal Scene Description (USD) Python snippets",
+            "url": "https://docs.omniverse.nvidia.com/kit/docs/pxr-usd-api/latest/pxr.html"
+        },
+        {
+            "internal": true,
+            "title": "VS Code link",
+            "description": "VS Code's Python debugger link",
+            "url": "https://docs.omniverse.nvidia.com/extensions/latest/ext_vs-code-link.html"
+        }
+    ]
+}

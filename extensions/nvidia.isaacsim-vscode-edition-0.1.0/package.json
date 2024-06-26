@@ -1,0 +1,230 @@
+{
+	"name": "isaacsim-vscode-edition",
+	"displayName": "Isaac Sim VS Code Edition",
+	"description": "Isaac Sim development support for VS Code",
+	"version": "0.1.0",
+	"publisher": "NVIDIA",
+	"icon": "images/icon.png",
+	"keywords": [
+		"NVIDIA",
+		"Omniverse",
+		"Isaac Sim",
+		"editor",
+		"remote"
+	],
+	"engines": {
+		"vscode": "^1.85.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "isaacsim-vscode-edition.run",
+				"title": "Run",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Run Python code in a local Omniverse application scope",
+				"icon": "$(play)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.runRemotely",
+				"title": "Run Remotely",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Run Python code in a remote Omniverse application scope",
+				"icon": "$(run-all)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.runSelectedText",
+				"title": "Run Selected Text",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Run Python code in a local Omniverse application scope from the selected text",
+				"icon": "$(play)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.runSelectedTextRemotely",
+				"title": "Run Selected Text Remotely",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Run Python code in a remote Omniverse application scope from the selected text",
+				"icon": "$(run-all)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.executeFromTerminal",
+				"title": "Execute the current document from terminal",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Execute the current document (saved or not) from the terminal",
+				"icon": "$(terminal)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.clearOutput",
+				"title": "Clear output",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Clear output panel",
+				"icon": "$(clear-all)"
+			},
+			{
+				"command": "isaacsim-vscode-edition.insertSnippet",
+				"title": "Insert snippet",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Insert any of the available snippets"
+			},
+			{
+				"command": "isaacsim-vscode-edition.createTemplate",
+				"title": "Create template",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Create templates for extension, scripting and others"
+			},
+			{
+				"command": "isaacsim-vscode-edition.openResource",
+				"title": "Open resource (internally or externally)",
+				"category": "Isaac Sim VS Code Edition",
+				"description": "Open documentation and other resources in a new tab or externally"
+			}
+		],
+		"configuration": {
+			"title": "Isaac Sim VS Code Edition",
+			"properties": {
+				"remoteApplication.extensionIP": {
+					"type": "string",
+					"format": "ipv4",
+					"default": "127.0.0.1",
+					"description": "IP address where the remote Omniverse application is running"
+				},
+				"remoteApplication.extensionPort": {
+					"type": "number",
+					"default": 8226,
+					"markdownDescription": "Port used by the *VS Code integration* extension in the remote Omniverse application"
+				},
+				"localApplication.extensionPort": {
+					"type": "number",
+					"default": 8226,
+					"markdownDescription": "Port used by the *VS Code integration* extension in the local Omniverse application"
+				},
+				"output.clearBeforeRunning": {
+					"type": "boolean",
+					"default": false,
+					"markdownDescription": "Whether to clear the output before execute the code. If unchecked (`false`), the output will be appended to the existing content"
+				},
+				"output.showCarbLogs": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Whether to enable carb logging to be displayed in the *Isaac Sim VS Code Edition (carb logs)* output panel. Changes will take effect after reloading the window"
+				}
+			}
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "isaacsim-vscode-edition-views",
+					"title": "Isaac Sim VS Code Edition",
+					"icon": "images/view.svg"
+				}
+			]
+		},
+		"views": {
+			"isaacsim-vscode-edition-views": [
+				{
+					"id": "isaacsim-vscode-edition-views-commands",
+					"name": "Commands"
+				},
+				{
+					"id": "isaacsim-vscode-edition-views-snippets-isaac-sim",
+					"name": "Snippets (Isaac Sim)"
+				},
+				{
+					"id": "isaacsim-vscode-edition-views-snippets-kit-usd",
+					"name": "Snippets (Kit/USD)"
+				},
+				{
+					"id": "isaacsim-vscode-edition-views-templates",
+					"name": "Templates"
+				},
+				{
+					"id": "isaacsim-vscode-edition-views-resources",
+					"name": "Docs & resources"
+				}
+			]
+		},
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "isaacsim-vscode-edition.createTemplate",
+					"when": "false"
+				},
+				{
+					"command": "isaacsim-vscode-edition.insertSnippet",
+					"when": "false"
+				},
+				{
+					"command": "isaacsim-vscode-edition.openResource",
+					"when": "false"
+				}
+			],
+			"view/title": [
+				{
+					"command": "isaacsim-vscode-edition.run",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@1"
+				},
+				{
+					"command": "isaacsim-vscode-edition.runRemotely",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@2"
+				},
+				{
+					"command": "isaacsim-vscode-edition.runSelectedText",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@3"
+				},
+				{
+					"command": "isaacsim-vscode-edition.runSelectedTextRemotely",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@4"
+				},
+				{
+					"command": "isaacsim-vscode-edition.executeFromTerminal",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@5"
+				},
+				{
+					"command": "isaacsim-vscode-edition.clearOutput",
+					"when": "view =~ /isaacsim-vscode-edition-views-commands/",
+					"group": "navigation@6"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.85.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "18.x",
+		"@typescript-eslint/eslint-plugin": "^6.15.0",
+		"@typescript-eslint/parser": "^6.15.0",
+		"eslint": "^8.56.0",
+		"typescript": "^5.3.3",
+		"@vscode/test-cli": "^0.0.4",
+		"@vscode/test-electron": "^2.3.8"
+	},
+	"__metadata": {
+		"id": "eb212cf7-1bdc-40ad-baf1-7d788580ba31",
+		"publisherId": "244caa58-2d9d-4c35-8881-903c4f07e311",
+		"publisherDisplayName": "NVIDIA",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1719367138124,
+		"pinned": true,
+		"source": "gallery"
+	}
+}
