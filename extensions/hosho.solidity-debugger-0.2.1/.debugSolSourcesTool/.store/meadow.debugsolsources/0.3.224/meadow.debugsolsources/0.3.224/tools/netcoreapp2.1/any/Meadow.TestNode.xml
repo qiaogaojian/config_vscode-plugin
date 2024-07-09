@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.TestNode</name>
+    </assembly>
+    <members>
+        <member name="P:Meadow.TestNode.AccountConfiguration.AccountGenerationCount">
+            <summary>
+            The number of accounts to generate.
+            Defaults to 100.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.AccountConfiguration.DefaultAccountEtherBalance">
+            <summary>
+            The balance (in ether) that accounts should be initially given.
+            Defaults to 2000.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.AccountConfiguration.AccountDerivationMethod">
+            <summary>
+            The specification/format to use for generating accounts from the seed.
+            Defaults to <see cref="T:Meadow.Core.AccountDerivation.Bip44AccountDerivation"/>
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.Chain">
+            <summary>
+            The operating chain and underlying components which we are adding to.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.TransactionPool">
+            <summary>
+            The transaction pool which holds all queue'd/pending transactions.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.Coinbase">
+            <summary>
+            Miner reward address.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.MinimumGasPrice">
+            <summary>
+            The minimum gas price for a transaction to be considered being mined into a block.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.ExtraData">
+            <summary>
+            The extra data for every mined block.
+            </summary>
+        </member>
+        <member name="P:Meadow.TestNode.TestNodeChain.TrustMinerStates">
+            <summary>
+            Indicates whether we should trust the miner's resulting state and use that as our state, or whether we should re-apply the entire block to recalculate our own.
+            </summary>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.#ctor(System.Nullable{System.Int32},System.Net.IPAddress,Meadow.TestNode.AccountConfiguration)">
+            <param name="port">If null or unspecified the http server binds to a random port.</param>
+            <param name="accountConfig">Configure number of accounts to generate, ether balance, wallet derivation method.</param>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.GetDeployedAddress(Meadow.EVM.Data_Types.Addressing.Address,Meadow.EVM.Data_Types.Addressing.Address,System.Byte[])">
+            <summary>
+            Obtains the address which a contract is deployed to or will be deployed, having to do with the given transaction/call parameters.
+            </summary>
+            <param name="to">The address the transaction was sent to.</param>
+            <param name="sender">The sender which sent the transaction.</param>
+            <param name="blockHash">The hash of the block for which we'd like to obtain</param>
+            <returns>Returns the address which the contract we are trying to interact with will be deployed to. Returns null if we are not trying to deploy an address.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.GetDeployedAddress(Meadow.EVM.Data_Types.Addressing.Address,Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Obtains the address which a contract is deployed to or will be deployed, having to do with the given transaction/call parameters.
+            </summary>
+            <param name="to">The address the transaction was sent to.</param>
+            <param name="sender">The sender which sent the transaction.</param>
+            <param name="senderNonceBeforeTransaction">The nonce of the sender before sending the transaction/call we are obtaining the address for.</param>
+            <returns>Returns the address which the contract we are trying to interact with will be deployed to. Returns null if we are not trying to deploy an address.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.GetTransactionTargetInformation(Meadow.EVM.Data_Types.Addressing.Address,Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Obtains information regarding if the transaction information supplied suggests we are deploying, our resulting deployed address (even if already deployed), 
+            and the sender's nonce at the time of receiving this transaction.
+            </summary>
+            <param name="sender">The sender of the transaction to obtain transaction target information for.</param>
+            <param name="to">The receiver of the transaction to obtain transaction target information for.</param>
+            <returns>Obtains deploying status, our deployed address (even if already deployed), and the sender's nonce at the time of receiving this transaction.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.ProcessTransactionInternal(Meadow.EVM.Data_Types.Transactions.Transaction,System.Boolean,Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Processes a given transaction, returning the resulting transaction hash if the transaction succeeds. If the transaction fails,
+            an exception with the target/deployed contract address and deployed status is returned.
+            </summary>
+            <param name="transaction">The transaction to process on the test node.</param>
+            <param name="deploying">True if this transaction will attempt to deploy a contract.</param>
+            <param name="targetDeployedAddress">The address of the contract receiving the transaction, or if deploying a contract, the address the contract will deploy to.</param>
+            <returns>Returns the transaction hash if the transaction succeeds, otherwise throws the causing exception with appropriate information attached.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.HandleCall(Meadow.JsonRpc.Types.CallParams,Meadow.EVM.Data_Types.State.State)">
+            <summary>
+            Executes a call on a given state, discarding all changes and returning the execution result.
+            </summary>
+            <param name="callParams">The call parameters to execute on the state.</param>
+            <param name="state">The state to execute on (changes will be discared).</param>
+            <returns>Returns the execution result of the call.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.GetStateFromBlockParameters(Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            Obtains the state for a given period in time, determined by the block parameter. Warning: This could be an old copy of State, or it could be the current instance of state.
+            </summary>
+            <param name="blockParameter">The block parameters which dictate the point in time for which we wish to obtain data.</param>
+            <returns>Returns either a copy of an previous state, or the current instance of our state.</returns>
+        </member>
+        <member name="M:Meadow.TestNode.TestNodeServer.BlockNumberFromBlockParameters(Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            Obtains the block number for a given period in time, determined by the block parameter.
+            </summary>
+            <param name="blockParameter">The block parameters which dictate the point in time for which we wish to obtain data.</param>
+            <returns>Returns the block number derived from the block parameter.</returns>
+        </member>
+    </members>
+</doc>

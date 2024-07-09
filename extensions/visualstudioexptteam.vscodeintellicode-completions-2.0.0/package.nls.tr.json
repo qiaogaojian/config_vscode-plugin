@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode Tamamlamaları",
+	"extension.description": "IntelliCode Tamamlamaları: AI temelli kodları otomatik tamamlama",
+	"settings.logging": "Konsol için günlük kaydı düzeyi",
+	"settings.parseErrorFilter": "Ayrıştırma hatalarını başlatan tamamlamaları filtreleme",
+	"settings.snippetCompletions": "Model, bir yer tutucu değişmez değeri gösterdiğinde kod parçacığı tamamlamalarını kullanma",
+	"settings.pythonEnabled": "Python dosyalarında tamamlamaları etkinleştirme",
+	"settings.typescriptEnabled": "TypeScript dosyalarında tamamlamaları etkinleştirme",
+	"settings.javascriptEnabled": "JavaScript dosyalarında tamamlamaları etkinleştirme",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

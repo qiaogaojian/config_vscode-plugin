@@ -1,0 +1,11 @@
+{
+	"extension.title": "Saisies semi-automatiques IntelliCode",
+	"extension.description": "Complétions IntelliCode : saisie semi-automatique de code piloté par l’IA",
+	"settings.logging": "Niveau de journalisation pour la console",
+	"settings.parseErrorFilter": "Filtrer les complétions qui introduisent des erreurs d’analyse syntaxique",
+	"settings.snippetCompletions": "Utiliser les complétions d’extraits de code lorsque le modèle suggère un littéral d’espace réservé",
+	"settings.pythonEnabled": "Activer les complétions dans les fichiers Python",
+	"settings.typescriptEnabled": "Activer les complétions dans les fichiers TypeScript",
+	"settings.javascriptEnabled": "Activer les complétions dans les fichiers JavaScript",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

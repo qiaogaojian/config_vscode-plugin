@@ -1,0 +1,299 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.Contract</name>
+    </assembly>
+    <members>
+        <member name="M:Meadow.Contract.ContractDeployer`1.ExpectRevert">
+            <summary>
+            Creates new contract deployment transaction and expects a revert.
+            Throws an exception if transaction does not revert.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.ContractFactory.Deploy(Meadow.JsonRpc.Client.IJsonRpcClient,System.Byte[],Meadow.JsonRpc.Types.TransactionParams,System.ReadOnlyMemory{System.Byte})">
+            <summary>
+            Deploys a contract with constructor arguments
+            </summary>
+            <param name="abiEncodedConstructorArgs">ABI encoded function selector and constructor parameters</param>
+        </member>
+        <member name="P:Meadow.Contract.EthFuncBase.RawCallData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.SendTransaction(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain.
+            </summary>
+            <returns>The transaction hash</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.ExpectRevertTransaction(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new transaction and expects a revert.
+            Throws an exception if transaction does not revert.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.TransactionReceipt(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain and gets the transaction receipt.
+            </summary>
+            <returns>The transaction receipt</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.FirstEventLog``1(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and returns the first (oldest) event log of the given type.
+            </summary>
+            <returns>Throws exception if not found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.FirstOrDefaultEventLog``1(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and returns the first (oldest) event log of the given type.
+            </summary>
+            <returns>Return null if no matching event is found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.LastEventLog``1(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and returns the last (newest) event log of the given type.
+            </summary>
+            <returns>Throws exception if not found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.LastOrDefaultEventLog``1(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and returns the last (newest) event log of the given type.
+            </summary>
+            <returns>Return null if no matching event is found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.EventLogs(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and returns all event logs that can be matched to an event type. 
+            Unmatched logs are left out of the result.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.EventLogs``1(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt, and searches the event logs for any that match the given event type.
+            </summary>
+            <returns>Returns an empty array if no matching events are found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFuncBase.EventLogs``2(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Eventlog helper for get a tuple eventlogs,which could contains 2-8 different type of evens, in one transaction in one time
+            Creates new message call transaction on the block chain, gets the transaction 
+            receipt.
+            </summary>
+            <returns>Returns tuple of event log </returns>
+        </member>
+        <member name="M:Meadow.Contract.EthFunc`1.CallAndTransact(Meadow.JsonRpc.Types.TransactionParams)">
+            <summary>
+            Performs first an RPC call to get the function return value, then an RPC sendTransaction and getTransactionReceipt.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFunc`1.CallRaw(Meadow.JsonRpc.Types.CallParams,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            Executes a new message call immediately without creating a transaction on the block chain. 
+            Returns the raw ABI encoded response. 
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFunc`1.Call(Meadow.JsonRpc.Types.CallParams,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            Executes a new message call immediately without creating a transaction on the block chain.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EthFunc`1.ExpectRevertCall(Meadow.JsonRpc.Types.CallParams,Meadow.JsonRpc.Types.DefaultBlockParameter)">
+            <summary>
+            Executes a new message call immediately without creating a transaction on the block chain and expects a revert.
+            Throws an exception if call does not revert.
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.Address">
+            <summary>
+            address from which this log originated
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.BlockHash">
+            <summary>
+            hash of the block where this log was in. null when its pending
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.BlockNumber">
+            <summary>
+            the block number where this log was in. null when its pending
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.LogIndex">
+            <summary>
+            integer of the log index position in the block
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.Data">
+            <summary>
+            contains one or more 32 Bytes non-indexed arguments of the log (ABI encoded)
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.Topics">
+            <summary>
+            Array of 0 to 4 32 Bytes DATA of indexed log arguments. 
+            (In solidity: The first topic is the hash of the signature of the event 
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.TransactionHash">
+            <summary>
+            hash of the transactions this log was created from. null when its pending log
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.EventLog.LogArgs">
+            <summary>
+            The arguments coming from the event
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.GetEventTypes(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Finds matching event object types for the event signatures in a given transaction receipt.
+            </summary>
+            <param name="receipt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.EventLogs(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Returns all event logs that can be matched to an event type. Unmatched logs are left out of the result.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.FirstEventLog``1(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Returns the first (oldest) event log of the given type.
+            </summary>
+            <returns>Throws exception if not found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.FirstOrDefaultEventLog``1(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Returns the first (oldest) event log of the given type.
+            </summary>
+            <returns>Return null if no matching event is found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.LastEventLog``1(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Returns the last (newest) event log of the given type.
+            </summary>
+            <returns>Throws exception if not found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.LastOrDefaultEventLog``1(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Returns the last (newest) event log of the given type.
+            </summary>
+            <returns>Returns null if not matching event is found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.EventLogs``1(Meadow.JsonRpc.Types.TransactionReceipt)">
+            <summary>
+            Searches the event logs for any that match the given event type.
+            </summary>
+            <returns>Returns an empty array if no matching events are found.</returns>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.TryParse(Meadow.JsonRpc.Types.FilterLogObject,System.Type,Meadow.Contract.EventLog@)">
+            <param name="eventType">Must be a <see cref="T:Meadow.Contract.EventLog"/> type with a matching event signature attribute.</param>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.GetEventLogTypeSignature(System.Type)">
+            <summary>
+            Gets the <see cref="T:Meadow.Contract.EventSignatureAttribute"/> signature on a <see cref="T:Meadow.Contract.EventLog"/> type.
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.RegisterDeployedContractEventTypes(Meadow.Core.EthTypes.Address,System.Type[])">
+            <summary>
+            Registers a contract's deployed address and its containing EventLog class types 
+            so that event log data can be looked up and parsed.
+            </summary>
+            <param name="deployedContractAddress">The address of the deployed contract.</param>
+            <param name="eventTypes">The event class types deriving from <see cref="T:Meadow.Contract.EventLog"/></param>
+        </member>
+        <member name="F:Meadow.Contract.EventLogUtil._reflectedEventTypes">
+            <summary>
+            Key is event signature hash, value is event class type
+            </summary>
+        </member>
+        <member name="M:Meadow.Contract.EventLogUtil.Parse(System.String,Meadow.JsonRpc.Types.FilterLogObject)">
+            <summary>
+            First checks if the log's address corresponds to a deployed contract address that is
+            registered using <see cref="M:Meadow.Contract.EventLogUtil.RegisterDeployedContractEventTypes(Meadow.Core.EthTypes.Address,System.Type[])"/>.
+            The constructor in generated contracts automatically register their deployed address
+            and event class types. 
+            Otherwise uses reflection to look through other contract event types for a matching
+            signature.
+            </summary>
+            <returns>
+            Returns null if the signature could not be matched to a known event type.
+            </returns>
+        </member>
+        <member name="M:Meadow.Contract.GeneratedSolcData.GetSolcBytecodeInfoByCodeMatch(System.String,System.Boolean,Meadow.Contract.SolcBytecodeInfo@)">
+            <summary>
+            
+            </summary>
+            <param name="codeHex"></param>
+            <param name="isDeployed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.Contract.GeneratedSolcData.MatchCoverageData(Meadow.JsonRpc.Types.Debugging.CompoundCoverageMap[])">
+            <summary>
+            Match coverage contract addresses with deployed contracts that the client keeps track of.
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.FilePath">
+            <summary>
+            The relative file path.
+            For example if the absolute path is "C:\Projects\MyProject\Contracts\Zeppelin\StandardToken.sol 
+            then this relatie file path would be "Zeppelin\StandardToken.sol".
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.ContractName">
+            <summary>
+            Name of the contract as defined in the solidity source code.
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.SourceMap">
+            <summary>
+            Solc output for: evm.bytecode.sourceMap
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.Opcodes">
+            <summary>
+            Solc output for: evm.bytecode.opcodes
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.SourceMapDeployed">
+            <summary>
+            Solc output for: evm.deployedBytecode.sourceMap
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcBytecodeInfo.OpcodesDeployed">
+            <summary>
+            Solc output for: evm.deployedBytecode.opcodes
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcSourceInfo.ID">
+            <summary>
+            This file's index in the solc sources list output.
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcSourceInfo.FileName">
+            <summary>
+            The relative file path.
+            For example if the absolute path is "C:\Projects\MyProject\Contracts\Zeppelin\StandardToken.sol 
+            then this relatie file path would be "Zeppelin\StandardToken.sol".
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcSourceInfo.AstJson">
+            <summary>
+            AST data serialized as a json string.
+            </summary>
+        </member>
+        <member name="P:Meadow.Contract.SolcSourceInfo.SourceCode">
+            <summary>
+            The full literal solidity file source code.
+            </summary>
+        </member>
+    </members>
+</doc>

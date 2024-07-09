@@ -1,0 +1,219 @@
+{
+	"name": "solidity-debugger",
+	"displayName": "Solidity Debugger",
+	"version": "0.2.1",
+	"description": "Debugger for Solidity smart contracts - powered by the Meadow testing and development tool suite",
+	"categories": [
+		"Debuggers"
+	],
+	"keywords": [
+		"Solidity",
+		"Ethereum",
+		"Truffle",
+		"Ganache",
+		"solidity-coverage"
+	],
+	"publisher": "hosho",
+	"author": "Meadow",
+	"homepage": "https://github.com/MeadowSuite/Meadow/blob/master/src/Meadow.VSCode.Debugger/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/MeadowSuite/Meadow.git"
+	},
+	"bugs": {
+		"url": "https://github.com/MeadowSuite/Meadow/issues"
+	},
+	"license": "MIT",
+	"main": "./out/extension",
+	"extensionDependencies": [],
+	"icon": "meadow-icon-256x256.png",
+	"preview": false,
+	"private": true,
+	"scripts": {
+		"vscode:prepublish": "(npm run compile && npm run preparePackage)",
+		"compile": "tsc -p ./src",
+		"watch": "tsc -watch -p ./src",
+		"preparePackage": "node ./out/preparePackage.js",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"package": "vsce package",
+		"publish": "vsce publish"
+	},
+	"engines": {
+		"vscode": "^1.28.0",
+		"node": "^8.9.3"
+	},
+	"dependencies": {
+		"lockfile": "^1.0.4",
+		"semver": "^5.6.0",
+		"uuid": "^3.3.2",
+		"vscode-debugadapter": "^1.32.1",
+		"vscode-debugprotocol": "^1.32.0"
+	},
+	"devDependencies": {
+		"@types/node": "8.9.3",
+		"tslint": "^5.11.0",
+		"typescript": "^3.1.6",
+		"vsce": "^1.53.0",
+		"vscode": "^1.1.21",
+		"vscode-debugadapter-testsupport": "^1.32.0",
+		"trash": "^4.3.0"
+	},
+	"activationEvents": [
+		"onDebug",
+		"onLanguage:solidity"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "solidity",
+				"aliases": [
+					"Solidity",
+					"solidity"
+				],
+				"extensions": [
+					".sol"
+				]
+			}
+		],
+		"breakpoints": [
+			{
+				"language": "solidity"
+			}
+		],
+		"debuggers": [
+			{
+				"type": "coreclr",
+				"label": "Meadow C# Unit Test Hook"
+			},
+			{
+				"type": "solidity",
+				"label": "Solidity Debug",
+				"languages": [
+					"solidity"
+				],
+				"configurationAttributes": {
+					"attach": {
+						"properties": {
+							"trace": {
+								"type": "boolean",
+								"description": "Enable logging of the Debug Adapter Protocol.",
+								"default": true
+							}
+						}
+					},
+					"launch": {
+						"properties": {
+							"entryPoint": {
+								"type": "string",
+								"description": "The contract and function to be deployed and called in the format of 'ContractName.FunctionName'. The contract constructor and given function should not contain any input parameters.",
+								"default": "Main"
+							},
+							"stopOnEntry": {
+								"type": "boolean",
+								"description": "Automatically stop after launch.",
+								"default": true
+							},
+							"trace": {
+								"type": "boolean",
+								"description": "Enable logging of the Debug Adapter Protocol.",
+								"default": true
+							},
+							"debugAdapterFile": {
+								"type": "string",
+								"description": "Specify the debug adapter assembly file to use."
+							},
+							"breakDebugAdapter": {
+								"type": "boolean",
+								"description": "Attach debugger in the debug adapter executable when its launched."
+							}
+						}
+					}
+				}
+			},
+			{
+				"type": "solidityMeadow",
+				"label": "Solidity Debugging w/ Unit Tests",
+				"configurationAttributes": {
+					"attach": {
+						"properties": {
+							"trace": {
+								"type": "boolean",
+								"description": "Enable logging of the Debug Adapter Protocol.",
+								"default": true
+							}
+						}
+					},
+					"launch": {
+						"properties": {
+							"stopOnEntry": {
+								"type": "boolean",
+								"description": "Automatically stop after launch.",
+								"default": true
+							},
+							"trace": {
+								"type": "boolean",
+								"description": "Enable logging of the Debug Adapter Protocol.",
+								"default": true
+							},
+							"debugAdapterFile": {
+								"type": "string",
+								"description": "Specify the debug adapter assembly file to use."
+							},
+							"testAssembly": {
+								"type": "string",
+								"description": "The C# Unit test assembly to launch for debugging."
+							},
+							"disableUnitTestDebugging": {
+								"type": "boolean",
+								"description": "If true then the unit tests are launched without debug mode."
+							},
+							"logFile": {
+								"type": "string",
+								"description": "File to log debugger messages to."
+							},
+							"breakDebugAdapter": {
+								"type": "boolean",
+								"description": "Attach debugger in the debug adapter executable when its launched."
+							},
+							"breakDebugServer": {
+								"type": "boolean",
+								"description": "Attach debugger in the debug server when its launched."
+							}
+						}
+					}
+				},
+				"configurationSnippets": [
+					{
+						"label": "Solidity Debug",
+						"description": "A new configuration for debugging Solidity with a contract entry point.",
+						"body": {
+							"type": "solidity",
+							"request": "launch",
+							"name": "Debug Solidity (via contract entry point)"
+						}
+					},
+					{
+						"label": "Solidity Debug: Launch Tests",
+						"description": "A new configuration for debugging Solidity with Meadow via unit test run.",
+						"body": {
+							"type": "solidityMeadow",
+							"request": "launch",
+							"name": "Debug Solidity (via unit test run)"
+						}
+					}
+				]
+			}
+		]
+	},
+	"__metadata": {
+		"id": "488c2e27-8f31-422d-936d-1aa71e94b76a",
+		"publisherId": "652f93f5-3764-4e85-8218-8a31a4ecb555",
+		"publisherDisplayName": "Meadow",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1720507248072,
+		"source": "gallery"
+	}
+}

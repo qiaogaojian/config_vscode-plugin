@@ -1,0 +1,11 @@
+{
+	"extension.title": "Finalizaciones de IntelliCode",
+	"extension.description": "Finalizaciones de IntelliCode: finalización automática de código controlada por IA",
+	"settings.logging": "Nivel de registro para la consola",
+	"settings.parseErrorFilter": "Filtrar las finalizaciones que introduzcan errores de análisis",
+	"settings.snippetCompletions": "Usar finalizaciones de fragmentos de código cuando el modelo sugiere un literal de marcador de posición",
+	"settings.pythonEnabled": "Habilitar finalizaciones en archivos de Python",
+	"settings.typescriptEnabled": "Habilitar finalizaciones en archivos TypeScript",
+	"settings.javascriptEnabled": "Habilitar finalizaciones en archivos JavaScript",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

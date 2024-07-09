@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode-Vervollständigungen",
+	"extension.description": "IntelliCode-Vervollständigungen: KI-gesteuerte automatische Vervollständigung von Code",
+	"settings.logging": "Der Level wird für die Konsole protokolliert",
+	"settings.parseErrorFilter": "Herausfiltern von Vervollständigungen, die Analysefehlern verursachen",
+	"settings.snippetCompletions": "Verwenden von Ausschnittvervollständigungen, wenn das Modell ein Platzhalterliteral vorschlägt",
+	"settings.pythonEnabled": "Aktivieren von Vervollständigungen in Python-Dateien",
+	"settings.typescriptEnabled": "Aktivieren von Vervollständigungen in TypeScript-Dateien",
+	"settings.javascriptEnabled": "Aktivieren von Vervollständigungen in JavaScript-Dateien",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

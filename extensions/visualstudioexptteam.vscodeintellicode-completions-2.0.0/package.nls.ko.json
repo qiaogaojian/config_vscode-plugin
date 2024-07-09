@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode 완성",
+	"extension.description": "IntelliCode 완성: AI 기반 코드 자동 완성",
+	"settings.logging": "콘솔의 로깅 수준",
+	"settings.parseErrorFilter": "구문 분석 오류가 발생하는 완성 필터링",
+	"settings.snippetCompletions": "모델이 자리 표시자 리터럴을 제안할 때 코드 조각 완성 사용",
+	"settings.pythonEnabled": "Python 파일에서 완성 사용",
+	"settings.typescriptEnabled": "TypeScript 파일에서 완성 사용",
+	"settings.javascriptEnabled": "JavaScript 파일에서 완성 사용",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

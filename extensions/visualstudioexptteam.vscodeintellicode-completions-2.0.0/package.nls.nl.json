@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode-voltooiingen",
+	"extension.description": "IntelliCode-voltooiingen: automatisch aanvullen van code door AI",
+	"settings.logging": "Logboekregistratieniveau voor console",
+	"settings.parseErrorFilter": "Voltooiingen filteren die parseerfouten veroorzaken",
+	"settings.snippetCompletions": "Fragmentvoltooiingen gebruiken wanneer het model een letterlijke tijdelijke aanduiding voorstelt",
+	"settings.pythonEnabled": "Voltooiingen inschakelen in Python-bestanden",
+	"settings.typescriptEnabled": "Voltooiingen inschakelen in TypeScript-bestanden",
+	"settings.javascriptEnabled": "Voltooiingen inschakelen in JavaScript-bestanden",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode-kiegészítések",
+	"extension.description": "IntelliCode-kiegészítések: AI-alapú automatikus kódkiegészítés",
+	"settings.logging": "Konzol naplózási szintje",
+	"settings.parseErrorFilter": "Elemzési hibákat tartalmazó kiegészítések kiszűrése",
+	"settings.snippetCompletions": "Kódrészlet-kiegészítések használata, ha a modell helyőrző literál érték használatát javasolja",
+	"settings.pythonEnabled": "Kiegészítések engedélyezése Python-fájlokban",
+	"settings.typescriptEnabled": "Kiegészítések engedélyezése TypeScript-fájlokban",
+	"settings.javascriptEnabled": "Kiegészítések engedélyezése JavaScript-fájlokban",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

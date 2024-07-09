@@ -1,0 +1,172 @@
+{
+	"name": "viml",
+	"displayName": "VimL (Vim Language, Vim Script)",
+	"version": "2.2.0",
+	"description": "Vim Script language server protocol and highlighting support for VSCode.",
+	"scripts": {
+		"update-grammar": "make update-grammar",
+		"update-changelog": "npx auto-changelog -p",
+		"postinstall": "rm -f package-lock.json",
+		"compile": "tsc -p ./",
+		"vscode:prepublish": "make pack"
+	},
+	"engines": {
+		"vscode": "^1.20.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"publisher": "XadillaX",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/XadillaX/vscode-language-viml.git"
+	},
+	"author": "XadillaX <i@2333.moe>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/XadillaX/vscode-language-viml/issues"
+	},
+	"homepage": "https://github.com/XadillaX/vscode-language-viml#readme",
+	"galleryBanner": {
+		"color": "#569cd6",
+		"theme": "dark"
+	},
+	"icon": "assets/logo.png",
+	"devDependencies": {
+		"@types/node": "^18.16.14",
+		"@types/vscode": "^1.20.0",
+		"all-contributors-cli": "^6.25.1",
+		"auto-changelog": "^2.4.0",
+		"eslint": "^8.0.0",
+		"eslint-config-egg": "^11.0.0",
+		"typescript": "^5.0.4",
+		"vscode-update-grammar-tool": "^1.0.0"
+	},
+	"contributes": {
+		"configuration": {
+			"title": "VimL",
+			"properties": {
+				"viml.highVimHelpIndentStylePriority": {
+					"type": "boolean",
+					"default": true,
+					"description": "Force use 8-spaces-size and tab as Vim Help file's indentation style (Even higher priority than EditorConfig, etc.)"
+				}
+			}
+		},
+		"grammars": [
+			{
+				"language": "viml",
+				"scopeName": "source.viml",
+				"path": "./syntaxes/viml.tmLanguage.json"
+			},
+			{
+				"language": "vim-help",
+				"scopeName": "text.vim-help",
+				"path": "./syntaxes/help.tmLanguage.json"
+			},
+			{
+				"language": "vim-snippet",
+				"scopeName": "source.vim-snippet",
+				"path": "./syntaxes/snippet.tmLanguage.json"
+			},
+			{
+				"language": "vroom",
+				"scopeName": "source.vroom",
+				"path": "./syntaxes/vroom.tmLanguage.json"
+			},
+			{
+				"language": "vim-markdown",
+				"scopeName": "markdown.vim.codeblock",
+				"path": "./syntaxes/codeblock.json",
+				"injectTo": [
+					"text.html.markdown"
+				],
+				"embeddedLanguages": {
+					"meta.embedded.block.viml": "viml",
+					"meta.embedded.block.vim-help": "vim-help",
+					"meta.embedded.block.vim-snippet": "vim-snippet"
+				}
+			}
+		],
+		"languages": [
+			{
+				"id": "viml",
+				"aliases": [
+					"VimL",
+					"VimScript",
+					"Vim Language"
+				],
+				"extensions": [
+					".vim",
+					".vimrc",
+					".gvim",
+					".ideavim",
+					".exrc"
+				],
+				"filenames": [
+					"_vimrc",
+					"vimrc",
+					".ideavim",
+					".ideavimrc"
+				],
+				"configuration": "./syntaxes/viml.language-configuration.json"
+			},
+			{
+				"id": "vim-help",
+				"aliases": [
+					"Vim Help"
+				],
+				"configuration": "./syntaxes/help.language-configuration.json"
+			},
+			{
+				"id": "vim-snippet",
+				"aliases": [
+					"Vim Snippet"
+				],
+				"extensions": [
+					".snip",
+					".snippet",
+					".snippets"
+				],
+				"configuration": "./syntaxes/snippet.language-configuration.json"
+			},
+			{
+				"id": "vim-markdown"
+			},
+			{
+				"id": "vroom",
+				"aliases": [
+					"Vroom"
+				],
+				"extensions": [
+					".vroom"
+				],
+				"configuration": "./syntaxes/vroom.language-configuration.json"
+			}
+		]
+	},
+	"activationEvents": [
+		"onLanguage:viml",
+		"onLanguage:vim-help",
+		"onLanguage:vim-snippet",
+		"onLanguage:vim-markdown",
+		"onLanguage:vroom",
+		"workspaceContains:**/.*txt"
+	],
+	"main": "./out/extension.js",
+	"dependencies": {
+		"vim-language-server": "^2.3.0",
+		"vscode-languageclient": "^8.1.0"
+	},
+	"__metadata": {
+		"id": "ecc7bbf7-9d61-46c8-b47e-a2a27c38b38d",
+		"publisherId": "9ea94209-a714-4c79-872e-95fcd2b2d718",
+		"publisherDisplayName": "XadillaX",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1720507247837,
+		"source": "gallery"
+	}
+}

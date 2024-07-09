@@ -1,0 +1,11 @@
+{
+	"extension.title": "IntelliCode-slutföranden",
+	"extension.description": "IntelliCode-slutföranden: AI-driven kod slutförs automatiskt",
+	"settings.logging": "Loggningsnivå för konsol",
+	"settings.parseErrorFilter": "Filtrera bort slutföranden som medför parsningsfel",
+	"settings.snippetCompletions": "Använd fragmentslutföranden när modellen föreslår en platshållarliteral",
+	"settings.pythonEnabled": "Aktivera slutföranden i Python-filer",
+	"settings.typescriptEnabled": "Aktivera slutföranden i TypeScript-filer",
+	"settings.javascriptEnabled": "Aktivera slutföranden i JavaScript-filer",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

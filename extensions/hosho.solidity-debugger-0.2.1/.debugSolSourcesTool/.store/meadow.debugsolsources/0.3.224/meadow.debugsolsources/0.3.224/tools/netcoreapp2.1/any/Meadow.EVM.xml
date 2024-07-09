@@ -1,0 +1,2995 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.EVM</name>
+    </assembly>
+    <members>
+        <member name="P:Meadow.EVM.Configuration.Configuration.Database">
+            <summary>
+            The key-value storage database.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.Consensus">
+            <summary>
+            The consensus mechanism we are currently executing on.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GenesisBlock">
+            <summary>
+            The initial/genesis block on our chain, the special case, as all blocks should have parents.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GenesisStateSnapshot">
+            <summary>
+            A snapshot of the state we begin with when creating our chain.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.Version">
+            <summary>
+            The current Ethereum release/version which we are operating on.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.ChainID">
+            <summary>
+            Represents the ID of the current chain we are operating on.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.EthereumReleaseBlockStart">
+            <summary>
+            Represents a lookup of Ethereum releases to a block number at which they should be considered active.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.MaxUncles">
+            <summary>
+            The maximum number of uncles a block can have.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.MaxUncleDepth">
+            <summary>
+            The maximum block distance that the uncle will be held onto.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.UncleDepthPenaltyFactor">
+            <summary>
+            The amount of reward penalty depending on the depth at which the uncle was processed.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GasLimitFactorNumerator">
+            <summary>
+            The numerator for the fraction which indicates the weight of the previous block to use in moving average calculation.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GasLimitFactorDenominator">
+            <summary>
+            The denominator for the fraction which indicates the weight of the previous block to use in moving average calculation.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.MinGasLimit">
+            <summary>
+            The minimum the gas limit can be on a block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.MaxGasLimit">
+            <summary>
+            The maximum the gas limit can be on a block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GasLimitExponentialMovingAverageFactor">
+            <summary>
+            Used in gas limit moving average calculation.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.GasLimitAdjustmentMaxFactor">
+            <summary>
+            Used in gas limit moving average calculation.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.DAOForkBlockExtraData">
+            <summary>
+            The data that is expected to be included on the 10 blocks leading up to the DAO fork.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.IgnoreEthashVerification">
+            <summary>
+            Ignores Ethash verification so mining can be avoided in order to save time.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.CurrentTimestamp">
+            <summary>
+            Represents the current time, offset by our current time stamp offset.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.CurrentTimestampOffset">
+            <summary>
+            Adjustable time offset for our current time stamp.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Configuration.Configuration.CodeCoverage">
+            <summary>
+            Tracks code coverage/execution optionally for testing purposes.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.Configuration.#ctor(Meadow.EVM.Data_Types.Databases.BaseDB,System.Nullable{Meadow.EVM.Configuration.EthereumRelease},Meadow.EVM.Data_Types.Block.BlockHeader,Meadow.EVM.Data_Types.State.State)">
+            <summary>
+            Initializes the configuration.
+            </summary>
+            <param name="database">The database to use as a key-value store for the chain, if none is provided, a new one is created.</param>
+            <param name="version">An optional version we can supply to override the version numbers derived from our current block number, and the starting block number for a new version.</param>
+            <param name="genesisBlockHeader">An optional genesis block header to use instead of the default. Expected to have no transactions or uncles.</param>
+            <param name="genesisState">An optional genesis state to use instead of the default. If this is provided, the genesis block's state root hash will be replaced with this state's root hash, and the database argument should be this genesis state's database, so lookups will resolve to any modified genesis state trie objects.</param>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.Configuration.UpdateEthereumRelease(Meadow.EVM.Data_Types.State.State)">
+            <summary>
+            Given a state, updates the current configuration's Ethereum release to accomodate for the current block number.
+            </summary>
+            <param name="state">The state which we wish to based our versioning off of.</param>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.Configuration.SetEthereumReleaseBlockStarts(Meadow.EVM.Configuration.EthereumRelease)">
+            <summary>
+            Sets the Ethereum release to be used in the configuration.
+            </summary>
+            <param name="releaseVersion">The release version to set this configuration to.</param>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.Configuration.GetReleaseStartBlockNumber(Meadow.EVM.Configuration.EthereumRelease)">
+            <summary>
+            Obtains a release version's starting block number.
+            </summary>
+            <param name="releaseVersion">The release version to obtain the starting block number for (inclusive).</param>
+            <returns>Returns the block number which begins the release version provided.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Configuration.EthereumChainID">
+            <summary>
+            An identifier for what Ethereum chain we are operating on, including main nets, test nets, etc. It became embedded in Transactions (and thus hashes) in Spurious Dragon to avoid replay attacks across chains.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Configuration.EthereumRelease">
+            <summary>
+            Indicates all releases/forks of Ethereum.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.Frontier">
+            <summary>
+            (1.0) Ethereum first production-net release (still considered beta) (7/30/2015)
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.Homestead">
+            <summary>
+            (2.0) Ethereum revision which marked the exit from a beta to a stable release (3/14/2016)
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.DAO">
+            <summary>
+            (2.1) Ethereum revision which corrected the DAO hack.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.TangerineWhistle">
+            <summary>
+            (2.2) Ethereum revision also known as Anti-DoS, introduced new gas rules and secure trie access to avoid targetted resource exhaustion.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.SpuriousDragon">
+            <summary>
+            (2.3) Ethereum revision also known as State-clearing.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.Byzantium">
+            <summary>
+            (3.0) Ethereum revision (phase 1) of Metropolis release. Introduces various privacy and functionality features. (This is often refered to as just Metropolis).
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.WIP_Constantinople">
+            <summary>
+            (Work in progress) (3.1) Ethereum revision (phase 2) of Metropolis release.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.EthereumRelease.WIP_Serenity">
+            <summary>
+            (Work in progress) (4.0) Ethereum revision meant to move from Proof-of-Work consensus to Proof-of-Stake consensus.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_TRANSACTION">
+            <summary>
+            The amount of gas a transaction uses just to be processed.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_TRANSACTION_DATA_ZERO">
+            <summary>
+            The amount of gas a transaction uses when it has a zero byte in it's transaction data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_TRANSACTION_DATA_NON_ZERO">
+            <summary>
+            The amount of gas a transaction uses when it has a non-zero byte in it's transaction data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_MEMORY_BASE">
+            <summary>
+            The amount of gas used to allocate a word of memory.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_MEMORY_COPY">
+            <summary>
+            The amount of gas used to copy a word into memory.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_EXP_BYTE">
+            <summary>
+            The amount of gas used for every byte of the exponent when executing an exponent instruction (pre-spurious dragon).
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_EXP_BYTE_SPURIOUS_DRAGON">
+            <summary>
+            The amount of gas used for every byte of the exponent when executing an exponent instruction (post-spurious dragon).
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SHA3_WORD">
+            <summary>
+            The amount of gas used to keccak hash a word of data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_ECRECOVER">
+            <summary>
+            The amount of gas to execute the ECRecover Precompile.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_SHA256_BASE">
+            <summary>
+            The amount of gas used just to execute a SHA256 precompile.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_SHA256_WORD">
+            <summary>
+            The amount of gas used to SHA256 hash a word of data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_RIPEMD160_BASE">
+            <summary>
+            The amount of gas used just to execute a RIPEMD160 precompile.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_RIPEMD160_WORD">
+            <summary>
+            The amount of gas used to RIPEMD160 hash a word of data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_IDENTITY_BASE">
+            <summary>
+            The amount of gas used just to execute an identity/memcpy precompile.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_IDENTITY_WORD">
+            <summary>
+            The amount of gas used to identity/memcpy a word of data.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_ECADD_BASE">
+            <summary>
+            The amount of gas used just to execute an EC add operation.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_ECMUL_BASE">
+            <summary>
+            The amount of gas used just to execute an EC multiplication operation.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_ECPAIRING_BASE">
+            <summary>
+            The amount of gas used just to execute an EC pairing operation.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_PRECOMPILE_ECPAIRING_PER_POINT">
+            <summary>
+            The amount of gas used per point supplied to the EC pairing operation.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SSTORE_ADD">
+            <summary>
+            The amount of gas used to add a key-value to account storage.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SSTORE_MODIFY">
+            <summary>
+            The amount of gas used to modify an existing value in account storage.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SSTORE_DELETE">
+            <summary>
+            The amount of gas used to delete an existing value in account storage.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SSTORE_REFUND">
+            <summary>
+            The amount of gas refunded for deleting an existing key-value from account storage.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_LOG_BYTE">
+            <summary>
+            The amount of gas used for every byte logged.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_CALL_NEW_ACCOUNT">
+            <summary>
+            The amount of gas charged for calling an account that doesn't exist.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_CALL_VALUE">
+            <summary>
+            The amount of gas used to transfer value in a transaction.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_CALL_VALUE_STIPEND">
+            <summary>
+            The amount of gas an inner call is given when transfering value in a transaction.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_SELF_DESTRUCT_REFUND">
+            <summary>
+            The amount of gas that is refunded when an account self destructs.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Configuration.GasDefinitions.GAS_CONTRACT_BYTE">
+            <summary>
+            The amount of gas used for every byte of a contract when creating a contract.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.#cctor">
+            <summary>
+            The default static constructor which creates a base gas lookup out of attributes on the opcodes for every Ethereum release version to be used globally for quick access and simple maintenance when introducing new opcodes.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.GetInstructionBaseGasCost(Meadow.EVM.Configuration.EthereumRelease,Meadow.EVM.EVM.Instructions.InstructionOpcode)">
+            <summary>
+            Obtains the base gas cost of executing the given opcode on the given Ethereum release version.
+            </summary>
+            <param name="currentVersion">The release of Ethereum to assume when obtaining the base gas cost for the given opcode.</param>
+            <param name="opcode">The opcode to obtain the base gas cost for.</param>
+            <returns>Returns the base gas cost for the given instruction on the given Ethereum release.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.GetMemoryAllocationCost(Meadow.EVM.Configuration.EthereumRelease,System.Numerics.BigInteger)">
+            <summary>
+            Provides the cost of gas for a given size of memory in words.
+            </summary>
+            <param name="wordCount">The target amount of words of memory.</param>
+            <returns>Returns the cost of gas for the given size of memory.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.GetMemoryCopyCost(Meadow.EVM.Configuration.EthereumRelease,System.Numerics.BigInteger)">
+            <summary>
+            Provides the cost of gas for a given
+            </summary>
+            <param name="currentVersion">The Ethereum release currently being executed.</param>
+            <param name="size">The size</param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.GetMaxCallGas(System.Numerics.BigInteger)">
+            <summary>
+            Calculates the maximum amount of gas a call can take, given the current gas amount. This is currently (63/64) * gas.
+            </summary>
+            <param name="gas">The current amount of gas.</param>
+            <returns>Returns the maximum amount of gas a call can take.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.CalculateGasLimit(Meadow.EVM.Data_Types.Block.BlockHeader,Meadow.EVM.Configuration.Configuration)">
+            <summary>
+            Calculates a new gas limit for the next block by using exponential moving averages.
+            </summary>
+            <param name="parentBlock">The previous block processed which we base our calculations off of.</param>
+            <param name="configuration">The current configuration.</param>
+            <returns>Returns a computed gas limit for the next block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Configuration.GasDefinitions.CheckGasLimit(System.Numerics.BigInteger,System.Numerics.BigInteger,Meadow.EVM.Configuration.Configuration)">
+            <summary>
+            Checks that a given parent block gas limit, and current block gas limit meet the gas adjustment requirements defined by the configuration.
+            </summary>
+            <param name="parentGasLimit">The current block's parent's gas limit.</param>
+            <param name="blockGasLimit">The current block's gas limit.</param>
+            <param name="configuration">The configuration which defines the gas adjustment requirements.</param>
+            <returns>Returns true if the gas limits are within our requirements, false otherwise.</returns>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.Nonce">
+            <summary>
+            The nonce ensures that each transaction can only be processed once
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.Balance">
+            <summary>
+            The current ether balance for the account.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.StorageRoot">
+            <summary>
+            The storage trie root hash used to obtain storage from the storage trie.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.CodeHash">
+            <summary>
+            A hash of the code section for this account, used to access it from the database.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.Configuration">
+            <summary>
+            The configuration we are using in the state that spawned this account.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.IsDirty">
+            <summary>
+            Not an actual account property in Ethereum, but used by the Ethereum state to determine if an account has been modified.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.IsNew">
+            <summary>
+            Not an actual account property in Ethereum, but used by the Ethereum state to track if an account is new or not.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Accounts.Account.IsDeleted">
+            <summary>
+            Not an actual account property in Ethereum, but used by the Ethereum state to track if an account has been deleted since the last commit.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Accounts.Account.Serialize">
+            <summary>
+            Serializes the account into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP account.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Accounts.Account.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized account and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to deserialize and obtain values from.</param>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Addressing.Address.ZERO_ADDRESS">
+            <summary>
+            Represents the zero address.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Addressing.Address.CREATE_CONTRACT_ADDRESS">
+            <summary>
+            Represents the create contract address.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Addressing.Address.NULL_ADDRESS">
+            <summary>
+            Represents a null address.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Addressing.Address.ADDRESS_MAX">
+            <summary>
+            Represents the maximum value an address can have.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.Block.CalculateDifficulty(Meadow.EVM.Data_Types.Block.BlockHeader,System.Numerics.BigInteger,Meadow.EVM.Configuration.Configuration)">
+            <summary>
+            Calculates the difficulty for the next block given a previous blocks header, the timestamp of the new block, and the configuration.
+            </summary>
+            <param name="parentBlockHeader">The previous block header from which we derive difficulty.</param>
+            <param name="timestamp">The timestamp of the new block.</param>
+            <param name="configuration">The configuration under which we calculate difficulty.</param>
+            <returns>Returns the difficulty for the supposed new block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.Block.CalculateUnclesHash">
+            <summary>
+            Calculates the hash for the RLP encoded uncle array.
+            </summary>
+            <returns>Returns the hash of the RLP encoded uncle array.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.Block.Serialize">
+            <summary>
+            Serializes the block into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.Block.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized block and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to deserialize and obtain values from.</param>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.PreviousHash">
+            <summary>
+            The hash of the previous block in the chain, also known as the parent block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.UnclesHash">
+            <summary>
+            A Keccak256 hash of all RLP encoded uncle block headers in this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.Coinbase">
+            <summary>
+            The address which the used gas will be given to and dispensed from afterwards to others.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.StateRootHash">
+            <summary>
+            The State's root hash/key used to access the State Trie.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.TransactionsRootHash">
+            <summary>
+            The Transactions root hash/key used to access the Transaction Trie.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.ReceiptsRootHash">
+            <summary>
+            The Receipts root hash/key used to access the Receipts Trie.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.Bloom">
+            <summary>
+            A bloom filter which is used to check inclusiveness of indexable information generated by processing the block (logs/receipts).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.Difficulty">
+            <summary>
+            The mining difficulty for this block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.BlockNumber">
+            <summary>
+            The number of the block, of all the blocks in the chain.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.GasLimit">
+            <summary>
+            The block's gas limit which it cannot exceed when executing transactions.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.GasUsed">
+            <summary>
+            The total amount of gas used when executing all the transactions in the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.Timestamp">
+            <summary>
+            UNIX timestamp, in seconds from the epoch.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.ExtraData">
+            <summary>
+            Extra data which can be included with the block. Up to 1024 bytes.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.MixHash">
+            <summary>
+            A 32-byte Hashimoto digest for the given block header.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Block.BlockHeader.Nonce">
+            <summary>
+            Nonce which is used as the proof-of-work for the block (mining works because it is not included with the resulting hashes and needs to be found for the reward). 64-bits in size.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.BlockHeader.Serialize">
+            <summary>
+            Serializes the block header into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP block header.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.BlockHeader.Serialize(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Serializes the block header into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP block header.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Block.BlockHeader.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized block header and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to block header and obtain values from.</param>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.Configuration">
+            <summary>
+            Defines the configuration for the Ethereum implementation, including fork/version implementation, etc.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.State">
+            <summary>
+            The Ethereum world state
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.HeadBlockHash">
+            <summary>
+            The hash of the leading block in this chain (the most recent processed and added one).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.QueuedBlocks">
+            <summary>
+            Priority queue for our queuing blocks with a future timestamp to process.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.OrphanBlocks">
+            <summary>
+            A list of blocks which have no parent yet but are ready to added when the parent appears.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.CompareBlockQueue(Meadow.EVM.Data_Types.Block.Block,Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            The default block comparing method for any queued blocks.
+            </summary>
+            <param name="first">The first block to compare for ordering in the queue.</param>
+            <param name="second">The second block to compare for ordering in the queue.</param>
+            <returns>Returns less than zero if the first blocks timestamp comes first, zero if they are equal, and greater than zero if the first blocks timestamp comes second.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.ProcessQueuedBlocks">
+            <summary>
+            Processes any queued blocks which were set to be processed for a future time when added.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.AddBlock(Meadow.EVM.Data_Types.Block.Block,Meadow.EVM.Data_Types.State.State)">
+            <summary>
+            Adds a block to the chain, or queues it to be added later if the block's timestamp has not passed yet.
+            </summary>
+            <param name="block">The block to add or queue to be added to the chain.</param>
+            <param name="newState">An optional parameter which implies the new state after executing the block.</param>
+            <returns>Returns true if the block was processed immediately, otherwise returns false if it was queued to be added later or was seen as problematic and will not be added at all.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetPostBlockState(System.Byte[])">
+            <summary>
+            Obtains a State instance that represents the state after the block with the given hash was processed.
+            </summary>
+            <param name="blockHash">The hash of the block to obtain post-processed state of.</param>
+            <returns>Returns a State instance that represents the state after the block with the given hash was processed.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.Revert(Meadow.EVM.Data_Types.State.StateSnapshot)">
+            <summary>
+            Reverts this chain state using a state snapshot obtained from this chain's state earlier.
+            </summary>
+            <param name="snapshot"></param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.AddGenesisBlockToDatabase">
+            <summary>
+            Adds the genesis block from the current configuration to the chain's database.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.ContainsBlock(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Checks if a given block is known to this chain.
+            </summary>
+            <param name="block">The block to look up in our chain database.</param>
+            <returns>Returns a boolean indicating if we have the provided block in our chain database.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.ContainsBlock(System.Byte[])">
+            <summary>
+            Checks if a given block hash is known to the chain.
+            </summary>
+            <param name="blockHash">The block hash to look up in our chain database.</param>
+            <returns>Returns a boolean indicating if we have a block with the given hash in our chain database.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetBlock(System.Byte[])">
+            <summary>
+            Obtains a block with the given block hash from the chain database.
+            </summary>
+            <param name="blockHash">The block hash to look up in our chain database.</param>
+            <returns>Returns the block corresponding to the given block hash, or null if it could not be found.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.SetBlock(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Sets a given block in the chain database so it can be obtained with a block hash key.
+            </summary>
+            <param name="block">The block to set in the chain database.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.RemoveBlock(System.Byte[])">
+            <summary>
+            Removes a block with the given block hash from the chain database.
+            </summary>
+            <param name="blockHash">The block hash to remove the key/value for in our chain database.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetHeadBlock">
+            <summary>
+            Obtains the head (latest/leading) block in the chain.
+            </summary>
+            <returns>Returns the head block in the chain.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetParentBlock(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Obtains the parent block of a provided block.
+            </summary>
+            <param name="block">The block to obtain the parent block of.</param>
+            <returns>Retuns the parent block of the provided block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.AddChild(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Adds the child lookup entry to our database so a block can later check it's children quickly (since normally only parents are referenced in blocks, so this provides bi-directional lookup).
+            </summary>
+            <param name="child">The child block to add to our lookup and reference the parent of.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetChildHashes(System.Byte[])">
+            <summary>
+            Given the hash of a parent block, obtains the hashes of it's children.
+            </summary>
+            <param name="blockHash">The block header hash of the block we wish to find children for.</param>
+            <returns>Returns an array of child block hashes.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.DeleteChildren(System.Byte[])">
+            <summary>
+            Given the hash of a parent block, deletes the children hashes in our child lookup.
+            </summary>
+            <param name="blockHash">The block header hash of the block we wish to remove children for.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetChildren(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Given a block, obtains all child blocks.
+            </summary>
+            <param name="block">The block to obtain children for.</param>
+            <returns>Returns all child blocks of the provided parent block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetChildren(Meadow.EVM.Data_Types.Block.BlockHeader)">
+            <summary>
+            Given a block header, obtains all child blocks.
+            </summary>
+            <param name="blockHeader">The block header to obtain children for.</param>
+            <returns>Returns all child blocks for the parent block which the provided header belongs to.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetChildren(System.Byte[])">
+            <summary>
+            Given a block hash, obtains all child blocks.
+            </summary>
+            <param name="blockHash">The block hash for the parent block to obtain children for.</param>
+            <returns>Returns all child blocks for the parent block which the provided block hash belongs to.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetBlockHashFromBlockNumber(System.Numerics.BigInteger)">
+            <summary>
+            Obtains a block hash corresponding to the provided block number.
+            </summary>
+            <param name="blockNumber">The block number of the block to obtain the hash for.</param>
+            <returns>Returns the block hash for the block at the provided block number.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.SetBlockHashForBlockNumber(System.Numerics.BigInteger,System.Byte[])">
+            <summary>
+            Sets the block hash for a provided block number in our chain database.
+            </summary>
+            <param name="blockNumber">The block number for which we wish to set the block hash.</param>
+            <param name="blockHash">The block hash which we wish to set for the provided block number.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.RemoveBlockHashForBlockNumber(System.Numerics.BigInteger)">
+            <summary>
+            Removed a block hash lookup for a certain block number.
+            </summary>
+            <param name="blockNumber">The block number to remove the block hash lookup for.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetScore(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Obtains the score for this block. In PoW, this is the sum of all difficulty from the head, all the way back to the genesis block.
+            </summary>
+            <param name="block">The block for which we wish to obtain a score for.</param>
+            <returns>Returns the score for the given block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.GetTransactionPosition(System.Byte[])">
+            <summary>
+            Obtains a transaction's block number and transaction index.
+            </summary>
+            <param name="transactionHash">The hash of the transaction to obtain indicies for.</param>
+            <returns>Returns the block number and transaction index which hold this transaction.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.SetTransactionPosition(System.Byte[],System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Sets the transaction position in our database (block number and transaction index).
+            </summary>
+            <param name="transactionHash">The hash of the transaction for which to set the position.</param>
+            <param name="blockNumber">The block number which holds the transaction.</param>
+            <param name="transactionIndex">The index of the transaction in the provided block number.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ChainPoW.RemoveTransactionPosition(System.Byte[])">
+            <summary>
+            Removes the transaction position information from our database (block number and transaction index).
+            </summary>
+            <param name="transactionHash"></param>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW">
+            <summary>
+            Ethereum proof-of-work consensus mechamism state transition and helper functions implementation.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW.Initialize(Meadow.EVM.Data_Types.State.State,Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Given a block, enters the initialization state for handling a block.
+            </summary>
+            <param name="state">The state to set.</param>
+            <param name="block">The block which will be processed.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW.CheckProof(Meadow.EVM.Data_Types.State.State,Meadow.EVM.Data_Types.Block.BlockHeader)">
+            <summary>
+            Checks that the proof for this consensus mechanism is valid. (Checks proof of work, proof of stake, etc).
+            </summary>
+            <param name="state">The current state we have while checking proof.</param>
+            <param name="blockHeader">The block which we are checking proof for.</param>
+            <returns>Returns true if proof is valid. Returns false if proof is invalid.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW.VerifyUncles(Meadow.EVM.Data_Types.State.State,Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Verifies all uncles in a given block to be processed.
+            </summary>
+            <param name="state">The state which accompanied the block to verify the uncles of.</param>
+            <param name="block">The block to verify the uncles of.</param>
+            <returns>Returns true if verification succeeded, returns false or throws an exception otherwise.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW.GetUncleCandidates(Meadow.EVM.Data_Types.Chain.PoW.ChainPoW,Meadow.EVM.Data_Types.State.State)">
+            <summary>
+            Given a chain and state, obtains all possible uncle candidates for the next block.
+            </summary>
+            <param name="chain">The chain we are currently operating on.</param>
+            <param name="state">The state we are currently operating on.</param>
+            <returns>Returns a list of possible uncle candidates for the next block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.ConsensusPoW.Finalize(Meadow.EVM.Data_Types.State.State,Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Given a block, enters the finalization state for handling a block.
+            </summary>
+            <param name="state">The state to set.</param>
+            <param name="block">The block which will be processed.</param>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Chain.PoW.Ethash">
+            <summary>
+            Ethereum hash implementation used for hashing blocks and proof of work. Increased difficulty and use of memory/storage to avoid Application Specific Integrated Circuit ("ASIC") hashing advantages.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.FNV_PRIME">
+            <summary>
+            A prime with which we perform xor operations.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.WORD_SIZE">
+            <summary>
+            The size of a standard word in bytes for this hashing algorithm.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.DATASET_BYTES_INIT">
+            <summary>
+            The initial size in bytes of the dataset when the chain is conceived.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.DATASET_BYTES_GROWTH">
+            <summary>
+            The amount of growth in bytes one can expect to see between epochs for the dataset.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CACHE_BYTES_INIT">
+            <summary>
+            The initial size of the generated cache when the chain is conceived. 
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CACHE_BYTES_GROWTH">
+            <summary>
+            The amount of growth in bytes one can expect to see between epochs for the cache.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.EPOCH_LENGTH">
+            <summary>
+            The count of blocks between the start of a given time period/epoch and the next.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.MIX_SIZE">
+            <summary>
+            The length of the mix data, in bytes.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.HASH_SIZE">
+            <summary>
+            The length of the hash produced, in bytes.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.DATASET_PARENTS">
+            <summary>
+            The number of parents for each dataset entry.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CACHE_ROUNDS">
+            <summary>
+            The number of rounds to take when generating the cache.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.ACCESSES">
+            <summary>
+            The number of accesses in the hashimoto loop.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CACHED_CACHE_ENTRIES">
+            <summary>
+            The amount of entries we cache.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Chain.PoW.Ethash._cachecache">
+            <summary>
+            Lookup for epoch number to cache.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.Fnv_hash(System.UInt32,System.UInt32)">
+            <summary>
+            Simple hash function used to hash two unsigned integers.
+            </summary>
+            <param name="v1">The first unsigned integer to hash.</param>
+            <param name="v2">The second unsigned integer to hash.</param>
+            <returns>Returns an unsigned integer hash code of the two provided unsigned integers.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.GetCacheSize(System.Numerics.BigInteger)">
+            <summary>
+            Obtains the size of the cache for a given block number. 
+            </summary>
+            <param name="blockNumber">The block number for which we require the cache.</param>
+            <returns>Returns the size of the cache at a given block number in time.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.GetDataSetSize(System.Numerics.BigInteger)">
+            <summary>
+            Obtains the size of the dataset for a given block number. 
+            </summary>
+            <param name="blockNumber">The block number for which we require the dataset.</param>
+            <returns>Returns the size of the dataset at a given block number in time.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.MakeCache(System.Numerics.BigInteger)">
+            <summary>
+            Generates the cache for a given block number.
+            </summary>
+            <param name="blockNumber">The block number for which we require the cache.</param>
+            <returns>Returns the cache generated for the given block number in time.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.GetCache(System.Memory{System.Byte},System.Int32)">
+            <summary>
+            Generates the cache given a seed and hash count.
+            </summary>
+            <param name="seed">The seed which will determine how our cache is initially formed.</param>
+            <param name="cacheHashCount">The hash count which we desire for our cache.</param>
+            <returns>Returns the cache generated for the given block number in time.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CalculateDatasetItem(System.Memory{System.Byte},System.UInt32,System.Span{System.Byte})">
+            <summary>
+            Generates the data set for the Ethash algorithm.
+            </summary>
+            <param name="cache">The cache to use for the data set generation.</param>
+            <param name="index">The index of our item in the set which we wish to generate.</param>
+            <param name="outputBuffer">The resulting buffer where our dataset hash item will be stored.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.CalculateDataset(System.Memory{System.Byte},System.Numerics.BigInteger)">
+            <summary>
+            Generates the data set for the Ethash algorithm.
+            </summary>
+            <param name="cache">The cache to use for the data set generation.</param>
+            <param name="size">The size of the data set which we wish to generate.</param>
+            <returns>Returns the calculated data set.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.Hashimoto(System.Byte[],System.Byte[],System.Numerics.BigInteger,System.Action{System.UInt32,System.Byte[]})">
+            <summary>
+            Ethereum's hash implementation to be used to generate mix hashes for a block given certain block information. In mining, the mix hash is provided, and the nonce is unknown.
+            </summary>
+            <param name="headerHash">Hash of a block header we are obtaining a mix hash for.</param>
+            <param name="nonce">The byte data of the 64-bit nonce, given in little endian format.</param>
+            <param name="size">The size of the data set.</param>
+            <param name="datasetLookup">The dataset lookup function to use.</param>
+            <returns>Returns the mix hash and resulting bound variable.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.HashimotoLight(System.Memory{System.Byte},System.Numerics.BigInteger,System.Byte[],System.Byte[])">
+            <summary>
+            Ethereum's hash implementation used to generate hashes for block mining. This implementation generates the dataset on the fly, thus it is lighter on space but slower. Best used for verification.
+            </summary>
+            <param name="cache">The cache to used to generate the dataset for this hashing operation.</param>
+            <param name="blockNumber">The block number from the block to hash, so the dataset can be generated for hashing this block.</param>
+            <param name="header">The header hash from the block to hash.</param>
+            <param name="nonce">The nonce from the block to hash.</param>
+            <returns>Returns the mix hash and the result.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.Ethash.HashimotoFull(System.Byte[][],System.Byte[],System.Byte[])">
+            <summary>
+            Ethereum's hash implementation used to generate hashes for block mining. This implementation has a pre-generated dataset, thus it uses much more memory/space, but is faster to hash, best used when mining to avoid recomputing dataset.
+            </summary>
+            <param name="dataSet">The dataset to use for this hashing operation.</param>
+            <param name="header">The header hash from the block to hash.</param>
+            <param name="nonce">The nonce from the block to hash.</param>
+            <returns>Returns the mix hash and the result.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Chain.PoW.MiningPoW">
+            <summary>
+            Ethereum proof of work validation and proof of work calculation routines.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.MiningPoW.CheckProof(Meadow.EVM.Data_Types.Block.BlockHeader)">
+            <summary>
+            Given a block header, checks if the proof of work is valid on the block header. That is, if the header values, nonce, mix hash and difficulty are all suitable.
+            </summary>
+            <param name="blockHeader">The header of the block which we wish to validate.</param>
+            <returns>Returns true if the proof of work is valid, returns false is the proof is invalid.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.MiningPoW.CheckProof(System.Numerics.BigInteger,System.Byte[],System.Byte[],System.Byte[],System.Numerics.BigInteger)">
+            <summary>
+            Given a block header, checks if the proof of work is valid on the block header. That is, if the header values, nonce, mix hash and difficulty are all suitable.
+            </summary>
+            <param name="blockNumber">The number of the block which we wish to validate.</param>
+            <param name="headerHash">Hash of a portion of the block header which is used with the nonce to generate a seed for the proof.</param>
+            <param name="mixHash">The resulting mix hash for the provided nonce after running the hashimoto algorithm.</param>
+            <param name="nonce">The nonce which, along with the other provided values, will calculate the mix hash to be verified.</param>
+            <param name="difficulty">The difficulty controls filtering for a plausible solution to the block which we wish to mine.</param>
+            <returns>Returns true if the proof of work is valid, returns false is the proof is invalid.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.MiningPoW.Mine(Meadow.EVM.Data_Types.Block.BlockHeader,System.UInt64,System.UInt64)">
+            <summary>
+            Mines a given block starting from the provided nonce for the provided number of rounds.
+            </summary>
+            <param name="blockHeader">The header of the block to mine.</param>
+            <param name="startNonce">The starting value for our nonce, from which we will iterate consecutively until we find a nonce which produces a valid mix hash.</param>
+            <param name="rounds">The number of steps to take from our starting nonce before giving up. Use ulong.MaxValue to try all.</param>
+            <returns>Returns the nonce and mixhash if block is successfully mined, otherwise both are null.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Chain.PoW.MiningPoW.Mine(System.Numerics.BigInteger,System.Numerics.BigInteger,System.Byte[],System.UInt64,System.UInt64)">
+            <summary>
+            Mines a given block starting from the provided nonce for the provided number of rounds.
+            </summary>
+            <param name="blockNumber">The number of the block which we are mining.</param>
+            <param name="difficulty">The difficulty of the block which we are mining.</param>
+            <param name="miningHash">The mining hash (partial header hash) of the block which we are mining.</param>
+            <param name="startNonce">The starting nonce we will use and iterate through to try and find a suitable one for the reward.</param>
+            <param name="rounds">The number of steps to take from our starting nonce before giving up. Use ulong.MaxValue to try all.</param>
+            <returns>Returns the nonce and mixhash if block is successfully mined, otherwise both are null.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.Heap`1">
+            <summary>
+            Binary heap implementation (priority queue or min/max heap) which pushes and pops items with complexity O(log n). This implementation uses first-in, first-out ("FIFO") if priority is equal to another.
+            </summary>
+            <typeparam name="T">The generic type of items we will be adding to the heap.</typeparam>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.Heap`1.CompareFunction">
+            <summary>
+            Defines the function prototype for a comparison function which acts as CompareTo does, between two items, in order to sort the heap.
+            </summary>
+            <param name="first">The primary item to compare to another and return the status of.</param>
+            <param name="second">The other item to compare the primary item to and return the status of.</param>
+            <returns>Returns greater-than zero if first is larger than second, zero if they are equal, or less-than zero if the first is smaller than the second.</returns>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Trees.Heap`1._internalList">
+            <summary>
+            Represents the internal item list which we order and treat as our heap.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Trees.Heap`1._compareFunction">
+            <summary>
+            Represents an optional compare function we can call to compare heap items instead of the item's CompareTo function.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Trees.Heap`1.Order">
+            <summary>
+            Represents the order of the data in the heap (indicates whether this is a min-heap or a max-heap).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Trees.Heap`1.Count">
+            <summary>
+            Indicates the count of items in this heap.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.#ctor(Meadow.EVM.Data_Types.Trees.HeapOrder,Meadow.EVM.Data_Types.Trees.Heap{`0}.CompareFunction)">
+            <summary>
+            Our default constructor, sets the heap order and initializes any fields/properies for this heap instance.
+            </summary>
+            <param name="order">The order of our heap, indicating whether it is a min-heap or a max-heap.</param>
+            <param name="compareFunction">An optional compare function which overrides the heap item's CompareTo function.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.Push(`0)">
+            <summary>
+            Pushes an item into the heap.
+            </summary>
+            <param name="value">The item to push into the heap.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.Peek">
+            <summary>
+            Obtains the root/top most item of the heap, which is either the minimum or maximum of the heap, depending on heap order.
+            </summary>
+            <returns>Returns the root/top most item of the heap, which is either the minimum or maximum of the heap, depending on heap order.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.Pop">
+            <summary>
+            Obtains the root/top most item and removes it from the heap, which is either the minimum or maximum of the heap, depending on heap order.
+            </summary>
+            <returns>Removes and returns the root/top most item of the heap, which is either the minimum or maximum of the heap, depending on heap order.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.DefaultCompareMethod(`0,`0)">
+            <summary>
+            Default function for a comparison function which acts as CompareTo does, between two items, in order to sort the heap.
+            </summary>
+            <param name="first">The first item to compare.</param>
+            <param name="second">The second item to compare.</param>
+            <returns>Returns greater-than zero if first is larger than second, zero if they are equal, or less-than zero if the first is smaller than the second.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.CompareItems(System.ValueTuple{System.UInt64,`0},System.ValueTuple{System.UInt64,`0})">
+            <summary>
+            The function used to compare two items in our heap. Acts as CompareTo would.
+            </summary>
+            <param name="first">The first item in our heap to compare.</param>
+            <param name="second">The second item in our heap to compare.</param>
+            <returns>Returns greater-than zero if first is larger than second, zero if they are equal, or less-than zero if the first is smaller than the second.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.Swap(System.Int32,System.Int32)">
+            <summary>
+            Swaps two items in the internal heap array at the provided indexes.
+            </summary>
+            <param name="firstIndex">The index of the first item in our internal heap array to swap with another.</param>
+            <param name="secondIndex">The index of the second item in our internal heap array to swap with another.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.SortUpwards(System.Int32)">
+            <summary>
+            Checks an item is sorted in relation to its parent, and if not, reorders them recursively until the tree branch is ordered.
+            </summary>
+            <param name="index">The index of the heap item in our internal array to check ordering with its parents recursively.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Heap`1.SortDownwards(System.Int32)">
+            <summary>
+            Checks an item is sorted in relation to its children, and if not, reorders them recursively until the three branches are ordered.
+            </summary>
+            <param name="index">The index of the heap item in our internal array to check ordering with its children recursively.</param>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.HeapOrder">
+            <summary>
+            The heap order which indicates if the heap is a min-heap or a max-heap.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.SecureTrie">
+            <summary>
+            Variation of the normally modified Merkle Patricia Tree which instead uses a keccak256 hash of it's keys as keys (to avoid DoS attacks using controlled lookups/stores of using similar key nibbles, we hash the key such that the path is less predictable).
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.SecureTrie.Get(System.Byte[])">
+            <summary>
+            Given a key, obtains the corresponding value from our trie.
+            </summary>
+            <param name="key">The key to grab the corresponding value for.</param>
+            <returns>Returns the value which corresponds to the provided key.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.SecureTrie.Set(System.Memory{System.Byte},System.Byte[])">
+            <summary>
+            Given a key, sets the corresponding value in our trie.
+            </summary>
+            <param name="key">The key for which to set the corresponding value for.</param>
+            <param name="value">The value to store in the trie for the provided key.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.SecureTrie.Remove(System.Memory{System.Byte})">
+            <summary>
+            Given a key, deletes the key-value entry from the trie.
+            </summary>
+            <param name="key">The key for which we'd like to remove the key-value entry.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.SecureTrie.ToDictionary">
+            <summary>
+            Obtains a dictionary representing all key-value pairs in our trie.
+            </summary>
+            <returns>Returns a dictionary which represents all key-value pairs in our trie.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.Trie">
+            <summary>
+            Represents a modified Merkle Patricia Tree used as a cryptographically authenticated key-value store, efficiently backed by a storage database for larger node data.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Trees.Trie.BLANK_NODE_HASH">
+            <summary>
+            Defines a hash of a blank node
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Trees.Trie.BLANK_NODE">
+            <summary>
+            Defines a blank node.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Trees.Trie.RootNodeHash">
+            <summary>
+            The key used to access the root node.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.#ctor(Meadow.EVM.Data_Types.Databases.BaseDB,System.Byte[])">
+            <summary>
+            Loads a trie using a provided storage database and the hash of the root node which this trie should have.
+            </summary>
+            <param name="database">The storage database to store longer encoded trie nodes.</param>
+            <param name="rootNodeHash">The hash of the root node to obtain and load.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.Contains(System.Byte[])">
+            <summary>
+            Checks if a given key is in our trie.
+            </summary>
+            <param name="key">The key to check is contained in the trie.</param>
+            <returns>Returns a boolean indicating if the key is in our trie.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.Get(System.Byte[])">
+            <summary>
+            Given a key, gets the corresponding value from our trie. Returns null if none exists.
+            </summary>
+            <param name="key">The key to grab the corresponding value for.</param>
+            <returns>Returns the value which corresponds to the provided key.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.Set(System.Memory{System.Byte},System.Byte[])">
+            <summary>
+            Given a key, sets the corresponding value in our trie.
+            </summary>
+            <param name="key">The key for which to set the corresponding value for.</param>
+            <param name="value">The value to store in the trie for the provided key.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.Remove(System.Memory{System.Byte})">
+            <summary>
+            Given a key, deletes the key-value entry from the trie.
+            </summary>
+            <param name="key">The key for which we'd like to remove the key-value entry.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.ToDictionary">
+            <summary>
+            Obtains a dictionary representing all key-value pairs in our trie.
+            </summary>
+            <returns>Returns a dictionary which represents all key-value pairs in our trie.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.GetRootNodeHash">
+            <summary>
+            Obtains the root node hash for the trie.
+            </summary>
+            <returns>The root node hash for the trie.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.IsBlankNodeHash(System.Byte[])">
+            <summary>
+            Returns a boolean indicating whether the provided node hash constitutes a blank node hash.
+            </summary>
+            <param name="nodeHash">The node hash to check is a blank node hash.</param>
+            <returns>Returns a boolean indicating whether the provided node hash constitutes a blank node hash.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.LoadRootNodeFromHash(System.Byte[])">
+            <summary>
+            Loads the trie root from the database by looking up the provided trie root node hash.
+            </summary>
+            <param name="rootNodeHash">The trie root node hash used to look up and load the trie root from the database.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.RehashRootNode">
+            <summary>
+            Recalculates the root node hash and sets it in the database accordingly.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.ByteArrayToNibbleArray(System.Memory{System.Byte},System.Int64)">
+            <summary>
+            Converts an array of bytes into an array of nibbles, thus the resulting array is twice as long and maximum values are 0xf.
+            </summary>
+            <param name="data">The array of bytes to convert into an array of nibbles.</param>
+            <returns>Returns an array of nibbles.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NibbleArrayToByteArray(System.Byte[])">
+            <summary>
+            Converts an array of nibbles into a byte array by pairing alternating nibbles as high/low nibbles in each byte.
+            </summary>
+            <param name="nibbles">The array of nibbles to convert into a byte array by pairing high and low nibbles.</param>
+            <returns>Returns a byte array which represents the provided nibbles.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.GetNibble(System.Memory{System.Byte},System.Int64)">
+            <summary>
+            Obtains a nibble from a byte array given a nibble index, where 0 is the high nibble of the first byte in the array, and the last item is the low nibble of the last byte.
+            </summary>
+            <param name="data">The byte array to obtain the nibble from.</param>
+            <param name="index">The index of the nibble to obtain, where 0 is the high nibble of the first byte in the array, and the last/highest index is the low nibble of the last byte.</param>
+            <returns>Returns the nibble from the byte array at the given nibble index.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.GetNodeType(Meadow.Core.RlpEncoding.RLPList)">
+            <summary>
+            Given a direct trie node, obtains the type of node.
+            </summary>
+            <param name="node">The node to obtain the type of.</param>
+            <returns>Returns the type of node for the provided node.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.PackPrefixedNode(Meadow.EVM.Data_Types.Trees.Trie.TrieNodeType,System.Byte[])">
+            <summary>
+            Given a trie node type, and a pair of nibbles, packs them into a prefix/shared-nibbles pair (extension) or prefix/key-remainder pair (leaf) respectively.
+            </summary>
+            <param name="type">The trie node type to pack into the first item of our node.</param>
+            <param name="nibbles">The nibble array to pack into the first item of our node.</param>
+            <returns>Returns a packed byte array which represents the new data for the first item of our node.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.UnpackPrefixedNode(System.Byte[])">
+            <summary>
+            Given a packed byte array which represents data for the first item of a leaf or extension node, unpacks the data accordingly.
+            </summary>
+            <param name="data">The packed data for the node's first item.</param>
+            <returns>Returns the unpacked data from the provided leaf or extension node's first item. This includes the type of node it is, and the nibble set that constitutes the shared nibbles (extension) or key remainder (leaf).</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.EncodeNode(Meadow.Core.RlpEncoding.RLPList)">
+            <summary>
+            Given a trie node, encodes it into an RLP item such that if it is 32 bytes or less encoded, it is directly included, otherwise it will be a 32 byte reference to the data.
+            </summary>
+            <param name="node">The node to encode into an RLP item for storage in the trie.</param>
+            <returns>Returns the RLP encoded trie node as it should be represented in our trie efficienctly.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.DecodeNode(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Given a trie node directly or by reference, obtains the direct node to operate on.
+            </summary>
+            <param name="nodeOrReference">The trie node or trie node reference used to obtain the actual trie node.</param>
+            <returns>Returns the representing trie node for this value.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeEquals(Meadow.Core.RlpEncoding.RLPList,Meadow.Core.RlpEncoding.RLPList)">
+            <summary>
+            Checks if two given nodes are equal in structure.
+            </summary>
+            <param name="first">The first node to check structural equality of.</param>
+            <param name="second">The second node to check structural equality of.</param>
+            <returns>Returns a boolean indicating if the provided nodes are equal in structure and underlying values.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeDuplicate(Meadow.Core.RlpEncoding.RLPList)">
+            <summary>
+            Given a node, duplicates it such that it is structurally the same, yet is a different object instance.
+            </summary>
+            <param name="node">The node to duplicate.</param>
+            <returns>Returns a duplicate of the provided node.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeGetAllPairs(Meadow.Core.RlpEncoding.RLPList,System.Byte[],System.Collections.Generic.Dictionary{System.Memory{System.Byte},System.Byte[]})">
+            <summary>
+            Given an trie node, traverses down all paths to obtain all key-value pairs in the trie.
+            </summary>
+            <param name="node">The trie node to recursively enumerate key-value pairs from.</param>
+            <param name="currentNibbles">The current key nibbles that have been traversed up to this point.</param>
+            <param name="result">The resulting dictionary created by obtaining all pairs from this node recursively downward.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeGetValue(Meadow.Core.RlpEncoding.RLPList,System.Memory{System.Byte},System.Int32)">
+            <summary>
+            Given an trie node, traverses down the appropriate node path to obtain the value for a given key and the current nibble index in our search.
+            </summary>
+            <param name="node">The current trie node to traverse through for our value, given our key and current nibble index.</param>
+            <param name="key">The key for the value which we wish to obtain.</param>
+            <param name="currentNibbleIndex">The index of the current nibble in our key which we are at in our indexing process.</param>
+            <returns>Returns the value stored in the trie for the provided key, or null if it does not exist.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeUpdateValue(Meadow.Core.RlpEncoding.RLPList,System.Memory{System.Byte},System.Int32,System.Byte[])">
+            <summary>
+            Given a trie node, traverses down the appropriate node path, updating the value for a given key and the current nibble index for our key in the indexing process.
+            </summary>
+            <param name="node">The current trie node to traverse down to update our value, given our key and current nibble index.</param>
+            <param name="key">The key for the value which we wish to update.</param>
+            <param name="currentNibbleIndex">The index of the current nibble in our key which we are at in our indexing process.</param>
+            <param name="value">The value which we wish to set for the provided key in our trie.</param>
+            <returns>Returns a node with the given update which is to be used as the replacement for the provided node.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.NodeRemoveValue(Meadow.Core.RlpEncoding.RLPList,System.Memory{System.Byte},System.Int32)">
+            <summary>
+            Given a trie node, traverses down the appropriate node path, removing the key/value for a given key and the current nibble index for our key in the indexing process.
+            </summary>
+            <param name="node">The current trie node to traverse down to remove our key/value, given our key and current nibble index.</param>
+            <param name="key">The key for the key/value which we wish to remove.</param>
+            <param name="currentNibbleIndex">The index of the current nibble in our key which we are at in our indexing process.</param>
+            <returns>Returns a node with the given removal which is to be used as the replacement for the provided node.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Trees.Trie.CleanupBranch(Meadow.Core.RlpEncoding.RLPList)">
+            <summary>
+            Given a branch node that has had a branch path removed, reviews the node to see if it should be another type, and returns a replacement node for the provided node.
+            </summary>
+            <param name="node">The branch node to clean up and replace with an updated/reformatted node.</param>
+            <returns>Returns an updated/reformatted node which accounts for a deleted branch path, possibly homogenizing the downward path, such that it should be a leaf instead of a branch, etc.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.Trie.TrieNodePrefix">
+            <summary>
+            The prefix value for a leaf or extension trie node which indicates if it is a leaf or extension (second bit), along with if the provided underlying nibble set for the node's first item is odd or even length.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Trees.Trie.TrieNodeType">
+            <summary>
+            Indicates the type of trie node one can encounter.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.Configuration">
+            <summary>
+            Defines the configuration for the Ethereum implementation, including fork/version implementation, etc.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.Trie">
+            <summary>
+            The state trie which contains all accounts which can be looked up by address.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.BlockGasUsed">
+            <summary>
+            Indicates the amount of gas used by this state while processing a block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.TransactionIndex">
+            <summary>
+            The index of the last transaction processed, beginning from the start of this state/chain.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.TransactionRefunds">
+            <summary>
+            Indicates the amount that should be refunded after this transaction is applied. This can occur during many occasions such as a contract self destructing.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.TransactionLogs">
+            <summary>
+            The list of logs for the current transaction application/message execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.TransactionReceipts">
+            <summary>
+            Receipts for this state's last applied block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.Bloom">
+            <summary>
+            Bloom filter which incompasses all indexable information.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.CachedAccounts">
+            <summary>
+            Account cache which is used for accounts which we obtained/modified since our last state commit.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.AccountDeleteQueue">
+            <summary>
+            Accounts are deleted after the transaction has completed, so we queue up accounts to delete until then.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.PreviousHeaders">
+            <summary>
+            Previous headers processed by our state, where the the earlier the item in the array, the most recent it is.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.CurrentBlock">
+            <summary>
+            The current or most recent block which is processing/was processed in this state.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.CurrentTransaction">
+            <summary>
+            The current or most recent transaction which this state had applied/attempted to apply.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.State.State.RecentUncleHashes">
+            <summary>
+            A cache of recent uncle block hashes to be referenced for future block uncle candidate selection.
+            Maps block number -> block header hash value.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.#ctor(Meadow.EVM.Configuration.Configuration,System.Byte[])">
+            <summary>
+            The default constructor for a state, initializes it with a given optional configuration (and root node hash if restoring state).
+            </summary>
+            <param name="configuration">(Optional) The configuration to use for this state object. If one is not supplied, a new configuration is created.</param>
+            <param name="rootNodeHash">(Optional) The root node hash for our state trie (accounts, which in turn also hold their own storage tries) used to restore state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.UpdateCurrentBlock(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Sets the state to use the provided block as the current block, updating uncle hashes and fork version.
+            </summary>
+            <param name="currentBlock">The block to make state use as the current block.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.UpdateUncleHashes(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Updates the state's recent block uncles collection with uncles from the given block.
+            </summary>
+            <param name="blockWithUncles">The block whose uncles we use to update our current state's recent uncles list.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GenerateTransactionTrie(Meadow.Core.RlpEncoding.IRLPSerializable[],Meadow.EVM.Data_Types.Databases.BaseDB)">
+            <summary>
+            Generates a trie for transactions/transaction receipts given an array of them, and an optional database to use for the trie.
+            </summary>
+            <param name="serializableItems">An array of RLP serializable items (transactions/transaction receipts) to construct a trie of, where each item's key is an RLP serialized integer index.</param>
+            <param name="database">The optional database to use for the trie. If null, a new database is used for the Trie.</param>
+            <returns>Returns a trie generated from the provided RLP serializable items.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetReceipts(Meadow.EVM.Data_Types.Block.Block,Meadow.EVM.Data_Types.Databases.BaseDB)">
+            <summary>
+            Obtain all transaction receipts for a given block from the given database.
+            </summary>
+            <param name="block">The block to obtain transaction receipts for.</param>
+            <param name="database">The database to obtain transaction receipts from.</param>
+            <returns>Returns the array of transaction receipts for the transactions in the provided block.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetReceipts(Meadow.EVM.Data_Types.Block.BlockHeader,System.Int32,Meadow.EVM.Data_Types.Databases.BaseDB)">
+            <summary>
+            Obtain the given amount of transaction receipts for a given block header from the given database.
+            </summary>
+            <param name="blockHeader">The block header to obtain transaction receipts for.</param>
+            <param name="transactionCount">The amount of transactions to obtain for the given block header.</param>
+            <param name="database">The database to obtain transaction receipts from.</param>
+            <returns>Returns the array of transaction receipts for the transactions in the provided block header.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetReceipt(Meadow.EVM.Data_Types.Block.BlockHeader,System.Int32,Meadow.EVM.Data_Types.Databases.BaseDB)">
+            <summary>
+            Obtain a transaction receipt at the given index for a given block header from the given database.
+            </summary>
+            <param name="blockHeader">The block header which owns the desired transaction receipt.</param>
+            <param name="transactionIndex">The index of the desired transaction in the provided block.</param>
+            <param name="database">The database to obtain transaction receipts from.</param>
+            <returns>Returns the transaction receipt at the given index for the transactions in the provided block header.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.CreateNewHeadCandidate(Meadow.EVM.Data_Types.Chain.PoW.ChainPoW,Meadow.EVM.Data_Types.Transactions.TransactionPool,Meadow.EVM.Data_Types.Block.BlockHeader,System.Numerics.BigInteger,Meadow.EVM.Data_Types.Addressing.Address,System.Byte[],System.Numerics.BigInteger)">
+            <summary>
+            Given a chain, and parent/last block to build on/fork from, creates a new successor/head block from transactions in the given pool,
+            and returns the post-execution state for the new block.
+            </summary>
+            <param name="chain">The chain which owns the <paramref name="parentHeader"/> block header, to build a new head candidate for.</param>
+            <param name="transactionPool">The pool of queued transactions to pull transactions from for the new block candidate.</param>
+            <param name="parentHeader">The desired parent block header for our new head block. Must be a block header within the provided chain.</param>
+            <param name="timestamp">The timestamp to attach to the new block.</param>
+            <param name="coinbase">The coinbase/miner address for the block.</param>
+            <param name="extraData">The extra data to include in the block.</param>
+            <param name="minimumGasPrice">The minimum gas price to use when pulling transactions from the transaction pool.</param>
+            <returns>Returns the newly created head block for the given chain/desired parent using transactions from the transaction pool, as well as the post-execution state for it.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.AddTransactions(Meadow.EVM.Data_Types.State.State,Meadow.EVM.Data_Types.Block.Block,Meadow.EVM.Data_Types.Transactions.TransactionPool,System.Numerics.BigInteger)">
+            <summary>
+            Applies transactions from the given transaction pool (<paramref name="transactionPool"/>) which meet the minimum gas requirement 
+            (<paramref name="minimumGasPrice"/>) to the provided state (<paramref name="state"/>) and adds them to a new block's transaction
+            collection.
+            </summary>
+            <param name="state">The state which we wish to process the picked transactions from the pool on, to obtain block values for.</param>
+            <param name="block">The block to insert the transactions picked from the transaction pool into.</param>
+            <param name="transactionPool">The pool of queued transactions to pull transactions from for the new block.</param>
+            <param name="minimumGasPrice">The minimum gas price to use when pulling transactions from the transaction pool.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.VerifyBlock(Meadow.EVM.Data_Types.Block.BlockHeader)">
+            <summary>
+            Performs preliminary block verification before applying the block to this state.
+            Throws a <see cref="T:Meadow.EVM.Exceptions.BlockException"/> exception if verification fails.
+            </summary>
+            <param name="blockHeader">The block header to verify prior to applying the block.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.VerifyExecutionResults(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Performs execution result verification after applying a block to this state.
+            </summary>
+            <param name="block">The block to verify the values against after applying the block to this state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetExecutionResults(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Sets the execution results in the given block's header from this state's variables (post-transaction application).
+            </summary>
+            <param name="block">The block to set the values in after applying the transactions the block will have to this state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.ApplyBlock(Meadow.EVM.Data_Types.Block.Block)">
+            <summary>
+            Applies a given block to the state, performing all necessary checks/updates, and executing all underlying transactions.
+            </summary>
+            <param name="block">The block to apply to this state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.VerifyTransaction(Meadow.EVM.Data_Types.Transactions.Transaction)">
+            <summary>
+            Performs preliminary transaction verification before applying the transaction to this state.
+            </summary>
+            <param name="transaction">The transaction to verify prior to applying to this state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.ApplyTransaction(Meadow.EVM.Data_Types.Transactions.Transaction)">
+            <summary>
+            Applies a given transaction to the state, performing all necessary checks/updates.
+            </summary>
+            <param name="transaction">The transaction to apply to this state.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetNonce(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Obtains the nonce for an account at a given address.
+            </summary>
+            <param name="address">The address of the account to grab the nonce of.</param>
+            <returns>Returns the nonce from the account at the given address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetNonce(Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Sets the nonce for an account at a given address.
+            </summary>
+            <param name="address">The address of the account to set the nonce of.</param>
+            <param name="nonce">The nonce to set for the account at the given address.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.IncrementNonce(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Increments the nonce for an account at a given address.
+            </summary>
+            <param name="address">The address of the account to increment the nonce at.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.ContainsAccount(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Verifies an account existed at the start of the current execution and wasn't deleted during this execution. (Past-Spurious Dragon we simply check if an account is blank or not).
+            </summary>
+            <param name="address">The address of the account to check existence of.</param>
+            <returns>Returns a boolean indicating the state contains the account.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetAccount(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Obtains the account with the given address, or creates one if the mentioned one does not exist.
+            </summary>
+            <param name="address">The address of the account to obtain or create.</param>
+            <returns>Returns the account at the provided address or creates one if it does not exist.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.QueueDeleteAccount(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Queues an account at a given address to be deleted after the transaction has finished processing.
+            </summary>
+            <param name="address">The address of the account to be deleted after the transaction has finished processing.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.DeleteAccount(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Deletes an account immediately by marking it as resetting all of it's properties and setting it as deleted.
+            </summary>
+            <param name="address">The address of the account to delete immediately.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetAccountDirty(Meadow.EVM.Data_Types.Addressing.Address,System.Boolean)">
+            <summary>
+            Sets an account as dirty/modified so it is known changes should be committed.
+            </summary>
+            <param name="address">The account to mark as dirty/modified.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetBalance(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Obtains the balance for an account at a given address.
+            </summary>
+            <param name="address">The address of the account we wish to obtain the balance for.</param>
+            <returns>Returns the balance of the account at the given address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetBalance(Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Sets the balance of an account at a given address.
+            </summary>
+            <param name="address">The address of the account we wish to set the balance for.</param>
+            <param name="balance">The balance we wish to set for the account at the given address.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.ModifyBalanceDelta(Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Modifies the balance of an account at a given address with the given delta/change value.
+            </summary>
+            <param name="address">The address of the account to add delta to the balance of.</param>
+            <param name="delta">The amount to change the balance of the account at the given address.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.TransferBalance(Meadow.EVM.Data_Types.Addressing.Address,Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Tranfers a given balance amount from one account to another. 
+            </summary>
+            <param name="from">The address of the account to take the amount from.</param>
+            <param name="to">The address of the account to give the amount to.</param>
+            <param name="amount">The amount to take from one account and give to the other.</param>
+            <returns>Returns true if the transfer was successful, false otherwise (such as if the balance failed).</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetCodeSegment(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Obtains the code segment from an account at the provided address.
+            </summary>
+            <param name="address">The address of the account to obtain the code segment for.</param>
+            <returns>Returns the code segment of the account at the provided address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetCodeSegment(Meadow.EVM.Data_Types.Addressing.Address,System.Byte[])">
+            <summary>
+            Sets the code segment on an account at the provided address.
+            </summary>
+            <param name="address">The address of the account to set the code segment for.</param>
+            <param name="code">The code to set for the account's code segment.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.GetStorageData(Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger)">
+            <summary>
+            Obtains the storage value for the provided key from the account at the provided address.
+            </summary>
+            <param name="address">The address of the account to obtain storage data from.</param>
+            <param name="key">The storage key to obtain the value for from the account.</param>
+            <returns>Returns the value corresponding to the key in the storage of the account at the provided address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.SetStorageData(Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Sets the storage value for the provided key for the account at the provided address.
+            </summary>
+            <param name="address">The address of the account to set storage data for.</param>
+            <param name="key">The storage key for which we wish to set the value for in the account.</param>
+            <param name="value">The storage value to set for the provided key in the account.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.ResetStorageData(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Resets the storage data for an account at the provided address.
+            </summary>
+            <param name="address">The address of the account to reset storage for.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.AddGasRefund(System.Numerics.BigInteger)">
+            <summary>
+            Adds to the amount of gas which should be refunded after execution for the current transaction.
+            </summary>
+            <param name="value">The amount to add to the gas to refund. Must be positive.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.Log(Meadow.EVM.Data_Types.Transactions.Log)">
+            <summary>
+            Adds a log to our state's log list.
+            </summary>
+            <param name="log">The log to add to our state's log list.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.Snapshot">
+            <summary>
+            Obtains a snapshot/saved state of this state instance.
+            </summary>
+            <returns>Returns a snapshot/saved state of this state instance.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.Revert(Meadow.EVM.Data_Types.State.StateSnapshot)">
+            <summary>
+            Reverts this state instance to that of a provided snapshot/saved state.
+            </summary>
+            <param name="savedState">The snapshot/saved state to revert to. If null, then the change journal is used to rollback to the state of the last commit.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.CommitChanges">
+            <summary>
+            Commits all uncommitted changes to the state trie.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.State.State.Clone">
+            <summary>
+            Clones the current state by building a new instance from a snapshot of this one.
+            </summary>
+            <returns>Returns a clone of the current state object.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Transactions.BloomFilter">
+            <summary>
+            Bloom Filters are used to determine inclusiveness in sets. In Ethereum, this hashes log information such as address and topics and sets unique bits to represent their inclusiveness.
+            False positives are possible (indicating something exists when it does not) because all set bits are OR'd when multiple items are filtered, but false negatives will not occur 
+            (indicating something is not in the set when it actually is). Ethereum's implementation of the bloom filter is 2048 bits in size.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Data_Types.Transactions.BloomFilter.BLOOM_CHUNK_COUNT">
+            <summary>
+            For every value added, this is the amount of 16-bit chunks we obtain to represent bit index in our bloom filter. Should never exceed 32 (keccak hash size).
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.BloomFilter.Generate(System.Numerics.BigInteger,System.Int32)">
+            <summary>
+            Generates a bloom filter for a given item with a given byte count.
+            </summary>
+            <param name="item">The item to generate a bloom filter for.</param>
+            <param name="byteCount">The amount of bytes that the item is made up of.</param>
+            <returns>Returns the bloom filter generated for this item.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.BloomFilter.Generate(System.Collections.Generic.IEnumerable{System.Numerics.BigInteger},System.Int32)">
+            <summary>
+            Generates a bloom filter for a given items with the given byte count.
+            </summary>
+            <param name="items">The items to generate a bloom filter for.</param>
+            <param name="byteCount">The amount of bytes that the items are individually made up of.</param>
+            <returns>Returns the bloom filter generated for these items.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.BloomFilter.Check(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Checks for the possible inclusion of a given item in a given bloom filter.
+            </summary>
+            <param name="bloomFilter">The bloom filter to check for possible inclusiveness of our item in.</param>
+            <param name="item">The item to check possible inclusion for in our bloom filter.</param>
+            <returns>Returns true if there is a possibility the item is in the set which the bloom filter was made from.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Transactions.Log">
+            <summary>
+            Logs are used to track events emitted from within the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Log.Address">
+            <summary>
+            The address provided from our message for our transaction log.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Log.Topics">
+            <summary>
+            Topics describe the log and what indexes information about the log (such as which event generated a log).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Log.Data">
+            <summary>
+            The data provided for the actual event/log.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Log.#ctor">
+            <summary>
+            Our default constructor.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Log.#ctor(Meadow.EVM.Data_Types.Addressing.Address,System.Collections.Generic.List{System.Numerics.BigInteger},System.Byte[])">
+            <summary>
+            Initializes a log with the provided arguments.
+            </summary>
+            <param name="address">The address to set during initialization.</param>
+            <param name="topics">The topics to set during initialization.</param>
+            <param name="data">The data to set during initialization.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Log.#ctor(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Creates a log instance given an RLP serialized Log we can decode to obtain values for.
+            </summary>
+            <param name="rlpList">The RLP serialized log to decode and set values from.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Log.Serialize">
+            <summary>
+            Serializes the log into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP log.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Log.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized log and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to deserialize and obtain values from.</param>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Transactions.Receipt">
+            <summary>
+            Receipts are generated in response to applying a transaction, and give the resulting state root hash, gas used during the transaction, logs for events called, and a bloom filter to quickly index logs.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Receipt.StateRoot">
+            <summary>
+            Represents the state trie root hash after execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Receipt.GasUsed">
+            <summary>
+            Represents the block gas used at the time the transaction was processed in the block.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Receipt.Bloom">
+            <summary>
+            Represents the bloom filter generated for the logs for quick lookup of possible inclusiveness.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Receipt.Logs">
+            <summary>
+            Represents the logs after execution/application of the transaction.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.#ctor">
+            <summary>
+            Our default constructor.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.#ctor(System.Byte[],System.Numerics.BigInteger,System.Collections.Generic.List{Meadow.EVM.Data_Types.Transactions.Log})">
+            <summary>
+            Creates a receipt instance with the given values.
+            </summary>
+            <param name="stateRoot">The state root to set upon creation.</param>
+            <param name="gasUsed">The gas used to set upon creation.</param>
+            <param name="logs">The logs list to set upon creation.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.#ctor(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Creates a receipt instance given an RLP serialized Receipt we can decode to obtain values for.
+            </summary>
+            <param name="rlpReceipt">The RLP serialized receipt to decode and set values from.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.GenerateBloomFilter">
+            <summary>
+            Generates an updated bloom filter and updates the receipt bloom property.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.Serialize">
+            <summary>
+            Serializes the receipt into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP receipt.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Receipt.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized receipt and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to deserialize and obtain values from.</param>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.Nonce">
+            <summary>
+            Used to prevent replay attacks and etc.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.GasPrice">
+            <summary>
+            Indicates the price of gas at the time of this transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.StartGas">
+            <summary>
+            The amount of gas provided to be charged for the transaction, where any remainder should be refunded if all succeeds.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.To">
+            <summary>
+            The address to receive this transaction and process it (could cause code to execute at that address).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.Value">
+            <summary>
+            The amount of ether to send to the receiving address.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.Data">
+            <summary>
+            Call specific data
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.ChainID">
+            <summary>
+            An optional ChainID which is embedded in our ECDSA v parameter.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.Transaction.BaseGasCost">
+            <summary>
+            The amount of gas we need to pay at the beginning of transaction application.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Transaction.Serialize">
+            <summary>
+            Serializes the transaction into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP transaction.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.Transaction.Deserialize(Meadow.Core.RlpEncoding.RLPItem)">
+            <summary>
+            Deserializes the given RLP serialized transaction and sets all values accordingly.
+            </summary>
+            <param name="item">The RLP item to deserialize and obtain values from.</param>
+        </member>
+        <member name="T:Meadow.EVM.Data_Types.Transactions.TransactionPool">
+            <summary>
+            Represents the collection of transactions waiting to be added to a block/mined/executed.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Data_Types.Transactions.TransactionPool.Count">
+            <summary>
+            The count of items we have in our transaction pool.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.TransactionPool.TransactionCompareFunction(Meadow.EVM.Data_Types.Transactions.Transaction,Meadow.EVM.Data_Types.Transactions.Transaction)">
+            <summary>
+            The comparison function for our transactions in order to sort it in our heap, which sorts by gas price, otherwise queued status.
+            </summary>
+            <param name="first">The first item to compare from our heap.</param>
+            <param name="second">The second item to compare from our heap.</param>
+            <returns>Returns the item with the highest gas price, or if equal, the one which was queued first.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.TransactionPool.Push(Meadow.EVM.Data_Types.Transactions.Transaction)">
+            <summary>
+            Adds a transaction to our transaction pool, queuing it for mining/block/execution.
+            </summary>
+            <param name="transaction">The transaction to add to the transaction pool.</param>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.TransactionPool.Pop">
+            <summary>
+            Obtains the most expensive from the transaction pool.
+            </summary>
+            <returns>Returns the most expensive transaction out of the transaction pool.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Data_Types.Transactions.TransactionPool.Pop(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Obtains the most expensive transaction that meets the given requirements from the transaction pool.
+            </summary>
+            <param name="maxStartGas">The maximum start gas the transaction to pop off should have. (Inclusive)</param>
+            <param name="minGasPrice">The minimum gas price the trasanction to pop off should have. (Inclusive)</param>
+            <returns>Returns a transaction that meets the criteria out of the transaction pool.</returns>
+        </member>
+        <member name="T:Meadow.EVM.Debugging.Coverage.CodeCoverage">
+            <summary>
+            Tracks code execution coverage for testing purposes.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Coverage.CodeCoverage._coverageMapsUndeployed">
+            <summary>
+            A lookup for contract addresses to their coverage maps (at the time of deployment).
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Coverage.CodeCoverage._coverageMapsDeployed">
+            <summary>
+            A lookup for contract addresses to their coverage maps (after deployment).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Coverage.CodeCoverage.Enabled">
+            <summary>
+            Indicates whether or not coverage maps are being recorded.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Coverage.CodeCoverage.IgnoreList">
+            <summary>
+            A set of addresses which will be ignored when constructing the coverage map.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.#ctor">
+            <summary>
+            The default constructor for the coverage map.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.Get(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Gets an existing coverage map from the specified address or returns null if it does not exist.
+            </summary>
+            <param name="contractAddress">The address of the contract to provide a coverage map for.</param>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.GetAll">
+            <summary>
+            Gets all existing coverage maps that exist in this code coverage configuration.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.Register(Meadow.EVM.EVM.Messages.EVMMessage,System.Memory{System.Byte})">
+            <summary>
+            Gets an existing coverage map from the specified address, or creates one if it doesn't exist, with the specified code.
+            </summary>
+            <param name="code">The code which we are producing a coverage map for.</param>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.Clear(System.Boolean,System.Boolean)">
+            <summary>
+            Clears all coverage maps.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.Clear(Meadow.EVM.Data_Types.Addressing.Address,System.Boolean,System.Boolean)">
+            <summary>
+            Clears the coverage map for the contract at the provided address.
+            </summary>
+            <param name="contractAddress">The address of the contract for which we wish to clear the coverage map.</param>
+            <returns>Returns true if the contract address was in the list and removed, false if it was not in the list at all.</returns>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.CoverageMap.RecordExecution(System.UInt32,System.UInt32)">
+            <summary>
+            Records the access of data in our coverage map at the provided offset with the provided size.
+            </summary>
+            <param name="offset">The offset at which we wish to record an access.</param>
+            <param name="size">The size of the access to record.</param>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.Coverage.CodeCoverage.CoverageMap.RecordBranch(System.UInt32,System.Boolean)">
+            <summary>
+            Records a branch in our coverage map,
+            </summary>
+            <param name="offset"></param>
+            <param name="jumped"></param>
+        </member>
+        <member name="T:Meadow.EVM.Debugging.DebugConfiguration">
+            <summary>
+            Provides debug execution state information and configuration.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.Debugging.DebugConfiguration.#ctor(Meadow.EVM.Data_Types.Databases.BaseDB)">
+            <summary>
+            Default contructor, initializes properties, etc. accordingly.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Tracing.ExecutionTrace._lastContractAddress">
+            <summary>
+            The last contract address we had context in during this trace.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Tracing.ExecutionTrace._lastMemoryChangeCount">
+            <summary>
+            The last memory change count we had recorded.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Tracing.ExecutionTrace._lastStorageChanged">
+            <summary>
+            Indicates if the last tracepoint had changed storage, so it is known to be included for the current step.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.Debugging.Tracing.ExecutionTrace._lastCallDepth">
+            <summary>
+            The last call depth we had recorded.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTrace.Tracepoints">
+            <summary>
+            Lists all points traced during this execution, providing information at every step of execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTrace.Exceptions">
+            <summary>
+            Lists all exceptions that occurred during this execution, providing the index in <see cref="P:Meadow.EVM.Debugging.Tracing.ExecutionTrace.Tracepoints"/> at which it occurred, and the exception itself.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTraceException.TraceIndex">
+            <summary>
+            The <see cref="T:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint"/> index in our <see cref="T:Meadow.EVM.Debugging.Tracing.ExecutionTrace"/> which indicates the point in execution where the <see cref="P:Meadow.EVM.Debugging.Tracing.ExecutionTraceException.Exception"/> occurred.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTraceException.Exception">
+            <summary>
+            The exception that occurred during execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.CallData">
+            <summary>
+            The <see cref="P:Meadow.EVM.EVM.Messages.EVMMessage.Data"/> at the time of execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Code">
+            <summary>
+            The entire code segment being processed at this point. NULL if unchanged since last known value.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.ContractAddress">
+            <summary>
+            The address of the contract currently executing at this point. NULL if unchanged since last known value.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.ContractDeployed">
+            <summary>
+            Indicates if the contract currently executing at this point is a deployed contract (true), or if it is in the process of deploying (false).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.GasRemaining">
+            <summary>
+            Gas remaining prior to the instruction's execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.GasCost">
+            <summary>
+            The amount of gas this instruction cost.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Opcode">
+            <summary>
+            The string representation of an opcode.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.PC">
+            <summary>
+            The program counter prior to this instruction's execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Depth">
+            <summary>
+            Our Ethereum virtual machine call depth (not to be confused with high level function call depth such as solidity)
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Memory">
+            <summary>
+            A representation of the EVM memory prior to this instruction's execution. NULL if unchanged since last known value.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Stack">
+            <summary>
+            A representation of the EVM stack prior to this instruction's execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.Debugging.Tracing.ExecutionTracePoint.Storage">
+            <summary>
+            Represents all key-value storage for the <see cref="P:Meadow.EVM.EVM.Messages.EVMMessage.To"/> address at this point in execution.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Definitions.EVMDefinitions">
+            <summary>
+            Represents generic EVM definitions that are desirable to access globally.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Definitions.EVMDefinitions.WORD_SIZE">
+            <summary>
+            Represents the size (in bytes) of a WORD in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Definitions.EVMDefinitions.WORD_SIZE_BITS">
+            <summary>
+            Represents the size (in bits) of a WORD in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Definitions.EVMDefinitions.MAX_CALL_DEPTH">
+            <summary>
+            Represents the maximum depth allowed when calling functions in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Definitions.EVMDefinitions.MAX_CONTRACT_SIZE">
+            <summary>
+            Represents the maximum byte size of a contract.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Definitions.EVMDefinitions.BLOOM_FILTER_SIZE">
+            <summary>
+            Represents the size of a bloom filter in bytes.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Definitions.EVMDefinitions.UINT256_MIN_VALUE">
+            <summary>
+            Represents the minimum value a 256-bit unsigned integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Definitions.EVMDefinitions.UINT256_MAX_VALUE">
+            <summary>
+            Represents the maximum value a 256-bit unsigned integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Definitions.EVMDefinitions.INT256_MAX_VALUE">
+            <summary>
+            Represents the minimum value a 256-bit signed integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Definitions.EVMDefinitions.INT256_MIN_VALUE">
+            <summary>
+            Represents the maximum value a 256-bit signed integer could have.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Execution.EVMExecutionResult">
+            <summary>
+            Represents the concluding result of execution in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionResult.ReturnData">
+            <summary>
+            Represents data which was returned upon execution of the VM.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionResult.RemainingGas">
+            <summary>
+            Represents the amount of gas remaining after execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionResult.Succeeded">
+            <summary>
+            Indicates whether or not all changes should be reverted.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMExecutionResult.#ctor(Meadow.EVM.MeadowEVM,System.Memory{System.Byte},System.Boolean)">
+            <summary>
+            Our default constructor, sets all properties of our execution result. Using this constructor returns the remaining gas in the EVM instance.
+            </summary>
+            <param name="evm">The EVM instance which the result is being returned for, and from which we should derive remaining gas.</param>
+            <param name="returnData">Represents data which was returned upon execution of the VM.</param>
+            <param name="succeeded">Indicates whether or not all changes should be reverted.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMExecutionResult.#ctor(Meadow.EVM.MeadowEVM,System.Memory{System.Byte},System.Numerics.BigInteger,System.Boolean)">
+            <summary>
+            Our default constructor, sets all properties of our execution result.
+            </summary>
+            <param name="evm">The EVM instance which the result is being returned for.</param>
+            <param name="returnData">Represents data which was returned upon execution of the VM.</param>
+            <param name="remainingGas">Represents the amount of gas remaining after execution.</param>
+            <param name="succeeded">Indicates whether or not all changes should be reverted.</param>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.Memory">
+            <summary>
+            Represents the expandable memory segment for the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.Stack">
+            <summary>
+            Represents the stack for the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.PC">
+            <summary>
+            Represents the program counter for the Ethereum Virtual Machine, indicating the address where the next instruction will be fetched and executed.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.Gas">
+            <summary>
+            The amount of gas remaining for this execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.JumpedLastInstruction">
+            <summary>
+            Indicates whether the last instruction we processed was a jump. This is used to look for a JUMPDEST instruction where we expect to jump to. If a jump occurs to a place with anything else, an exception will be thrown.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.Result">
+            <summary>
+            Represents the returning result of this VM's execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMExecutionState.LastCallResult">
+            <summary>
+            Represents the last returning result of another VM as a result of a call this one made.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMGasState.InitialGas">
+            <summary>
+            Indicates the amount of gas that we had when we created this gas state.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Execution.EVMGasState.Gas">
+            <summary>
+            Indicates the amount of gas one has remaining in the current state.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMGasState.#ctor(System.Numerics.BigInteger)">
+            <summary>
+            Our default constructor, sets the amount of gas we have to operate on.
+            </summary>
+            <param name="gas">The amount of gas we have to run computations.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMGasState.Check(System.Numerics.BigInteger)">
+            <summary>
+            Throw an exception if we do not have enough Gas to handle the given amount.
+            </summary>
+            <param name="amount">The amount of gas we are checking if we have.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMGasState.Deduct(System.Numerics.BigInteger)">
+            <summary>
+            Deducts the given amount from our current gas.
+            </summary>
+            <param name="amount">The amount of gas to deduct from our current gas.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Execution.EVMGasState.Refund(System.Numerics.BigInteger)">
+            <summary>
+            Refunds the given amount of gas to our current gas.
+            </summary>
+            <param name="amount">The amount of gas to refund to our current gas.</param>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Hooking.EVMHookInterface">
+            <summary>
+            Used to supply handlers for certain events, which can be used as hooks for the EVM component of the Ethereum Core.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionAdd.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionAddMod.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionDivide.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionExponent.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionMod.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionMultiply.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionMultiplyMod.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionSignedDivide.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionSignedMod.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionSignExtend.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Arithmetic.InstructionSubtract.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionAnd.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionEqual.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionExtractByte.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionGreaterThan.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionIsZero.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionLessThan.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionNot.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionOr.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionSignedGreaterThan.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionSignedLessThan.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Bitwise_Logic.InstructionXor.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockCoinbase.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockDifficulty.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockGasLimit.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockHash.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockNumber.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Block_Information.InstructionBlockTimestamp.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionGas.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionGetPC.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionHalt.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionJump.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionJumpDest.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionJumpI.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionMemoryLoad.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionMemorySize.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionMemoryStore.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionMemoryStore8.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionStorageLoad.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Control_Flow_and_IO.InstructionStorageStore.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Cryptography.InstructionSHA3.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionAddress.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionBalance.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCallDataCopy.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCallDataLoad.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCallDataSize.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCaller.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCallValue.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCodeCopy.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionCodeSize.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionExternalCodeCopy.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionExternalCodeSize.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionGasPrice.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionOrigin.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionReturnDataCopy.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Environment.InstructionReturnDataSize.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Opcode">
+            <summary>
+            Represents an opcode which describes the underlying instruction type.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.OpcodeDescriptor">
+            <summary>
+            Describes the opcode 
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Offset">
+            <summary>
+            The program counter location when this instruction is executed.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.EVM">
+            <summary>
+            The Ethereum Virtual Machine which this instruction exists in the context of.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Version">
+            <summary>
+            The Ethereum Virtual Machine release version which we are currently operating on.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.ChainID">
+            <summary>
+            The Chain's ID which we are currently executing on.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.GasState">
+            <summary>
+            The current state of gas in execution.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.ExecutionState">
+            <summary>
+            The current runtime execution state
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Stack">
+            <summary>
+            The current Ethereum Virtual Machine's stack
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Memory">
+            <summary>
+            The current Ethereum Virtual Machine's memory
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.InstructionBase.Message">
+            <summary>
+            The current Ethereum Virtual Machine's message it is executing on.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.InstructionBase.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.InstructionBase.Execute">
+            <summary>
+            Executes the given instruction in the given execution state.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.InstructionBase.Return(Meadow.EVM.EVM.Execution.EVMExecutionResult)">
+            <summary>
+            Sets the results of our execution to mark execution as concluded.
+            </summary>
+            <param name="executionResult">The result of the execution.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.InstructionBase.ToString">
+            <summary>
+            Obtains a string representation of our instruction
+            </summary>
+            <returns>Returns a string representation of our instruction.</returns>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.Mnemonic">
+            <summary>
+            A symbol describing the opcode.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.Description">
+            <summary>
+            A short description of the opcode.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.OperandSize">
+            <summary>
+            The size of the instruction's operand in bytes.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.ItemsAddedToStack">
+            <summary>
+            The amount of items this operation adds to the stack.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.ItemsRemovedFromStack">
+            <summary>
+            The amount of items this operation removes from the stack.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.ImplementationClassType">
+            <summary>
+            The Type of the class where the instruction is implemented, used to instantiate the instruction.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.OpcodeDescriptorAttribute.GetInstructionImplementation(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Creates an instance of the appropriate instruction implementation for this opcode.
+            </summary>
+            <returns>Returns the instruction implementation.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Stack.InstructionDuplicate.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Stack.InstructionPop.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Stack.InstructionPush.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Stack.InstructionPush.ToString">
+            <summary>
+            Obtains a string representation of our instruction
+            </summary>
+            <returns>Returns a string representation of our instruction.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.Stack.InstructionSwap.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionCall.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionCreate.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionInvalid.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionLog.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionReturn.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionRevert.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Instructions.System_Operations.InstructionSelfDestruct.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, reads the opcode/operand information from the provided stream.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Memory.EVMMemory">
+            <summary>
+            Represents the expandable memory segment in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Memory.EVMMemory._internalBufferStream">
+            <summary>
+            The internal buffer that represents the memory segment in an Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Memory.EVMMemory.EVM">
+            <summary>
+            The parent Ethereum Virtual Machine that this memory belongs to (and gas should be charged to).
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Memory.EVMMemory.Length">
+            <summary>
+            Represents the current length of the stream.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Memory.EVMMemory.ChangeCount">
+            <summary>
+            A rolling count of changes to memory, indicates if changes to memory have been made, signalling for it to be included in the next trace item if tracing.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.#ctor(Meadow.EVM.MeadowEVM)">
+            <summary>
+            Our default constructor, initializes a new virtual memory section.
+            </summary>
+            <param name="evm">The parent EVM that this memory belongs to (and gas should be charged to).</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.#ctor(Meadow.EVM.MeadowEVM,System.Byte[])">
+            <summary>
+            Our constructor, takes a byte array to map virtual memory to.
+            </summary>
+            <param name="evm">The parent EVM that this memory belongs to (and gas should be charged to).</param>
+            <param name="memoryData">The byte array to map virtual memory to.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.ReadByte(System.Int64)">
+            <summary>
+            Reads a byte from virtual memory at the provided address.
+            </summary>
+            <param name="address">The address to read the byte from.</param>
+            <returns>Returns the byte at the given address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.ReadBytes(System.Int64,System.Int32)">
+            <summary>
+            Reads a byte array from virtual memory of the given size at the given address.
+            </summary>
+            <param name="address">The address to read bytes from.</param>
+            <param name="size">The amount of bytes to read.</param>
+            <returns>Returns the bytes read from the given address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.ReadBigInteger(System.Int64,System.Boolean)">
+            <summary>
+            Reads a 256-bit integer from virtual memory at the given address
+            </summary>
+            <param name="address">The address to read from.</param>
+            <param name="signed"></param>
+            <returns>Returns the 256-bit integer read from the given address.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.Write(System.Int64,System.Byte)">
+            <summary>
+            Writes a byte to virtual memory at the provided address.
+            </summary>
+            <param name="address">The address to write the byte to.</param>
+            <param name="data">The byte to write to the given address.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.Write(System.Int64,System.Byte[])">
+            <summary>
+            Writes a byte array to virtual memory at the provided address.
+            </summary>
+            <param name="address">The address to write bytes to.</param>
+            <param name="data">The byte array to write to the given address.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.Write(System.Int64,System.Numerics.BigInteger)">
+            <summary>
+            Writes a 256-bit integer to virtual memory at the provided address.
+            </summary>
+            <param name="address">The address to write to.</param>
+            <param name="bigInteger">The 256-bit integer to write.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.ExpandStream(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Expands the memory stream if needed (and charges gas) to accomodate for an operation to occur at the given address with a given size.
+            </summary>
+            <param name="address">The address where data is presumed to be read or written.</param>
+            <param name="size">The size of the data presumed to be read or written.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMMemory.ToArray">
+            <summary>
+            Obtains all of the EVM memory as a byte array.
+            </summary>
+            <returns>Returns all EVM memory as a byte array.</returns>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Memory.EVMStack">
+            <summary>
+            Represents the stack in the Ethereum Virtual Machine.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Memory.EVMStack.MAX_STACK_SIZE">
+            <summary>
+            Describes the maximum count of items on the stack before an exception is thrown.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Memory.EVMStack.ToArray">
+            <summary>
+            Obtains an array representation of all stack items.
+            </summary>
+            <returns>Returns an array which represents the stack, where each item is a byte array in the stack.</returns>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Messages.EVMMessage">
+            <summary>
+            Represents the internal message calls which the Ethereum virtual machine initiates execution/calls based off of. A structure which represents call data for contracts. The initial call is usually derived from a transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.Sender">
+            <summary>
+            The sender of the message.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.To">
+            <summary>
+            The recipient of the message.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.Value">
+            <summary>
+            The deposited value by the instruction/transaction responsible for this call, or amount to transfer to an account.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.Gas">
+            <summary>
+            The amount of gas sent with the transaction.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.Data">
+            <summary>
+            An optional data parameter.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.Depth">
+            <summary>
+            Call stack depth. This should be incremented with one for every call we go deeper into.
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.CodeAddress">
+            <summary>
+            The ethereum address where the code resides (not to be confused with code offset)
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.IsTransferringValue">
+            <summary>
+            Indicates value from the "Sender" should be transfered to the "To" address. The amount to send is in "Value".
+            </summary>
+        </member>
+        <member name="P:Meadow.EVM.EVM.Messages.EVMMessage.IsStatic">
+            <summary>
+            Indicates if this message is as a result of a STATICCALL. In static context, any subcalls will also be static, and no state changing will be allowed, including non-zero value calls, creates, SSTORE, SELFDESTRUCT, etc.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Messages.EVMMessage.#ctor(Meadow.EVM.Data_Types.Addressing.Address,Meadow.EVM.Data_Types.Addressing.Address,System.Numerics.BigInteger,System.Numerics.BigInteger,System.Byte[],System.Numerics.BigInteger,Meadow.EVM.Data_Types.Addressing.Address,System.Boolean,System.Boolean)">
+            <summary>
+            Our default constructor, sets all properties for our message.
+            </summary>
+            <param name="sender">The origin of the message.</param>
+            <param name="to">The destination of the message.</param>
+            <param name="value">The amount to transfer, or a value passed by the caller to a callee.</param>
+            <param name="gas">The amount of gas sent with this transaction to execute on.</param>
+            <param name="data">The message's call data.</param>
+            <param name="depth">The depth of the call, meaning how many message calls deep we are.</param>
+            <param name="codeAddress">The address where the code resides to execute.</param>
+            <param name="transfersValue">Indicates whether we are transferring a balance amount between accounts.</param>
+            <param name="isStatic">Indicates if the call is in a static context.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Messages.EVMMessage.GetDeployedCodeAddress">
+            <summary>
+            Predits the address of the code post-deployment, regardless of whether are we deploying now or not.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.EVM.Precompiles.EVMPrecompiles">
+            <summary>
+            Implements Ethereum Virtual Machine precompiled code, code which is hardcoded to be executed if certain hardcoded addresses are called for code execution.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Precompiles.EVMPrecompiles._precompiles">
+            <summary>
+            Precompile address to method handler lookup.
+            </summary>
+        </member>
+        <member name="F:Meadow.EVM.EVM.Precompiles.EVMPrecompiles._sha256">
+            <summary>
+            SHA256 cryptographic provider used for hashing
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.#cctor">
+            <summary>
+            Static constructor, initializes the Precompiles lookup.
+            </summary>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.IsPrecompileAddress(Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Checks if a contract address corresponds to a hardcoded precompile code address.
+            </summary>
+            <param name="address">The address to check for a precompile at.</param>
+            <returns>Returns true if this address corresponds to a supported precompile, false otherwise.</returns>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.ExecutePrecompile(Meadow.EVM.MeadowEVM,Meadow.EVM.Data_Types.Addressing.Address)">
+            <summary>
+            Executes the precompile which corresponds to the given address in our provided EVM instance.
+            </summary>
+            <param name="evm">The Ethereum Virtual Machine with which we wish to execute the precompile at the provided address.</param>
+            <param name="address">The address which corresponds to a precompile we wish to execute.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.Precompile_ECRecover(Meadow.EVM.MeadowEVM)">
+            <summary>
+            A precompiled contract which uses v,r,s + hash obtained from the message data to perform elliptic curve public key recovery to obtain a senders address.
+            </summary>
+            <param name="evm">The Ethereum Virtual Machine instance we are executing inside of.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.Precompile_SHA256(Meadow.EVM.MeadowEVM)">
+            <summary>
+            A precompiled contract which computes a SHA256 hash from the message data.
+            </summary>
+            <param name="evm">The Ethereum Virtual Machine instance we are executing inside of.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.Precompile_RIPEMD160(Meadow.EVM.MeadowEVM)">
+            <summary>
+            A precompiled contract which computes a RIPEMD160 hash from the message data.
+            </summary>
+            <param name="evm">The Ethereum Virtual Machine instance we are executing inside of.</param>
+        </member>
+        <member name="M:Meadow.EVM.EVM.Precompiles.EVMPrecompiles.Precompile_Identity(Meadow.EVM.MeadowEVM)">
+            <summary>
+            A precompiled contract which acts as memcpy, returning a copy of the message data provided.
+            </summary>
+            <param name="evm">The Ethereum Virtual Machine instance we are executing inside of.</param>
+        </member>
+        <member name="M:Meadow.EVM.MeadowEVM.Step">
+            <summary>
+            Executes the next instruction located at the program counter, and advances it accordingly.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Exceptions.BlockException">
+            <summary>
+            An exception thrown to signal that our block encountered an error.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Exceptions.EVMException">
+            <summary>
+            A basic exception type used by our EVM to signal a failure in the virtual execution.
+            This is caught and converted to a failed transaction/call result.
+            </summary>
+        </member>
+        <member name="T:Meadow.EVM.Exceptions.TransactionException">
+            <summary>
+            An exception thrown to signal that our transaction was invalid.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,783 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.CoverageReport</name>
+    </assembly>
+    <members>
+        <member name="P:Meadow.CoverageReport.AnalysisResults.FullNodeList">
+            <summary>
+            All nodes with no filtering.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AnalysisResults.ReachableNodes">
+            <summary>
+            All nodes that have a corresponding sourcemap entry.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AnalysisResults.AllActiveNodes">
+            <summary>
+            All nodes that represent executable source code
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AnalysisResults.UnreachableNodes">
+            <summary>
+            All nodes that have executable source code which are not compiled into the bytecode and thus are
+            unreachable.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.Walk(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Walk the entry AST node tree to create flattened list of all AstNodes
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.RemoveSubsets(Meadow.CoverageReport.AstNode[])">
+            <summary>
+            Create a list without nodes that are a subset of another node
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.RemoveSupersets(Meadow.CoverageReport.AstNode[])">
+            <summary>
+            Create a list without nodes that are a superset of another node
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.GetNodesOfTypes(Meadow.Contract.SolcSourceInfo[],System.Collections.Generic.IEnumerable{Meadow.CoverageReport.AstNode},Meadow.CoverageReport.AstNodeType[])">
+            <summary>
+            Returns a list of nodes that are of a type in the given type list. 
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.GetNodesNotOfTypes(Meadow.Contract.SolcSourceInfo[],System.Collections.Generic.IEnumerable{Meadow.CoverageReport.AstNode},Meadow.CoverageReport.AstNodeType[])">
+            <summary>
+            Returns a list of nodes that are not of a type in the given type list. 
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.AstHelper.IndexAstNodes(Meadow.Contract.SolcSourceInfo[])">
+            <summary>
+            Group AST nodes by their source file index as the dictionary key.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstNodeTypeStringAttribute.NodeTypeStrings">
+            <summary>
+            Potential node type strings that match to the field we are attributing to.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstElementaryTypeName.Name">
+            <summary>
+            The name of our type.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstElementaryTypeName.TypeDescriptions">
+            <summary>
+            The descriptions for this type.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstEnumDefinition.Name">
+            <summary>
+            The name of our enum. 
+            Ex: "enum Color" would refer to an enum with name "Color".
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstEnumDefinition.CanonicalName">
+            <summary>
+            The canonical name of our enum.
+            Ex: "enum Color" in Contract "Test.sol" would refer to an enum with canonical name "Test.Color".
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstFunctionDefinition.Name">
+            <summary>
+            The name of the function definition. Can be a blank string if this refers to a constructor.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstFunctionDefinition.Visibility">
+            <summary>
+            The visibility of this function.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstFunctionDefinition.IsConstructor">
+            <summary>
+            Indicates whether the function is a constructor for its parent <see cref="T:Meadow.CoverageReport.AstTypes.AstContractDefinition"/> or not.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstFunctionDefinition.Parameters">
+            <summary>
+            The variable declarations which represent the function input parameters.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstFunctionDefinition.ReturnParameters">
+            <summary>
+            The variable declarations which represent the function return parameters.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstStructDefinition.Name">
+            <summary>
+            The name of our struct. 
+            Ex: "struct Color" would refer to a struct with name "Color".
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstStructDefinition.CanonicalName">
+            <summary>
+            The canonical name of our struct.
+            Ex: "struct Color" in Contract "Test.sol" would refer to a struct with canonical name "Test.Color".
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstUserDefinedTypeName.ReferencedDeclaration">
+            <summary>
+            The ID of the node which declares this type definition.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstVariableDeclaration.Visibility">
+            <summary>
+            The visibility of this variable.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.AstTypes.AstVariableDeclaration.TypeDescriptions">
+            <summary>
+            The descriptions for this type.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.Error">
+            <summary>
+            Indicates the current lines executing in this stack frame have been resolved.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.ResolvedFunction">
+            <summary>
+            Indicates this stack frame has been resolved to code within a function definition.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.IsFunctionConstructor">
+            <summary>
+            Indicates whether the stack frame was mapped to a function, and whether the function is a constructor.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.FunctionName">
+            <summary>
+            Indicates the name of the function. If this is a constructor without a name, it takes the name of its encapsulating contract.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.Scope">
+            <summary>
+            The execution trace scope which defines the the scope this stack frame is currently executing in.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.CurrentPositionLines">
+            <summary>
+            The source files lines which indicate the current position in the stack frame.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.CurrentPositionTraceIndex">
+            <summary>
+            Indicates a trace index which represents the current source position (<see cref="F:Meadow.CoverageReport.Debugging.Callstack.ExecutionTraceStackFrame.CurrentPositionLines"/>))
+            in this stack frame's scope.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis">
+            <summary>
+            Analyzes an execution trace to perform high level code analysis on the instruction execution using the respective source maps/abstract syntax trees.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._solcData">
+            <summary>
+            Cache for the generated solc data from the contracts in the project.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._analysisResults">
+            <summary>
+            The analysis results of the embedded solidity source.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._sourceFileMaps">
+            <summary>
+            The source file maps of the embedded solidity source.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._cachedTracepointCodes">
+            <summary>
+            An array of code hashes for every trace point.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._contractMapCache">
+            <summary>
+            A cache of contract states (address+deployed) to contract maps (source maps and instruction offset to number lookup).
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._astStateVariableDeclarations">
+            <summary>
+            A collection of all state VariableDeclaration AST nodes.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis._exceptionLookup">
+            <summary>
+            A lookup of trace index -> exception.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ExecutionTrace">
+            <summary>
+            The execution trace which provides information regarding every instruction executed.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.Scopes">
+            <summary>
+            A lookup of scopes using the start trace index for that scope. It is important to note
+            that these scopes seperate internal and external calls, but child scopes will also be contained in the parent scopes, since we are likely to return to them.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.StorageManager">
+            <summary>
+            Handles storage slot index/data offset resolving as well as stores information about the current trace index context to resolve local/state variables.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.SignificantStepIndices">
+            <summary>
+            Indices which signify the index of each significant step in the trace, where a significant step is defined as one that advances in source position from the previous.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.FillUnchangedValues">
+            <summary>
+            Fills in values that are marked as unchanged from the last known values (to save memory in deserialization).
+            Unchanges values are reference types, and setting unchanged values to last known here will have no real memory cost.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetSourceLines">
+            <summary>
+            Obtain source lines at the last trace point in our execution trace.
+            </summary>
+            <returns>Returns source lines at the last point in execution in this trace.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetSourceLines(System.Int32)">
+            <summary>
+            Obtain source lines at the given trace point in our execution trace, or if none exist, step backward until source lines can be obtained.
+            </summary>
+            <param name="traceIndex">The index into our execution trace to obtain source lines at.</param>
+            <returns>Returns the source lines at the given trace index.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetSourceLines(System.Int32,System.Int32@)">
+            <summary>
+            Obtain source lines at the given trace point in our execution trace, or if none exist, step backward until source lines can be obtained.
+            </summary>
+            <param name="traceIndex">The index into our execution trace to obtain source lines at.</param>
+            <param name="resultingTraceIndex">The index into our execution trace where the source lines ended up being grabbed from.</param>
+            <returns>Returns the source lines at the given trace index.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetSourceLines(Meadow.CoverageReport.AstNode)">
+            <summary>
+            Obtains the source lines corresponding to the given AST node.
+            </summary>
+            <param name="node">The AST node to obtain source lines for.</param>
+            <returns>Returns the lines that contain this AST node.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetSourceLines(SolcNet.DataDescription.Output.SourceMapEntry)">
+            <summary>
+            Obtains the source lines corresponding to the given source map entry.
+            </summary>
+            <param name="sourceMapEntry">The source map entry to obtain source lines for.</param>
+            <returns>Returns the lines contained by this source map entry.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetInstructionAndSourceMap(System.Int32)">
+            <summary>
+            Obtains the instruction index and source map entry for a given trace point index in our execution trace.
+            </summary>
+            <param name="traceIndex">The index of the trace point in our execution trace for which we want to obtain the current instruction and source map entry.</param>
+            <returns>Returns the instruction index and source map entry for a given trace point index in our execution trace.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.IsExternalCall(System.Int32)">
+            <summary>
+            Determines if the given trace index has an instruction that will increase message depth/call external code.
+            </summary>
+            <param name="traceIndex">The index of the trace point which we want to check to see is a potential call.</param>
+            <returns>Returns a boolean indicating whether the instruction at the given trace index is a calling instruction of some sort.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.IsJumpDestination(System.Int32)">
+            <summary>
+            Determines if the given trace index has an instruction that is a jump destination.
+            </summary>
+            <param name="traceIndex">The index of the trace point which we want to check to see is a potential jump destination.</param>
+            <returns>Returns a boolean indicating whether the instruction at the given trace index is a jump destination instruction.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetCallStackScopes">
+            <summary>
+            Obtains all execution trace scopes, starting from the current scope, ending with the entry point.
+            </summary>
+            <returns>Returns an array of execution trace scopes, starting from most recent scopes entered, to earliest.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetCallStackScopes(System.Int32)">
+            <summary>
+            Obtains all execution trace scopes, starting from the latest scope for the provided trace index, ending with the entry point.
+            </summary>
+            <param name="traceIndex">The trace point index which we'd like to obtain the callstack for.</param>
+            <returns>Returns an array of execution trace scopes, starting from most recent scopes entered, to earliest.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetCallStack">
+            <summary>
+            Obtains an array of stack frames representing a callstack at the last executed location in this trace.
+            </summary>
+            <returns>Returns an array of stack frames, starting from most recent scopes entered, to earliest.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetCallStack(System.Int32)">
+            <summary>
+            Obtains an array of stack frames representing a callstack at the provided location in this trace.
+            </summary>
+            <param name="traceIndex">The trace point index which we'd like to obtain the callstack for.</param>
+            <returns>Returns an array of stack frames, starting from most recent scopes entered, to earliest.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetScope(System.Int32)">
+            <summary>
+            Obtains the scope for the given trace index.
+            </summary>
+            <param name="traceIndex">The index in our trace for which we'd like to obtain the scope for.</param>
+            <returns>Returns a scope instance representing the scope at the given trace point index, or null if one could not be found.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetException(System.Int32)">
+            <summary>
+            Obtains the execution trace exception at this trace index, or returns null if one does not exist.
+            </summary>
+            <param name="traceIndex">The trace index to obtain the exception at.</param>
+            <returns>Returns the execution trace exception at the given trace index, or returns null if one does not exist.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetExceptionMessage(Meadow.JsonRpc.Types.Debugging.ExecutionTraceException)">
+            <summary>
+            Generates a message from an execution trace exception.
+            </summary>
+            <param name="traceException">The execution trace exception to generate a message for.</param>
+            <returns>Returns an exception message generated from an execution trace exception.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.GetAggregateException(System.Exception)">
+            <summary>
+            Obtains an aggregated exception composed of the collection of exceptions that occurred in <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ExecutionTrace"/>.
+            </summary>
+            <returns>Returns an exception that is composed of all exceptions that occurred in <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ExecutionTrace"/>, otherwise null if no exceptions occurred.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ParseStateVariableDeclarations">
+            <summary>
+            Parse all contract definitions and subsequent state variable declarations.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ParseScopeTracepoint(System.Int32,SolcNet.DataDescription.Output.SourceMapEntry,Meadow.CoverageReport.Debugging.ExecutionTraceScope)">
+            <summary>
+            Parses a single tracepoint in <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ExecutionTrace"/> which
+            (This function is a helper to <see cref="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ParseScopes(System.Int32,System.Int32,System.Int32,Meadow.CoverageReport.Debugging.ExecutionTraceScope,System.Nullable{SolcNet.DataDescription.Output.SourceMapEntry}@)"/> which handles parsing at the same level, not entering or executing scope.
+            </summary>
+            <param name="traceIndex"></param>
+            <param name="currentEntry"></param>
+            <param name="currentScope"></param>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ParseScopes(System.Int32,System.Int32,System.Int32,Meadow.CoverageReport.Debugging.ExecutionTraceScope,System.Nullable{SolcNet.DataDescription.Output.SourceMapEntry}@)">
+            <summary>
+            Parses information from <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceAnalysis.ExecutionTrace"/> in preparation for debugging operations.
+            </summary>
+            <param name="traceIndex">The index of the trace we want to start parsing from. Used in conjuction with depth to appropriately scan scopes.</param>
+            <param name="scopeDepth">The depth of the current scope (also equal to the amount of parents it has).</param>
+            <param name="callDepth">The depth of calls at this point in the scan. This refers to the EVM message depth at this point in execution.</param>
+            <param name="parentScope">References the immediate parent scope which contains this scope. Can be null (for root).</param>
+            <returns>Returns the next trace index to continue from for the calling scope.</returns>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.ExecutionTraceScope">
+            <summary>
+            Represents a scope in an exection trace (the set of instructions that signify executing in one function context or another).
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.ContractDefinition">
+            <summary>
+            The contract definition for the contract this scope's execution context takes place in.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.FunctionDefinition">
+            <summary>
+            The function definition for the function this scope's execution context takes place in.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.FunctionDefinitionIndex">
+            <summary>
+            The trace index where the function definition is first resolved for this scope.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.FunctionEnteredIndex">
+            <summary>
+            The trace index where the function definition is actually entered and encapsulated code is beginning execution. 
+            If this is not set, but <see cref="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.FunctionDefinition"/> is set, then execution is likely occuring in an access modifier,
+            and we have not entered the actual function definition's code.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.StartIndex">
+            <summary>
+            The trace index into the execution trace where the first instruction for this scope occurred.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.EndIndex">
+            <summary>
+            The trace index into the execution trace where the last instruction for this scope occurred.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.CallDepth">
+            <summary>
+            The depth starting from zero which signifies how many external function calls/EVM executes deep the current scope takes place in.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.ScopeDepth">
+            <summary>
+            Signifies how many scopes are ancestors to this scope.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.Parent">
+            <summary>
+            The parent scope which contains this scope, if any.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.ParentFunctionCall">
+            <summary>
+            Represents the ast node for the function call which had created/invoked this scope.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.ParentFunctionCallIndex">
+            <summary>
+            The trace index where the parent function call is first resolved for this scope.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.ExecutionTraceScope.Locals">
+            <summary>
+            Represents a lookup of local variables by ID.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceScope.AddLocalVariable(Meadow.CoverageReport.Debugging.Variables.LocalVariable)">
+            <summary>
+            Adds a local variable to this execution scopes lookup, if one with this ID was not already resolved.
+            </summary>
+            <param name="localVariable">The local variable to add if it has not been added already.</param>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.ExecutionTraceScope.SetFunctionDefinitionAndIndex(System.Int32,Meadow.CoverageReport.AstTypes.AstFunctionDefinition)">
+            <summary>
+            Sets the function definition for this scope, and the trace index at which it was resolved.
+            </summary>
+            <param name="traceIndex">The trace index at which this function definition was resolved.</param>
+            <param name="functionDefinition">The function definition which this scope executed inside of.</param>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.BaseVariable">
+            <summary>
+            Represents the base for a local/state variable derived from certain execution state components from execution traces/runtime.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.Declaration">
+            <summary>
+            The variable declaration ast node which defines this variable.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.Name">
+            <summary>
+            The name of this variable.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.AstTypeName">
+            <summary>
+            The AST node which describes the type for this variable.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.BaseType">
+            <summary>
+            The base type string of this variable, which is likened to the full <see cref="T:System.Type"/> but with location information stripped.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.GenericType">
+            <summary>
+            The generic type enum derived from other type information, which can be most easily used to categorize this variable's type.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.VariableLocation">
+            <summary>
+            Represents the variable's underlying data location in less trivial cases.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.BaseVariable.ValueParser">
+            <summary>
+            Represents the underlying data type value parser, which parses values for the variable given components of execution states.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Enums.VarGenericType">
+            <summary>
+            Represents a generic type for a variable.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Enums.VarLocation">
+            <summary>
+            Represents a variables actual resulting location after parsing other location enums.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Enums.VarTypeLocation">
+            <summary>
+            Represents a <see cref="T:Meadow.CoverageReport.AstTypes.AstVariableDeclaration"/>'s location as it is referred to by its type descriptors.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.LocalVariable">
+            <summary>
+            Represents a local variable derived from certain execution state components from execution traces/runtime.
+            A local variable can be understood as a variable declared within a function of is a parameter given as input
+            or one returned as output.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.IsFunctionParameter">
+            <summary>
+            Indicates if this local variable is either an input or output parameter to a function.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.IsFunctionInputParameter">
+            <summary>
+            Indicates if this local variable is an input parameter to a function.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.IsFunctionOutputParameter">
+            <summary>
+            Indicates if this local variable is an output parameter to a function.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.StackIndex">
+            <summary>
+            Indicates the position on the stack to use as the entry point to resolving our underlying variable value.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.SourceMapEntry">
+            <summary>
+            The source map entry at the point when the local variable was resolved.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.LocalVariable.VariableLocation">
+            <summary>
+            Represents the variable's underlying data location in less trivial cases.
+            In the case of a local variable, the default value refers to memory if this is a function parameter, or storage otherwise.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Pairing.MappingKeyValuePair">
+            <summary>
+            Represents a mapping key-value pair.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Pairing.UnderlyingVariableValuePair">
+            <summary>
+            Similar to <see cref="T:Meadow.CoverageReport.Debugging.Variables.Pairing.VariableValuePair"/> but instead including the underlying variable object "<see cref="T:Meadow.CoverageReport.Debugging.Variables.UnderlyingTypes.VarBase"/>" instead of a <see cref="T:Meadow.CoverageReport.Debugging.Variables.BaseVariable"/> type.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Pairing.VariableValuePair">
+            <summary>
+            Represents a variable definition and its underlying value.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.StateVariable">
+            <summary>
+            Represents a state variable derived from certain execution state components from execution traces/runtime.
+            A state variable can be understood as a variable which is operated on in persistent storage,
+            altering the state of storage, and the overall Ethereum state.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.StateVariable.StorageLocation">
+            <summary>
+            Represents a location/pointer to access data in storage where this variable can be resolved at.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.StateVariable.VariableLocation">
+            <summary>
+            Represents the variable's underlying data location in less trivial cases.
+            In the case of a state variable, the default value refers to storage.
+            </summary>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation">
+            <summary>
+            Represents a location/pointer in storage to a variable's data.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation.SlotKeyInteger">
+            <summary>
+            Represents a storage key used to obtain a storage value (as an integer).
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation.SlotKey">
+            <summary>
+            Represents a storage key used to obtain a storage value (as bytes).
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation.DataOffset">
+            <summary>
+            Represents the offset in the obtained storage value where we wish to point to.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation.#ctor(System.Numerics.BigInteger,System.Int32)">
+            <summary>
+            Initializes the storage location pointer using the given slot key and data offset.
+            </summary>
+            <param name="slotKeyInteger">The storage key used to obtain a storage value.</param>
+            <param name="dataOffset">The offset in the obtained storage value where we wish to point to.</param>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation.#ctor(System.Memory{System.Byte},System.Int32)">
+            <summary>
+            Initializes the storage location pointer using the given slot key and data offset.
+            </summary>
+            <param name="slotKey">The storage key used to obtain a storage value.</param>
+            <param name="dataOffset">The offset in the obtained storage value where we wish to point to.</param>
+        </member>
+        <member name="T:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager">
+            <summary>
+            Tracks storage across execution traces and helps with various storage calculation/functions.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ExecutionTrace">
+            <summary>
+            The execution trace to initialize and track storage across.
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex">
+            <summary>
+            The primary trace index to use, if none is provided.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.#ctor(Meadow.JsonRpc.Types.Debugging.ExecutionTrace)">
+            <summary>
+            Initializes the storage manager with the provided execution trace.
+            </summary>
+            <param name="executionTrace">The execution trace to initialize and track storage across.</param>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ResolveStorageSlots(System.Collections.Generic.IEnumerable{Meadow.CoverageReport.Debugging.Variables.StateVariable},Meadow.CoverageReport.Debugging.Variables.Storage.StorageLocation)">
+            <summary>
+            Resolves storage locations for a collection of state variables.
+            </summary>
+            <param name="stateVariables">State variables for which we wish to resolve storage locations.</param>
+            <param name="nextStorageLocation">An optional storage location object which indicates the next storage location from which we should start. If null, we start from the beginning.</param>
+            <returns>Returns the next potential storage slot after enumerating the last variable.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.GetStorage">
+            <summary>
+            Obtains the storage lookup for the current set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.
+            </summary>
+            <returns>Returns the storage lookup for the set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.GetStorage(System.Int32)">
+            <summary>
+            Obtains the storage lookup for the given <paramref name="traceIndex"/>.
+            </summary>
+            <param name="traceIndex">The index of the trace point in the current execution trace for which we wish to obtain storage.</param>
+            <returns>Returns the storage lookup for the given trace index.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ReadStorageSlot(System.Memory{System.Byte})">
+            <summary>
+            Reads the value from the storage slot accessed by the given key at the set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.
+            </summary>
+            <param name="key">The key used to obtain the storage value.</param>
+            <returns>Returns the storage value for the provided storage key at the set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ReadStorageSlot(System.Memory{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Reads a range of the storage value for the given storage key at the set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.
+            NOTE: Offset and size are indexed from the left hand side, but actually operated on from the right hand side.
+            </summary>
+            <param name="key">The key used to obtain the storage value.</param>
+            <param name="offset">The offset to begin reading from in the obtained storage value.</param>
+            <param name="size">The size of the data to read from the obtained storage value.</param>
+            <returns>Returns the desired range of the value for the provided storage key at the set <see cref="P:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.TraceIndex"/>.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ReadStorageSlot(System.Int32,System.Memory{System.Byte})">
+            <summary>
+            Reads the value from the storage slot accessed by the given key at <paramref name="traceIndex"/>.
+            </summary>
+            <param name="traceIndex">The index of the trace point in the current execution trace which we wish to read storage at.</param>
+            <param name="key">The key used to obtain the storage value.</param>
+            <returns>Returns the storage value for the provided storage key at the set <paramref name="traceIndex"/>.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.Storage.StorageManager.ReadStorageSlot(System.Int32,System.Memory{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Reads a range of the storage value for the given storage key at the provided <paramref name="traceIndex"/>.
+            NOTE: Offset and size are indexed from the left hand side, but actually operated on from the right hand side.
+            </summary>
+            <param name="traceIndex">The index of the trace point in the current execution trace which we wish to read storage at.</param>
+            <param name="key">The key used to obtain the storage value.</param>
+            <param name="offset">The offset to begin reading from in the obtained storage value.</param>
+            <param name="size">The size of the data to read from the obtained storage value.</param>
+            <returns>Returns the desired range of the value for the provided storage key at the set <paramref name="traceIndex"/>.</returns>
+        </member>
+        <member name="F:Meadow.CoverageReport.Debugging.Variables.VarParser._cachedLocationRegexGroup">
+            <summary>
+            The default bit count for int/uint solidity types.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.VarParser.GetIntegerSizeInBytes(System.String,System.Nullable{Meadow.CoverageReport.Debugging.Variables.Enums.VarGenericType})">
+            <summary>
+            Obtains the size of a solidity int/uint type in bytes when provided a full type/location string.
+            </summary>
+            <param name="baseType">The variable base type for which we wish to obtain the integer byte size of.</param>
+            <param name="genericType">Optional generic type obtained from the base type. If null, it is reparsed.</param>
+            <returns>Returns the byte count for the provided integer type.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.VarParser.GetFixedArraySizeInBytes(System.String)">
+            <summary>
+            Obtains the size of a solidity fixed array size type in bytes when provided a full type/location string.
+            </summary>
+            <param name="baseType">The variable base type for which we wish to obtain the integer byte size of.</param>
+            <returns>Returns the byte count for the provided fixed array size.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.VarParser.ParseTypeComponents(System.String)">
+            <summary>
+            Parses the base type and optional location from a type string. Some versions of solidity include location in type string, 
+            so this method is intended to seperate the underlying type from location.
+            </summary>
+            <param name="type">The type string to parse components from.</param>
+            <returns>Returns the underlying type and an optional location parsed from the type string.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.VarParser.GetGenericType(System.String)">
+            <summary>
+            Obtains a generic type when provided a full type/location string.
+            </summary>
+            <param name="baseType">The full type/location string to derive a generic type from.</param>
+            <returns>Returns a generic type derived from the provided full type/location.</returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.Debugging.Variables.VarParser.GetVariableObject(Meadow.CoverageReport.AstTypes.AstElementaryTypeName,Meadow.CoverageReport.Debugging.Variables.Enums.VarLocation)">
+            <summary>
+            Obtains a solidity variable type object of the type provided.
+            </summary>
+            <param name="astTypeName">The ast node containing the type/location from which we derive our solidity variable type objects from.</param>
+            <param name="location">The default location that some variable types should be assumed to be at, in this context.</param>
+            <returns>Returns a solidity variable type object of the type provided by <paramref name="astTypeName"/></returns>
+        </member>
+        <member name="M:Meadow.CoverageReport.MiscUtil.ResetDirectory(System.String)">
+            <summary>
+            Creates or empties out a directory
+            </summary>
+        </member>
+        <member name="P:Meadow.CoverageReport.Models.SourceFileMap.SourceFileIndex">
+            <summary>
+            This file's index in the solc sources list output.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.ReportGenerator.CreateSourceFileMaps(Meadow.Contract.SolcSourceInfo[],Meadow.CoverageReport.AnalysisResults)">
+            <summary>
+            Takes all the solidity source code lists, splits the code by new line characters, and creates the 
+            coverage report ViewModel objects which the html template code uses to generate the web page report.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.ReportGenerator.IdentifySourceLineBranchCoverage(Meadow.JsonRpc.Types.Debugging.CoverageMap,System.String,SolcNet.DataDescription.Output.SourceMapEntry[],Meadow.CoverageReport.AnalysisResults,System.Collections.Generic.Dictionary{System.Int32,Meadow.CoverageReport.Models.SourceFileMap})">
+            <summary>
+            For each passed ast node, determine all bytecode-offset and instruction-indexes contained within the node source code range.
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.ReportGenerator.IdentifyExecutedSourceLines(Meadow.JsonRpc.Types.Debugging.CoverageMap,System.String,SolcNet.DataDescription.Output.SourceMapEntry[],Meadow.CoverageReport.AnalysisResults,System.Collections.Generic.Dictionary{System.Int32,Meadow.CoverageReport.Models.SourceFileMap},System.Collections.Generic.List{System.Exception})">
+            <summary>
+            Uses the opcode string (from solc output) to translate coverage byte-offsets into instruction offsets,
+            then matches the instruction offset a sourcemap entry (from solc output), then matches the sourcemap
+            entry to a SourceFileLine and increments the execution count.
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.SourceAnalysis.FilterNodeTypes">
+            <summary>
+            Ast node types not allowed when mapping sourcemap entries
+            </summary>
+        </member>
+        <member name="F:Meadow.CoverageReport.SourceAnalysis.InterestNodeTypes">
+            <summary>
+            Ast node types to use when walking the entire ast node tree
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.SourceAnalysis.ParseSourceMap(System.String,System.Collections.Generic.Dictionary{System.Int32,Meadow.CoverageReport.AstNode[]})">
+            <summary>
+            Parses an encoded sourcemap string and matches each entry to an AST Node
+            </summary>
+        </member>
+        <member name="M:Meadow.CoverageReport.SourceAnalysis.MatchSourceMapEntry(SolcNet.DataDescription.Output.SourceMapEntry,System.Collections.Generic.Dictionary{System.Int32,Meadow.CoverageReport.AstNode[]})">
+            <summary>
+            Finds an ast node that matches the source range from a given SourceMapEntry
+            </summary>
+        </member>
+    </members>
+</doc>

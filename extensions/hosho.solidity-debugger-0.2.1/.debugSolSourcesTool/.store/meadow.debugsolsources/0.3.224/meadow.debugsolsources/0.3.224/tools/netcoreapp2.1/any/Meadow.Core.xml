@@ -1,0 +1,1390 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Meadow.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Meadow.Core.AbiEncoding.AbiDecodeBuffer">
+            <summary>
+            Stackalloc struct used for ABI encoding and decoding.
+            Static types (primitive types of fixed size) are encoded entirely in the header.
+            Dynamic types (variable size, eg: string, bytes, T[]) have their data area
+            offset encoded in the head, and their actual contents in the data area buffer.
+            <see href="http://solidity.readthedocs.io/en/latest/abi-spec.html#use-of-dynamic-types"/>
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiDecodeBuffer.Buffer">
+            <summary>
+            Entire buffer (head and tail).
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiEncodeBuffer.HeadLength">
+            <summary>
+            Length of the header section of the buffer
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.AbiEncoding.AbiSignature">
+            <summary>
+            The first four bytes of the call data for a function call specifies the function to be called. 
+            It is the first (left, high-order in big-endian) four bytes of the Keccak (SHA-3) hash of the 
+            signature of the function. The signature is defined as the canonical expression of the basic 
+            prototype, i.e. the function name with the parenthesised list of parameter types. Parameter 
+            types are split by a single comma - no spaces are used.
+            <see href="https://solidity.readthedocs.io/en/v0.4.23/abi-spec.html#function-selector"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AbiEncoding.AbiSignature.GetMethodIDHex(System.String,System.Boolean)">
+            <summary>
+            Creates the 4 byte function selector from a function signature string
+            </summary>
+            <param name="functionSignature">Function signature, ex: "baz(uint32,bool)"</param>
+            <param name="hexPrefix">True to prepend the hex string with "0x"</param>
+            <returns>8 character lowercase hex string (from first 4 bytes of the sha3 hash of utf8 encoded function signature)</returns>
+        </member>
+        <member name="T:Meadow.Core.AbiEncoding.AbiTypeInfo">
+            <summary>
+            Can be implicitly created from a <see cref="T:System.String"/> (e.g: "address"), or a <see cref="T:Meadow.Core.SolidityType"/> (e.g.: <see cref="F:Meadow.Core.SolidityType.String"/>
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.SolidityName">
+            <summary>
+            Original type string from the json ABI.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.ClrType">
+            <summary>
+            The corresponding C# type. For solidiy array types this is an IEnumerable&lt;TBaseType&gt;.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.ClrTypeName">
+            <summary>
+            The ClrType.FullName (for caching).
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.PrimitiveTypeByteSize">
+            <summary>
+            For static sized types this is the size of the entire type, 
+            otherwise is the size of the base type for an array/dynamic type.
+            The solidity types 'string' and 'bytes' are considered dynamic arrays
+            of bytes where this base size is 1.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AbiEncoding.AbiTypeInfo.IsArrayType">
+            <summary>
+            If the type is a dynamic or fixed array type
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AbiEncoding.AbiTypeInfo.IsSpecialBytesType">
+            <summary>
+            If the type is of "bytes" or "bytes&lt;M&gt;"
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.ArrayItemInfo">
+            <summary>
+            The elementary/base value of an array time. Null for non-array types.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeInfo.ArrayDimensionSizes">
+            <summary>
+            The size of each dimension for multi-dimensional array types. Dynamic sizes are represented as 0.
+            For example the type uint256[3][][6] would be represented as [3, 0, 6].
+            Null for non-multi-dimensional types.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.SolidityTypeCategory.Elementary">
+            <summary>
+            Static / base / primitive type, eg: uint16, address, bool, etc..
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.SolidityTypeCategory.FixedArray">
+            <summary>
+            An static/fixed sized array type
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.SolidityTypeCategory.DynamicArray">
+            <summary>
+            A dynamic/variably sized array type
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.SolidityTypeCategory.String">
+            <summary>
+            Special encoded dynamic length string
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.SolidityTypeCategory.Bytes">
+            <summary>
+            Special dynamic length byte array
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeMap._finiteTypes">
+            <summary>
+            Map of all finite solidity type names and their corresponding C# type.
+            Includes all the static / elementary types, as well as the explicit dynamic
+            types 'string' and 'bytes'.
+            
+            Does not include the array or tuple types; i.e.: &lt;type&gt;[M], &lt;type&gt;[], or (T1,T2,...,Tn)
+            
+            Note: All possible values of the C# types do not neccessarily fit into the corresponding
+            solidity types. For example a UInt32 C# type is used for a UInt24 solidity type.
+            Integer over/underflows are checked at runtime during encoding.
+            
+            ByteSize is zero for dynamic types.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AbiEncoding.AbiTypeMap._cachedTypes">
+            <summary>
+            Cache of solidity types parsed during runtime; eg: arrays, tuples
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AbiEncoding.DecoderFactory.GetArrayDecoder``1(Meadow.Core.AbiEncoding.IAbiTypeEncoder{``0})">
+            <summary>
+            Used for regular one-dimensional arrays
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.AbiEncoding.EncoderFactory">
+            <summary>
+            Generic-overloaded methods for easy access to typed encoders from generated contracts.
+            Trade off of: Lots of code here for less code in the generated contracts, and less 
+            dynamic runtime type checking.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AbiEncoding.Encoders.UInt256Encoder.Encode(Meadow.Core.AbiEncoding.AbiEncodeBuffer@,Meadow.Core.EthTypes.UInt256@)">
+            <summary>
+            Encodes a solidity 'uint256' (with no overflow checks since its the max value)
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AbiEncoding.IAbiTypeEncoder.Encode(Meadow.Core.AbiEncoding.AbiEncodeBuffer@)">
+            <summary>
+            Encodes and writes the value to the buffer, then returns the buffer 
+            with this position/cursor incremented to where the next writer should
+            start at.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.BIP32.ExtendedKey">
+            <summary>
+            Represents a hierarchal deterministic elliptic curve key, as defined by BIP32.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.InternalKey">
+            <summary>
+            The underlying elliptic curve key to use to construct hierarchally deterministic child keys.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.KeyType">
+            <summary>
+            The type of key this extended key represents.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.Depth">
+            <summary>
+            The depth from the root key (where 1 indicates this is an immediate child of the root key).
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.ChildIndex">
+            <summary>
+            The index of this key in its parent's child collection. This is the same as a "directory" item in a key path.
+            Can represent a hardened index or not.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.Hardened">
+            <summary>
+            Represents the key path leading to a hardened derived key.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.ChainCode">
+            <summary>
+            Data used to help derive child keys.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.Fingerprint">
+            <summary>
+            A fingerprint calculated by this keys parent. Null if this key is the master (top-level) key.
+            Used to verify parenthood of keys.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.InitializeFromSeed(System.Byte[])">
+            <summary>
+            Initializes the extended key from the provided seed.
+            </summary>
+            <param name="seed">The seed to initialize this extended key from.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetExtendedPublicKey">
+            <summary>
+            Obtains the public key for this current key instance (if private, derives public, if public, returns as is).
+            </summary>
+            <returns>Returns this key if it is a public key, otherwise obtains the public key from this key.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.ComputeChildHash(System.UInt32,System.Byte[])">
+            <summary>
+            Computes the hash from which chain code and next key data is derived for the specified child.
+            </summary>
+            <param name="childIndex">The child key/index to derive a key for.</param>
+            <param name="prefixedKeyData">The key data to use in computing the child hash, expected to be prefixed.</param>
+            <returns>Returns the hash for the specified child from which the child chain code and key data is derived.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetChildFingerprint">
+            <summary>
+            Computes a hash for the current key to determine what its child's hash should be, in order to verify a supposed parent matches a supposed child.
+            </summary>
+            <returns>Returns a hash used as an extended key fingerprint.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetChildKeyInternal(System.UInt32)">
+            <summary>
+            Computes the child key and child chain code for a given child key/index relative from this extended key.
+            </summary>
+            <param name="index">The child key/index to derive a key/chain code for.</param>
+            <returns>Returns a key and chain code for a child relative from this extended key. Derives a key of the same type as this key.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetChildKey(System.UInt32)">
+            <summary>
+            Obtains a child extended key, relative from this key, at the given child key/index.
+            </summary>
+            <param name="index">The child key/index to obtain the extended key for, relative from this extended key.</param>
+            <returns>Returns a extended key for the provided child key/index, relative from this extended key.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetChildKey(Meadow.Core.AccountDerivation.BIP32.KeyPath)">
+            <summary>
+            Obtains a child extended key, relative from this key, at the given key path.
+            </summary>
+            <param name="keyPath">The path of the child extended key to derive, relative from this extended key.</param>
+            <returns>Returns an extended key for a child relative from this key, at the provided key path.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.IsChild(Meadow.Core.AccountDerivation.BIP32.ExtendedKey)">
+            <summary>
+            Determines if the provided key is a child key to this current key.
+            </summary>
+            <param name="childKey">The key to determine is a child key or not.</param>
+            <returns>Returns true if the provided key is a child to this key.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.IsParent(Meadow.Core.AccountDerivation.BIP32.ExtendedKey)">
+            <summary>
+            Determines if the provided key is a parent key to this current key.
+            </summary>
+            <param name="parentKey">The key to determine is a parent key or not.</param>
+            <returns>Returns true if the provided key is the parent to this key.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.ExtendedKey.GetParentPrivateKey(Meadow.Core.AccountDerivation.BIP32.ExtendedKey)">
+            <summary>
+            Obtains the parent private key if provided the parent public key. This key must be a private key.
+            </summary>
+            <param name="parentPublicKey">The public key of the parent of this extended key.</param>
+            <returns>Returns the private key of the parent of this extended key.</returns>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.BIP32.KeyPath">
+            <summary>
+            Represents a path in derived hierarchically deterministic keys, as defined by BIP32.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.KeyPath.Indices">
+            <summary>
+            Determines our indices representing this path.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.KeyPath.Parent">
+            <summary>
+            The parent key path to this key path. (One directory above, or null if this is a top level key path).
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP32.KeyPath.Hardened">
+            <summary>
+            Represents the current path leading to a hardened derived key.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.#ctor(System.String)">
+            <summary>
+            Initializes the key path with a given string representation of a key path.
+            </summary>
+            <param name="path">The string representation of the key path to initialize with.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.#ctor(System.UInt32[])">
+            <summary>
+            Initializes the key path with a given integer index path representation of a key path.
+            </summary>
+            <param name="indices">The integer index path representation of a key path to initialize with.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.DirectoryToIndex(System.String)">
+            <summary>
+            Converts a single directory from the path into an index.
+            </summary>
+            <param name="directory">A single entry from the path split at each seperator/delimiter <see cref="F:Meadow.Core.AccountDerivation.BIP32.KeyPath.HARDENED_DIRECTORY_SYMBOL"/>.</param>
+            <returns>Returns an index for the key path with the appropriate hardened flag set.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.IndexToDirectory(System.UInt32)">
+            <summary>
+            Converts a single integer index into the appropriate directory/single entry string to be joined in the path.
+            </summary>
+            <param name="index">The index to convert to a directory/entry string to be joined in the path.</param>
+            <returns>Returns the directory/entry string which represents the provided index, to be joined into the full path.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.Concat(System.String)">
+            <summary>
+            Concatenates the string representation of a path to the current key path and returns the result.
+            </summary>
+            <param name="pathToAppend">The path to concatenate to the end of the current key path.</param>
+            <returns>Returns the key path resulting from this key path concatenated with the provided path.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.Concat(Meadow.Core.AccountDerivation.BIP32.KeyPath)">
+            <summary>
+            Concatenates the given key path to the current key path and returns the result.
+            </summary>
+            <param name="pathToAppend">The path to concatenate to the end of the current key path.</param>
+            <returns>Returns the key path resulting from this key path concatenated with the provided path.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.Concat(System.UInt32[])">
+            <summary>
+            Concatenates the indices representing a key path to the current key path and returns the result.
+            </summary>
+            <param name="indices">The indices representing a key path to concenate to the current path.</param>
+            <returns>Returns the key path resulting from this key path concatenated with the provided indices representing a key path.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.Next">
+            <summary>
+            Obtains a key path that exists at the same level, but has it's final index in the path incremented.
+            </summary>
+            <returns>Returns a key path that exists at the same level, but has it's final index in the path incremented.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.Previous">
+            <summary>
+            Obtains a key path that exists at the same level, but has it's final index in the path decremented.
+            </summary>
+            <returns>Returns a key path that exists at the same level, but has it's final index in the path decremented.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP32.KeyPath.CheckHardenedDirectoryIndex(System.UInt32)">
+            <summary>
+            Indicates if a directory index is hardened or not.
+            </summary>
+            <param name="index">The index to check hardened status of.</param>
+            <returns>Returns true if the index has the hardened bit set.</returns>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase">
+            <summary>
+            Represents mnemonic phrases which can be derived into an encryption key, with a given password,
+            as defined by BIP39.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.SALT_COMPUTATION_PREFIX">
+            <summary>
+            Constant used in salt computation for the 
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.MNEMONIC_ENTROPY_BITS_PER_CHECKSUM_BIT">
+            <summary>
+            The amount of bytes in our entropy data per checksum bit.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.MNEMONIC_WORDS_PER_CHECKSUM_BIT">
+            <summary>
+            The amount of words encompassed in a single checksum bit.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.MNEMONIC_WORDS_MINIMUM">
+            <summary>
+            (Inclusive) Minimum amount of words in our mnemonic phrase.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.MNEMONIC_WORDS_MAXIMUM">
+            <summary>
+            (Inclusive) Maximum amount of words in our mnemonic phrase.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.MNEMONIC_WORD_INDEX_BITCOUNT">
+            <summary>
+            The amount of bits used to represent a word index.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.#ctor(System.String)">
+            <summary>
+            Initializes a mnemonic phrase from the given mnemonic string.
+            </summary>
+            <param name="mnemonic">The mnemonic string to initialize this mnemonic phrase from, for key derivation.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.#ctor(Meadow.Core.AccountDerivation.BIP39.WordListLanguage,System.Byte[])">
+            <summary>
+            Initializes a mnemonic phrase for the given language, with the optionally given entropy data (or newly generated data if none is provided).
+            </summary>
+            <param name="wordListLanguage">The language to create a mnemonic phrase in.</param>
+            <param name="entropy">The optionally given entropy data to generate a mnemonic phrase from. If null, generates new entropy data of the maximum size.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.Verify">
+            <summary>
+            Verifies the mnemonic phrase's word sequence checksum is valid.
+            </summary>
+            <returns>Returns true if the mnemonic word sequence is valid.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.DeriveKeySeed(System.String)">
+            <summary>
+            Calculates/derives the seed for a key from this mnemonic.
+            </summary>
+            <param name="password">The password to use when calculating our key seed.</param>
+            <returns>Returns the calculated key seed from this mnemonic.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.NormalizeString(System.String)">
+            <summary>
+            Normalize the given string for different cultures/localizations.
+            </summary>
+            <param name="s">The string to normalize.</param>
+            <returns>Returns the given string, normalized.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.MnemonicPhrase.NormalizeStringToBytes(System.String)">
+            <summary>
+            Normalize the given string for different cultures/localizations, and convert it to bytes using our encoder.
+            </summary>
+            <param name="s">The string to normalize and convert into bytes.</param>
+            <returns>Returns the given string, normalized, as bytes.</returns>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.BIP39.WordList">
+            <summary>
+            Represents the list of words used to generate/parse mnemonic phrases. (Unique per language).
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.WordList.WORD_SEPARATOR_GENERIC">
+            <summary>
+            The seperator used generically across most languages/localizations.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.AccountDerivation.BIP39.WordList.WORD_SEPERATOR_JAPANESE">
+            <summary>
+            The seperator used by the Japanese language/localization.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP39.WordList.Language">
+            <summary>
+            Describes the language that this word list describes.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP39.WordList.Words">
+            <summary>
+            A string array representing all the words in the word list.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.BIP39.WordList.Seperator">
+            <summary>
+            The seperator/spacing character between words in a mnemonic.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.#ctor(Meadow.Core.AccountDerivation.BIP39.WordListLanguage)">
+            <summary>
+            Base constructor to initialize a word list to represent the given language.
+            </summary>
+            <param name="language">The language which this word list will represent.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.#ctor(Meadow.Core.AccountDerivation.BIP39.WordListLanguage,System.String[])">
+            <summary>
+            Initializes a word list to represent the given language, with the given words.
+            </summary>
+            <param name="language">The language which this word list will represent.</param>
+            <param name="words">The words which constitute the word list to initialize.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.#ctor(Meadow.Core.AccountDerivation.BIP39.WordListLanguage,System.String)">
+            <summary>
+            Initializes a word list to represent the given language, with the given words.
+            </summary>
+            <param name="language">The language which this word list will represent.</param>
+            <param name="words">The words which constitute the word list to initialize.</param>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.GetWordList(System.String)">
+            <summary>
+            Obtains the word list for a given mnemonic string by auto detecting the language used.
+            </summary>
+            <param name="mnemonicString">The mnemonic string to parse to determine the language of the word list to obtain.</param>
+            <returns>Returns the word list in the appropriate language which corresponds to the given mnemonic string.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.GetWordList(Meadow.Core.AccountDerivation.BIP39.WordListLanguage)">
+            <summary>
+            Obtains the word list for a given language for mnemonic phrases, or if it does not exist,
+            parses one from the embedded word list resources in this assembly.
+            </summary>
+            <param name="language">The language of the word list to obtain.</param>
+            <returns>Returns a word list for the given language, used for mnemonic phrases.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.GetWordList(Meadow.Core.AccountDerivation.BIP39.WordListLanguage,System.String[])">
+            <summary>
+            Obtains the word list for a given language for mnemonic phrases, or if it does not exist,
+            creates one from the given words.
+            </summary>
+            <param name="language">The language of the word list to obtain.</param>
+            <param name="words">The array of words to use to create the word list if one was not already parsed.</param>
+            <returns>Returns a word list for the given language, used for mnemonic phrases.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.GetWordList(Meadow.Core.AccountDerivation.BIP39.WordListLanguage,System.String)">
+            <summary>
+            Obtains the word list for a given language for mnemonic phrases, or if it does not exist,
+            reads one from the given filename.
+            </summary>
+            <param name="language">The language of the word list to obtain.</param>
+            <param name="fileName">The filename of the word list to read from if one was not already parsed.</param>
+            <returns>Returns a word list for the given language, used for mnemonic phrases.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.GetWordIndex(System.String)">
+            <summary>
+            Determines the index of the given word in the current word list.
+            </summary>
+            <param name="word">The word to get the index of in the current word list.</param>
+            <returns>Returns the index of the provided word in the current word list. Returns a negative integer if the word could not be found.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.JoinMnemonic(System.String[])">
+            <summary>
+            Joins mnemonic word components into a single mnemonic phrase.
+            </summary>
+            <param name="words">An array of mnemonic words to join.</param>
+            <returns>Returns a string of all joined words.</returns>
+        </member>
+        <member name="M:Meadow.Core.AccountDerivation.BIP39.WordList.SplitMnemonic(System.String)">
+            <summary>
+            Splits a mnemonic string into its word components.
+            </summary>
+            <param name="mnemonicString">The mnemonic string to split into words.</param>
+            <returns>Returns a string array that represents the word components of the mnemonic string.</returns>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.BIP39.WordListLanguage">
+            <summary>
+            The language which a given word list represents.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.Bip44AccountDerivation">
+            <summary>
+            Multi-Account Hierarchy for Deterministic Wallets.
+            https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.AccountDerivation.Bip44AccountDerivation.MnemonicPhrase">
+            <summary>
+            Returns the mnemonic phrase string used.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.AccountDerivation.HDAccountDerivation">
+            <summary>
+            Acount derivation using BIP44 with Ethereum's SLIP44 registered coin index "60".
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve">
+            <summary>
+            Provides information about the Barreto-Naehrig curve Bn128.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve.N">
+            <summary>
+            The elliptic curve order of the bn128 curve. This is a number which when multiplied to any other point, yields the point at infinity.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve.P">
+            <summary>
+            The prime used for our field operations. Referred to as p in F_p. Used as the modulo divisor to wrap values around the field.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve.G1">
+            <summary>
+            Generator for curve over FQ
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve.G2">
+            <summary>
+            Generator for curve over FQ2
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Curve.#cctor">
+            <summary>
+            Our default static constructor, sets static read only variables.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.ECDSA.Bn128.Bn128Pairing.#cctor">
+            <summary>
+            Our default static constructor, sets static read only variables.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.ECDSA.Bn128.Fp">
+            <summary>
+            Represents a field element wrapped around at point P from our bn128 curve.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.UseNativeLib">
+            <summary>
+            True to use the native secp256k1 lib, false to use the managed BouncyCastle lib.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.IncludeKeyDataInExceptions">
+            <summary>
+            Set to true for public and private key data to be included in secp256k1 exceptions.
+            Off by default since exceptions typically end up in logs and shared without security concerns.
+            Useful for test/debug situations.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.KeyType">
+            <summary>
+            The type of key that is available in this ECDSA instance.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.ToPublicKeyArray(System.Boolean,System.Boolean)">
+            <summary>
+            Obtains the binary data representation of our public key.
+            </summary>
+            <returns>Returns a binary data representation of the public key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.ToPrivateKeyArray">
+            <summary>
+            Obtains the binary data representation of our private key.
+            </summary>
+            <returns>Returns a binary data representation of the private key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.VerifyData(System.Span{System.Byte},System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Verifies a hash was signed correctly given the r and s signature components.
+            </summary>
+            <param name="hash">The hash which was signed.</param>
+            <param name="r">The ECDSA signature component r.</param>
+            <param name="s">The ECDSA signature component s.</param>
+            <returns>Returns a boolean indicating whether the data was properly signed.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.SignData(System.Span{System.Byte})">
+            <summary>
+            Signs given data and returns the r and s components of the ECDSA signature, along with a recovery ID to recover the public key given the original signed message and the returned components.
+            </summary>
+            <param name="hash">The hash to be signed.</param>
+            <returns>Returns r and s components of an ECDSA signature, along with a recovery ID to recover the signers public key given the original signed message and r, s.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.Create(System.Memory{System.Byte},Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaKeyType)">
+            <summary>
+            Initializes an ECDSA instance given a key and the type of key which it is.
+            </summary>
+            <param name="key">The key data for either a public or private key.</param>
+            <param name="keyType">The type of key this provided key is.</param>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.Generate(Meadow.Core.AccountDerivation.IAccountDerivation)">
+            <summary>
+            Creates an ECDSA instance with a freshly generated keypair.
+            </summary>
+            <returns>Returns the ECDSA instance which has the generated keypair.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.Generate(System.Int32,Meadow.Core.AccountDerivation.IAccountDerivation)">
+            <summary>
+            Creates an ECDSA instance with a freshly generated keypair.
+            </summary>
+            <returns>Returns the ECDSA instance which has the generated keypair.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.Recover(System.Span{System.Byte},System.Byte,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Creates an ECDSA instance by recovering a public key given a hash, recovery ID, and r and s components of the resulting signature of the hash. Throws an exception if recovery is not possible.
+            </summary>
+            <param name="hash">The hash of the data which was signed.</param>
+            <param name="recoveryId">The recovery ID of ECDSA during signing.</param>
+            <param name="ecdsa_r">The r component of the ECDSA signature for the provided hash.</param>
+            <param name="ecdsa_s">The s component of the ECDSA signature for the provided hash.</param>
+            <returns>Returns the quotient/public key which was used to sign this hash.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.GetPublicKeyHash">
+            <summary>
+            Obtains a public key Keccak hash, often used in Ethereum to identify a sender/signer of a transaction.
+            </summary>
+            <returns>Returns the Keccak hash of the public key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.GetVFromRecoveryID(System.Nullable{System.UInt32},System.Byte)">
+            <summary>
+            Encodes the recovery ID (and an optional chain ID) into a v parameter.
+            </summary>
+            <param name="chainID">The optional chain ID to encode into v.</param>
+            <param name="recoveryID">The recovery ID to encode into v.</param>
+            <returns>Returns the v parameter with encoded recovery ID and chain ID.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa.GetRecoveryIDFromV(System.Byte)">
+            <summary>
+            Decodes the recovery ID from the v parameter.
+            </summary>
+            <param name="v">The v which has the recovery ID embedded in it which we wish to extract.</param>
+            <returns>Returns the recovery ID embedded in v.</returns>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle">
+            <summary>
+            ECDSA cryptographic provider that accomodates for Ethereum signing standards, using the managed BouncyCastle library.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.ALGORITHM">
+            <summary>
+            Algorithm to use in Bouncy Castle's ECDSA providers.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle._secureRandom">
+            <summary>
+            Random secure data provider for cryptographic operations.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.PublicKey">
+            <summary>
+            Public key parameters for ECDSA, always available.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.PrivateKey">
+            <summary>
+            Private key parameters for ECDSA, available if this is a private key instance only.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.Recover(System.Span{System.Byte},System.Byte,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Creates an ECDSA instance by recovering a public key given a hash, recovery ID, and r and s components of the resulting signature of the hash. Throws an exception if recovery is not possible.
+            </summary>
+            <param name="hash">The hash of the data which was signed.</param>
+            <param name="recoveryId">The recovery ID of ECDSA during signing.</param>
+            <param name="ecdsa_r">The r component of the ECDSA signature for the provided hash.</param>
+            <param name="ecdsa_s">The s component of the ECDSA signature for the provided hash.</param>
+            <returns>Returns the quotient/public key which was used to sign this hash.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.ToPublicKeyArray(System.Boolean,System.Boolean)">
+            <summary>
+            Obtains the binary data representation of our public key.
+            </summary>
+            <returns>Returns a binary data representation of the public key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.ToPrivateKeyArray">
+            <summary>
+            Obtains the binary data representation of our private key.
+            </summary>
+            <returns>Returns a binary data representation of the private key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.VerifyData(System.Span{System.Byte},System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Verifies a hash was signed correctly given the r and s signature components.
+            </summary>
+            <param name="hash">The hash which was signed.</param>
+            <param name="r">The ECDSA signature component r.</param>
+            <param name="s">The ECDSA signature component s.</param>
+            <returns>Returns a boolean indicating whether the data was properly signed.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaBouncyCastle.SignData(System.Span{System.Byte})">
+            <summary>
+            Signs given data and returns the r and s components of the ECDSA signature, along with a recovery ID to recover the public key given the original signed message and the returned components.
+            </summary>
+            <param name="hash">The hash to be signed.</param>
+            <returns>Returns r and s components of an ECDSA signature, along with a recovery ID to recover the signers public key given the original signed message and r, s.</returns>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaKeyType">
+            <summary>
+            Identifies the types of ECDSA keys one could provide.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative">
+            <summary>
+            ECDSA cryptographic provider that accomodates for Ethereum signing standards, using the native secp256k1 library.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.UnmanagedKey">
+            <summary>
+            Enables the usage of the unmanaged C library to handle cryptographic operations.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.#cctor">
+            <summary>
+            Our default static constructor that initializes any constant and shared values.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.#ctor(System.Memory{System.Byte},Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaKeyType)">
+            <summary>
+            Initializes an ECDSA instance given a key and the type of key which it is.
+            </summary>
+            <param name="key">The key data for either a public or private key.</param>
+            <param name="keyType">The type of key this provided key is.</param>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.Recover(System.Span{System.Byte},System.Byte,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Creates an ECDSA instance by recovering a public key given a hash, recovery ID, and r and s components of the resulting signature of the hash. Throws an exception if recovery is not possible.
+            </summary>
+            <param name="hash">The hash of the data which was signed.</param>
+            <param name="recoveryId">The recovery ID of ECDSA during signing.</param>
+            <param name="ecdsa_r">The r component of the ECDSA signature for the provided hash.</param>
+            <param name="ecdsa_s">The s component of the ECDSA signature for the provided hash.</param>
+            <returns>Returns the quotient/public key which was used to sign this hash.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.VerifyData(System.Span{System.Byte},System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Verifies a hash was signed correctly given the r and s signature components.
+            </summary>
+            <param name="hash">The hash which was signed.</param>
+            <param name="r">The ECDSA signature component r.</param>
+            <param name="s">The ECDSA signature component s.</param>
+            <returns>Returns a boolean indicating whether the data was properly signed.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.SignData(System.Span{System.Byte})">
+            <summary>
+            Signs given data and returns the r and s components of the ECDSA signature, along with a recovery ID to recover the public key given the original signed message and the returned components.
+            </summary>
+            <param name="hash">The hash to be signed.</param>
+            <returns>Returns r and s components of an ECDSA signature, along with a recovery ID to recover the signers public key given the original signed message and r, s.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.ConvertPublicKeyFormat(System.Memory{System.Byte},System.Boolean,System.Boolean)">
+            <summary>
+            Converts a given public key (compressed/uncompressed or ethereum format (uncompressed without prefix)) to the specified format.
+            </summary>
+            <param name="publicKey">The public key to convert the format of.</param>
+            <param name="compressed">If true, outputs a compressed public key.</param>
+            <param name="slicedPrefix">If true, slices off the prefix byte from the public key.</param>
+            <returns>Returns the provided public key, converted to the format specified.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.ToPublicKeyArray(System.Boolean,System.Boolean)">
+            <summary>
+            Obtains the binary data representation of our public key.
+            </summary>
+            <returns>Returns a binary data representation of the public key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.ToPublicKeyString">
+            <summary>
+            Obtains a hex string representation of our public key.
+            </summary>
+            <returns>Returns a hex string representation of the public key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.ToPrivateKeyArray">
+            <summary>
+            Obtains the binary data representation of our private key.
+            </summary>
+            <returns>Returns a binary data representation of the private key.</returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.EthereumEcdsaNative.ToPrivateKeyString">
+            <summary>
+            Obtains a hex string representation of our private key.
+            </summary>
+            <returns>Returns a hex string representation of the private key.</returns>
+        </member>
+        <member name="T:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve">
+            <summary>
+            Provides relevant information to the ECDSA provider about the Secp256k1 curve.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve.N">
+            <summary>
+            The elliptic curve order of the secp256k1 curve. This is a number which when multiplied to any other point, yields the point at infinity.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve.G">
+            <summary>
+            The elliptic curve base point of the secp256k1 curve.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve.Parameters">
+            <summary>
+            Our elliptic curve parameters.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve.DomainParameters">
+            <summary>
+            The domain parameters for this curve.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.Ecdsa.Secp256k1Curve.#cctor">
+            <summary>
+            Our default static constructor, sets static read only variables.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.KeccakHash.FromString(System.String)">
+            <summary>
+            Computes the hash of a string using UTF8 encoding.
+            </summary>
+            <param name="utf8String">String to be converted to UTF8 bytes and hashed.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.KeccakHash.FromString(System.String,System.Text.Encoding)">
+            <summary>
+            Computes the hash of a string using given string encoding.
+            For example <see cref="P:System.Text.Encoding.ASCII"/>
+            </summary>
+            <param name="inputString">String to be converted to bytes and hashed.</param>
+            <param name="stringEncoding">The string encoding to use. For example <see cref="P:System.Text.Encoding.ASCII"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.Core.Cryptography.KeccakHash.FromHex(System.String)">
+            <summary>
+            Decodes a hex string to bytes and computes the hash.
+            </summary>
+            <param name="hexString">The hex string to be decoded into bytes and hashed.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.Address.ToStringWithChecksum">
+            <summary>
+            https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.Address.ValidChecksum(System.String)">
+            <summary>
+            https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.DivideRounded(Meadow.Core.EthTypes.UInt256,Meadow.Core.EthTypes.UInt256)">
+            <summary>
+            Divides with a precision of 28 digits <see href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/decimal"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.Parse(System.String)">
+            <summary>
+            Parses a string of a positive numeric value. 
+            Can be a integer without commas or decimals. 
+            Can be a exponential notation, examples: "45e10", "1.23e5", "24E18", "24e+18". 
+            Underscores and spaces are ignored. 
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.ParseHex(System.String)">
+            <summary>
+            Parses a hex string as bytes. The '0x' prefix is optional.
+            Examples: "0x12a05f200", "12a05f200", "0xff", "ff", "0xcded53d631ce4a38a1f90d59e5f2f9c023cd28c64aa66488e9462cc4a64a032f"
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.TryParse(System.String,Meadow.Core.EthTypes.UInt256@)">
+            <summary>
+            Parses a string of a positive numeric value. 
+            Can be a integer (no decimals). 
+            Can be a exponential notation, examples: "45e10", "1.23e5", "24E18", "24e+18". 
+            Commas, underscores, spaces are ignored. 
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.FromString(System.String)">
+            <summary>
+            Alias for <see cref="M:Meadow.Core.EthTypes.UInt256.Parse(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.EthTypes.UInt256.FromHexString(System.String)">
+            <summary>
+            Alias for <see cref="M:Meadow.Core.EthTypes.UInt256.ParseHex(System.String)"/>
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.RlpEncoding.RLP">
+            <summary>
+            Used to serialize and deserialize data in Recursive Length Prefix ("RLP") encoding.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.RlpEncoding.RLPByteArray">
+            <summary>
+            Represents a byte array which can be RLP serialized.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.RlpEncoding.RLPByteArray.Data">
+            <summary>
+            The embedded raw data inside of this RLP item.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.RlpEncoding.RLPByteArray.#ctor">
+            <summary>
+            Default constructor, initializes with a null data array.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.RlpEncoding.RLPByteArray.#ctor(System.Memory{System.Byte})">
+            <summary>
+            Initializes an RLP byte array with the given data.
+            </summary>
+            <param name="data">The data to set for our RLP item.</param>
+        </member>
+        <member name="T:Meadow.Core.RlpEncoding.RLPItem">
+            <summary>
+            Represents the base class for an RLP serializable item. This class should not be instantiated directly as it does not implement any data type and only this classes derivatives are serialized.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.RlpEncoding.RLPItem.IsByteArray">
+            <summary>
+            Indicates this item is a byte array.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.RlpEncoding.RLPItem.IsList">
+            <summary>
+            Indicates this item is a list.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.RlpEncoding.RLPList">
+            <summary>
+            Represents a list which can be RLP serialized.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.RlpEncoding.RLPList.Items">
+            <summary>
+            The embedded item list inside of this RLP item.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.RlpEncoding.RLPList.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.RlpEncoding.RLPList.#ctor(System.Collections.Generic.List{Meadow.Core.RlpEncoding.RLPItem})">
+            <summary>
+            Initializes the RLP list using the provided list as the internal list.
+            </summary>
+            <param name="items">Initializes the RLP list with the given internal item list.</param>
+        </member>
+        <member name="M:Meadow.Core.RlpEncoding.RLPList.#ctor(Meadow.Core.RlpEncoding.RLPItem[])">
+            <summary>
+            Initializes the RLP list using the provided list as the internal list.
+            </summary>
+            <param name="items">Initializes the RLP list with the given internal item list.</param>
+        </member>
+        <member name="T:Meadow.Core.RootServiceProvider">
+            <summary>
+            The main static instance for this lib's ServiceProvider.
+            DI (dependency-injection) is quickly becoming a required component for using new 
+            Microsoft libs. For example the new HttpClientFactory can only be used with DI.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.SolidityType.String">
+            <summary>
+            Dynamic sized unicode string assumed to be UTF-8 encoded.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.SolidityType.Bytes">
+            <summary>
+            Dynamic sized byte sequence.
+            </summary>
+        </member>
+        <member name="F:Meadow.Core.SolidityType.Bool">
+            <summary>
+            Equivalent to uint8 restricted to the values 0 and 1.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Utils.BigIntegerConverter.UINT256_MIN_VALUE">
+            <summary>
+            Represents the minimum value a 256-bit unsigned integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Utils.BigIntegerConverter.UINT256_MAX_VALUE">
+            <summary>
+            Represents the maximum value a 256-bit unsigned integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Utils.BigIntegerConverter.INT256_MAX_VALUE">
+            <summary>
+            Represents the minimum value a 256-bit signed integer could have.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Utils.BigIntegerConverter.INT256_MIN_VALUE">
+            <summary>
+            Represents the maximum value a 256-bit signed integer could have.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerConverter.GetBytes(System.Numerics.BigInteger,System.Int32)">
+            <summary>
+            Obtains the bytes that represent the BigInteger as if it was a big endian 256-bit integer.
+            </summary>
+            <param name="bigInteger">The BigInteger to obtain the byte representation of.</param>
+            <returns>Returns the bytes that represent BigInteger as if it was a 256-bit integer.</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerConverter.GetBytesWithoutLeadingZeros(System.Numerics.BigInteger,System.Int32)">
+            <summary>
+            Obtains the bytes that represent the BigInteger as if it was a big endian 256-bit integer, except removes leading zero bytes.
+            </summary>
+            <param name="bigInteger">The BigInteger to obtain the byte representation of.</param>
+            <returns>Returns the bytes that represent BigInteger as if it was a 256-bit integer, except with leading zero bytes removed..</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerConverter.GetBigInteger(System.Span{System.Byte},System.Boolean,System.Int32)">
+            <summary>
+            Obtains a BigInteger representation for the provided data as if the data represents a big endian 256-bit integer.
+            </summary>
+            <param name="bytes">The big endian ordered bytes that constitute a 256-bit integer</param>
+            <param name="signed">Determines whether we want to interpret the data signed or unsigned</param>
+            <returns>Returns the BigInteger representation of the provided data</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerExtensions.ToUInt256(System.Numerics.BigInteger)">
+            <summary>
+            Takes a big integer and returns a new instance whose data is interpreted as if it was unsigned.
+            </summary>
+            <param name="bigInteger">The signed BigInteger to convert to an unsigned BigInteger.</param>
+            <returns>Returns a BigInteger instance that is an unsigned representation of the one provided (in integer value).</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerExtensions.ToInt256(System.Numerics.BigInteger)">
+            <summary>
+            Takes a big integer and returns a new instance whose data is interpreted as if it was unsigned.
+            </summary>
+            <param name="bigInteger">The signed BigInteger to convert to an unsigned BigInteger.</param>
+            <returns>Returns a BigInteger instance that is an unsigned representation of the one provided (in integer value).</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerExtensions.CapOverflow(System.Numerics.BigInteger,System.Int32,System.Boolean)">
+            <summary>
+            Ensures that if the integer flowed past the default Ethereum Virtual Machine word size (256-bit), we remove the additional overflow.
+            </summary>
+            <param name="bigInteger">The integer who's overflow we'll want to remove.</param>
+            <returns>Returns a big integer value that is capped by overflow past the given amount of bytes in size.</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerExtensions.ModInverse(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Computes the modular multiplicative inverse for a given integer.
+            </summary>
+            <param name="a">The integer which we should obtain the modular multiplicative inverse for.</param>
+            <param name="n">The upper bound/wrapping point of the ring.</param>
+            <returns>Returns the multiplicative inverse for the given integer.</returns>
+        </member>
+        <member name="M:Meadow.Core.Utils.BigIntegerExtensions.Mod(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Performs true modulo division (as C#'s % operator does not perform modulo divison, but remainder instead).
+            </summary>
+            <param name="a">The number to perform modulo division on.</param>
+            <param name="n">The divisor for the modulo operation.</param>
+            <returns>Returns the result of modulo divison on a with the divisor of n.</returns>
+        </member>
+        <member name="P:Meadow.Core.Utils.BitStream.Opened">
+            <summary>
+            Indicates if the stream is opened, or if it has been closed.
+            </summary>
+        </member>
+        <member name="P:Meadow.Core.Utils.BitStream.BitPosition">
+            <summary>
+            Indicates the bit position in the current byte we are writing to, counting bit 0 as the most significant bit (left most bit).
+            Setting this value greater than the size of a byte will advance byte position and correct the bit position relative to the correct byte.
+            Setting this value less than zero will roll back the position and correct the bit position relative to the correct byte.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.BitStream.ClearContents">
+            <summary>
+            Resets the contents of the underlying stream to zero bytes in size, and resets position properties.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Utils.HexConverter">
+            <summary>
+            Helper class for converting struct and class objects to and from hex.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Utils.HexExtensions">
+            <summary>
+            Hex encoding extensions methods for strings and byte arrays/spans.
+            </summary>
+        </member>
+        <member name="T:Meadow.Core.Utils.HexUtil">
+            <summary>
+            Helper class for encoding and decoding between hex strings and bytes arrays/spans.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.HexUtil.GetHexCharFromByte(System.Byte@)">
+            <summary>
+            Returns single lowercase hex character for given byte
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.HexUtil.HexToSpan(System.ReadOnlySpan{System.Char},System.Span{System.Byte})">
+            <summary>
+            Expected str to already be stripped of hex prefix, 
+            and expects bytes to already be allocated to the correct size
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.HexUtil.WriteBytesIntoHexString(System.ReadOnlySpan{System.Byte},System.Span{System.Char})">
+            <summary>
+            Expects target Span`char` to already be allocated to correct size
+            </summary>
+            <param name="bytes">Bytes to read</param>
+            <param name="c">An already allocated char buffer to write hex into</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.HashPersonalMessage(System.String)">
+            <summary>
+            Returns a Keccak256 hash of the given message, using the prefix from eth_sign: "\u0019Ethereum Signed Message:\n{message.Length}".
+            Message string is UTF8 decoded.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.HashPersonalMessage(System.Span{System.Byte})">
+            <summary>
+            Returns a Keccak256 hash of the given message, using the prefix from eth_sign: "\u0019Ethereum Signed Message:\n{message.Length}".
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PackAndHash(System.ValueTuple{Meadow.Core.AbiEncoding.AbiTypeInfo,System.Object}[])">
+            <summary>
+            Similar to the "web3.utils.soliditySha3" <see href="https://web3js.readthedocs.io/en/1.0/web3-utils.html#soliditysha3" />.
+            Calculates the keccak256 hash of the input parameters the same way solidity would. Values are ABI encoded in non-standard packed mode.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECSign(System.Byte[],System.String)">
+            <summary>
+            Performs an ECDSA sign on the given 32-byte message hash.
+            Returns the signature in r,s,v format. Use <see cref="M:Meadow.Core.Utils.SolidityUtil.SignatureToRpcFormat(System.Byte[],System.Byte[],System.Byte)"/> to convert into the serialized byte array format.
+            </summary>       
+            <param name="messageHash">The 32 byte message hash. Usually the output from <see cref="M:Meadow.Core.Utils.SolidityUtil.HashPersonalMessage(System.String)"/> or <see cref="M:Meadow.Core.Cryptography.KeccakHash.ComputeHash(System.Span{System.Byte})"/></param>
+            <param name="signerPrivateKeyHex">Hex encoded private key to sign with.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECSign(System.Byte[],System.Byte[])">
+            <summary>
+            Performs an ECDSA sign on the given 32-byte message hash.
+            Returns the signature in r,s,v format. Use <see cref="M:Meadow.Core.Utils.SolidityUtil.SignatureToRpcFormat(System.Byte[],System.Byte[],System.Byte)"/> to convert into the serialized byte array format.
+            </summary>       
+            <param name="messageHash">The 32 byte message hash. Usually the output from <see cref="M:Meadow.Core.Utils.SolidityUtil.HashPersonalMessage(System.String)"/> or <see cref="M:Meadow.Core.Cryptography.KeccakHash.ComputeHash(System.Span{System.Byte})"/></param>
+            <param name="signerPrivateKey">The private key to sign with.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECRecover(System.Byte[],System.String)">
+            <summary>
+            Recovers the public key from the message hash and signature.
+            </summary>
+            <param name="signatureHex">Hex encoded signature of the serialized format (used by the eth_sign RPC method).</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECRecover(System.Byte[],System.Byte[])">
+            <summary>
+            Recovers the public key from the message hash and signature.
+            </summary>
+            <param name="signature">The signature into the serialized format (used by the eth_sign RPC method).</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECRecover(System.Byte[],System.ValueTuple{System.Byte[],System.Byte[],System.Byte})">
+            <summary>
+            Recovers the public key from the message hash and signature.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.ECRecover(System.Byte[],System.Byte[],System.Byte[],System.Byte)">
+            <summary>
+            Recovers the public key from the message hash and signature.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.SignatureToRpcFormat(System.ValueTuple{System.Byte[],System.Byte[],System.Byte})">
+            <summary>
+            Serializes the signature into the format of the eth_sign RPC method.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.SignatureToRpcFormat(System.Byte[],System.Byte[],System.Byte)">
+            <summary>
+            Serializes the signature into the format of the eth_sign RPC method.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.SignatureFromRpcFormat(System.String)">
+            <summary>
+            Create a signature object from a serialized / RPC signature (the format of the eth_sign RPC method).
+            </summary>
+            <param name="signatureHex">Hex encoded signature</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.SignatureFromRpcFormat(System.Byte[])">
+            <summary>
+            Create a signature object from a serialized / RPC signature (the format of the eth_sign RPC method).
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PublicKeyToAddress(System.Byte[],System.Boolean)">
+            <summary>
+            Returns the ethereum address from a public key. Accepts uncompressed and compressed formats unless sanitize is set to false.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PrivateKeyToAddress(System.String)">
+            <summary>
+            Returns the ethereum address from a private key.
+            </summary>
+            <param name="privateKeyHex">Hex encoded private key.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PrivateKeyToAddress(System.Byte[])">
+            <summary>
+            Returns the ethereum address from a private key.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PadLeft(System.Byte[],System.Int32)">
+            <summary>
+            Resizes a byte array to the given size, left padded with leading zero-bytes.
+            Returns the existing array if length is already of the given size, otherwise creates a new array.
+            </summary>
+            <param name="value">The array to resize.</param>
+            <param name="length">The total length of the new array.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PadLeft(System.Span{System.Byte},System.Int32)">
+            <summary>
+            Resizes a byte span to the given size, left padded with leading zero-bytes.
+            Returns the existing array if length is already of the given size, otherwise creates a new array.
+            </summary>
+            <param name="value">The array to resize.</param>
+            <param name="length">The total length of the new array.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.PadLeft(System.String,System.Int32,System.Boolean)">
+            <param name="byteLength">The length of bytes (not string length)</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.AbiPackTypes(System.ValueTuple{Meadow.Core.SolidityType,System.Object}[])">
+            <summary>
+            Encodes values with non-standard packed mode. Commonly used on data before hashing/signing.
+            See <see href="https://solidity.readthedocs.io/en/v0.4.24/abi-spec.html#non-standard-packed-mode"/>
+            This method only supports static solidity types defined in <see cref="T:Meadow.Core.SolidityType"/>. 
+            To specify any type as a string use <see cref="M:Meadow.Core.Utils.SolidityUtil.AbiPack(System.ValueTuple{Meadow.Core.AbiEncoding.AbiTypeInfo,System.Object}[])" />.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.AbiPack(System.ValueTuple{Meadow.Core.AbiEncoding.AbiTypeInfo,System.Object}[])">
+            <summary>
+            Encodes values with non-standard packed mode. Commonly used on data before hashing/signing.
+            See <see href="https://solidity.readthedocs.io/en/v0.4.24/abi-spec.html#non-standard-packed-mode"/>
+            </summary>
+            <param name="values">Strings and <see cref="T:Meadow.Core.SolidityType"/> can be used as <see cref="T:Meadow.Core.AbiEncoding.AbiTypeInfo"/> variables.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.AbiEncodeTypes(System.ValueTuple{Meadow.Core.SolidityType,System.Object}[])">
+            <summary>
+            Encodes values as solidity types in ABI format which is used for: function parameters, return values, and event arguments.
+            This method only supports static solidity types defined in <see cref="T:Meadow.Core.SolidityType"/>. 
+            To specify any type as a string use <see cref="T:Meadow.Core.AbiEncoding.AbiTypeInfo" />.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.AbiEncode(System.ValueTuple{Meadow.Core.AbiEncoding.AbiTypeInfo,System.Object}[])">
+            <summary>
+            Encodes values as solidity types in ABI format which is used for: function parameters, return values, and event arguments.
+            </summary>        
+            <param name="values">Strings and <see cref="T:Meadow.Core.SolidityType"/> can be used as <see cref="T:Meadow.Core.AbiEncoding.AbiTypeInfo"/> variables.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.SolidityUtil.AbiEncode(Meadow.Core.AbiEncoding.AbiTypeInfo,System.Object)">
+            <summary>
+            Encodes values as solidity types in ABI format which is used for: function parameters, return values, and event arguments.
+            </summary>        
+            <param name="solidityType">Strings and <see cref="T:Meadow.Core.SolidityType"/> can be used as <see cref="T:Meadow.Core.AbiEncoding.AbiTypeInfo"/> variables.</param>
+        </member>
+        <member name="M:Meadow.Core.Utils.TransactionUtil.SignRawTransaction(Meadow.Core.Cryptography.Ecdsa.EthereumEcdsa,System.Numerics.BigInteger,System.Numerics.BigInteger,System.Numerics.BigInteger,System.Nullable{Meadow.Core.EthTypes.Address},System.Numerics.BigInteger,System.Byte[],System.Nullable{System.UInt32})">
+            <summary>
+            Signs transaction data and returns the raw byte array. Typically used for eth_sendRawTransaction.
+            </summary>
+        </member>
+        <member name="M:Meadow.Core.Utils.TransactionUtil.Serialize(System.Nullable{System.Byte},System.Nullable{System.Numerics.BigInteger},System.Nullable{System.Numerics.BigInteger},System.Numerics.BigInteger,System.Numerics.BigInteger,System.Numerics.BigInteger,System.Nullable{Meadow.Core.EthTypes.Address},System.Numerics.BigInteger,System.Byte[])">
+            <summary>
+            Serializes the transaction into an RLP item for encoding.
+            </summary>
+            <returns>Returns a serialized RLP transaction.</returns>
+        </member>
+        <member name="M:ArrayExtensions.Concat``1(``0[],``0[])">
+            <summary>
+            Concatenates one array with another.
+            </summary>
+            <typeparam name="T">The type of arrays we'd like to join.</typeparam>
+            <param name="data">The first array to join (head).</param>
+            <param name="data2">The second array to join (tail)</param>
+            <returns>Returns a joined array of both the items.</returns>
+        </member>
+        <member name="M:ArrayExtensions.Concat``1(``0[],``0[],``0[])">
+            <summary>
+            Concatenates one array with another.
+            </summary>
+            <typeparam name="T">The type of arrays we'd like to join.</typeparam>
+            <param name="data">The first array to join (head).</param>
+            <param name="data2">The second array to join (middle)</param>
+            <param name="data3">The last array to join (tail)</param>
+            <returns>Returns a joined array of all the items.</returns>
+        </member>
+        <member name="M:ArrayExtensions.Concat``1(``0[],``0[][])">
+            <summary>
+            Concatenates one array with all the arrays in an array of arrays.
+            </summary>
+            <typeparam name="T">The type of arrays we'd like to join.</typeparam>
+            <param name="data">The first array which contains all the leading items.</param>
+            <param name="data2">The second array of arrays, for which we obtain all items of the subarrays, and append them to the end of the first array.</param>
+            <returns>Returns a joined array of all the items.</returns>
+        </member>
+        <member name="M:ArrayExtensions.Clear``1(``0[])">
+            <summary>
+            Sets all data in the array to zero.
+            </summary>
+            <param name="data">The array to take a slice out of</param>
+        </member>
+        <member name="M:ArrayExtensions.Flatten``1(``0[][])">
+            <summary>
+            Takes all items from a 3D array and puts them into a 2D array.
+            </summary>
+            <typeparam name="T">The type of the array objects</typeparam>
+            <param name="data">The 3D array to convert into a 2D array.</param>
+            <returns>Returns a 2D array "flattened" copy of the provided 3D array.</returns>
+        </member>
+        <member name="M:ArrayExtensions.Slice``1(``0[],System.Int32)">
+            <summary>
+            Returns a portion of an array from the given start index (inclusive) to the end.
+            </summary>
+            <typeparam name="T">The array element type</typeparam>
+            <param name="data">The array to take a slice out of</param>
+            <param name="start">The starting index (can be negative to count from the back).</param>
+            <returns>Returns the array slice</returns>
+        </member>
+        <member name="M:ArrayExtensions.Slice``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            Returns a portion of an array from the given start index (inclusive) and end index (exclusive)
+            </summary>
+            <typeparam name="T">The array element type</typeparam>
+            <param name="data">The array to take a slice out of</param>
+            <param name="start">The starting index (can be negative to count from the back).</param>
+            <param name="end">The ending index (can be negative to count from the back)</param>
+            <returns>Returns the array slice</returns>
+        </member>
+        <member name="M:ArrayExtensions.ValuesEqual``1(``0[],``0[])">
+            <summary>
+            Verifies that the underlying values in an array all equal, and there is the same amount of items in both arrays.
+            </summary>
+            <typeparam name="T">The type of underlying array object to check.</typeparam>
+            <param name="data">The first array to compare.</param>
+            <param name="data2">The second array to compare.</param>
+            <returns>Returns a boolean indicating if all underlying items in the arrays equal.</returns>
+        </member>
+    </members>
+</doc>

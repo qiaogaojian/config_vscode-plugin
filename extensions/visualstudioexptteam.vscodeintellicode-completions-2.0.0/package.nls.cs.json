@@ -1,0 +1,11 @@
+{
+	"extension.title": "Dokončování IntelliCode",
+	"extension.description": "Dokončování IntelliCode: Automatické dokončování kódu řízené umělou inteligencí",
+	"settings.logging": "Úroveň protokolování pro konzoli",
+	"settings.parseErrorFilter": "Odfiltrování dokončení, která zavádějí chyby analýzy",
+	"settings.snippetCompletions": "Použití dokončování fragmentů kódu, když model navrhne zástupný literál",
+	"settings.pythonEnabled": "Povolení dokončování v souborech Pythonu",
+	"settings.typescriptEnabled": "Povolení dokončování v souborech typu TypeScript",
+	"settings.javascriptEnabled": "Povolení dokončování v souborech typu JavaScript",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

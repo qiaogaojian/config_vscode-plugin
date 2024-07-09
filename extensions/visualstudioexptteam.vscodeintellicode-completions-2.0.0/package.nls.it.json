@@ -1,0 +1,11 @@
+{
+	"extension.title": "Completamenti di IntelliCode",
+	"extension.description": "Completamenti IntelliCode: completamento automatico del codice basato su intelligenza artificiale",
+	"settings.logging": "Livello di registrazione per la console",
+	"settings.parseErrorFilter": "Filtra i completamenti che introducono errori di analisi",
+	"settings.snippetCompletions": "Usa completamenti di frammenti quando il modello suggerisce un valore letterale segnaposto",
+	"settings.pythonEnabled": "Abilita completamenti nei file Python",
+	"settings.typescriptEnabled": "Abilita completamenti nei file TypeScript",
+	"settings.javascriptEnabled": "Abilita completamenti nei file JavaScript",
+	"settings.runAlongsideCopilot": "Run IntelliCode Completions and GitHub Copilot at the same time, if both extensions are enabled. This is not recommended because the two extensions will often suggest different completions in the same location, but only one completion can be shown."
+}

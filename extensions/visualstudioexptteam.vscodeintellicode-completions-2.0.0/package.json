@@ -1,0 +1,165 @@
+{
+	"name": "vscodeintellicode-completions",
+	"displayName": "%extension.title%",
+	"description": "%extension.description%",
+	"version": "2.0.0",
+	"publisher": "VisualStudioExptTeam",
+	"author": {
+		"name": "Microsoft"
+	},
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"repository": {
+		"url": "https://github.com/MicrosoftDocs/intellicode"
+	},
+	"bugs": {
+		"url": "https://go.microsoft.com/fwlink/?linkid=2005855"
+	},
+	"engines": {
+		"vscode": "^1.82.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"enabledApiProposals": [
+		"inlineCompletionsAdditions"
+	],
+	"icon": "images/icon.png",
+	"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+	"activationEvents": [
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact",
+		"onLanguage:python",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"configurationDefaults": {
+			"[python]": {
+				"editor.inlineSuggest.suppressSuggestions": false
+			},
+			"[javascript]": {
+				"editor.inlineSuggest.suppressSuggestions": false
+			},
+			"[typescript]": {
+				"editor.inlineSuggest.suppressSuggestions": false
+			},
+			"[javascriptreact]": {
+				"editor.inlineSuggest.suppressSuggestions": false
+			},
+			"[typescriptreact]": {
+				"editor.inlineSuggest.suppressSuggestions": false
+			}
+		},
+		"commands": [],
+		"configuration": {
+			"title": "%extension.title%",
+			"properties": {
+				"intellicodeCompletions.loggingLevel": {
+					"type": "string",
+					"enum": [
+						"ALL",
+						"DEBUG",
+						"INFO",
+						"WARN",
+						"ERROR",
+						"FATAL",
+						"OFF"
+					],
+					"default": "INFO",
+					"description": "%settings.logging%"
+				},
+				"intellicodeCompletions.parseErrorFilter": {
+					"type": "boolean",
+					"default": true,
+					"description": "%settings.parseErrorFilter%"
+				},
+				"intellicodeCompletions.language.python": {
+					"type": "boolean",
+					"default": true,
+					"description": "%settings.pythonEnabled%",
+					"tags": [
+						"experimental"
+					]
+				},
+				"intellicodeCompletions.language.typescript": {
+					"type": "boolean",
+					"default": true,
+					"description": "%settings.typescriptEnabled%",
+					"tags": [
+						"experimental"
+					]
+				},
+				"intellicodeCompletions.language.javascript": {
+					"type": "boolean",
+					"default": true,
+					"description": "%settings.javascriptEnabled%",
+					"tags": [
+						"experimental"
+					]
+				},
+				"intellicodeCompletions.runAlongsideCopilot": {
+					"type": "boolean",
+					"default": false,
+					"description": "%settings.runAlongsideCopilot%",
+					"tags": [
+						"experimental"
+					]
+				}
+			}
+		}
+	},
+	"scripts": {
+		"build": "npm run webpack:dev",
+		"webpack:prod": "npm run webpack:clean && npm run localize && webpack --mode production && gulp postwebpack",
+		"webpack:dev": "npm run webpack:clean && webpack --mode development && gulp postwebpack",
+		"vscode:prepublish": "npm run webpack:prod",
+		"lint": "eslint \"src/**/*.ts\"",
+		"localize": "gulp localizationBundle",
+		"vsix": "vsce package --no-dependencies",
+		"webpack:clean": "rimraf bin dist"
+	},
+	"dependencies": {
+		"@vsintellicode/completions-shared": "*",
+		"@vsintellicode/completions-utils": "*",
+		"@vsintellicode/completions-worker-wrapper": "*",
+		"@vsintellicode/pythia-compose-client": "*",
+		"onnxruntime-node": "^1.13.0"
+	},
+	"devDependencies": {
+		"@types/event-stream": "^4.0.0",
+		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.68.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"@vscode/vsce": "^2.24.0",
+		"copy-webpack-plugin": "^8.1.0",
+		"eslint": "^8.26.0",
+		"eslint-config-prettier": "^7.1.0",
+		"eslint-plugin-prettier": "^3.3.1",
+		"gulp": "^4.0.2",
+		"gulp-filter": "^7.0.0",
+		"gulp-sourcemaps": "^3.0.0",
+		"gulp-typescript": "^6.0.0-alpha.1",
+		"path": "^0.12.7",
+		"prettier": "^1.19.1",
+		"rimraf": "^4.2.0",
+		"typescript": "^5.1.2",
+		"val-loader": "^6.0.0",
+		"vscode-nls": "4.1.1",
+		"webpack": "^5.64.4",
+		"webpack-cli": "^4.9.1"
+	},
+	"__metadata": {
+		"id": "b8febe71-368d-482e-96f5-6f53d03e640b",
+		"publisherDisplayName": "Microsoft",
+		"publisherId": "e8db1608-52e8-4d8d-92a6-779c5db302a9",
+		"isPreReleaseVersion": false,
+		"targetPlatform": "undefined",
+		"updated": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1720507248031,
+		"source": "gallery"
+	},
+	"private": true
+}
