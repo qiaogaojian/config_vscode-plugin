@@ -1,0 +1,1 @@
+{"launchTensorBoard.title":"Запустить TensorBoard","refreshTensorBoard.title":"Обновить TensorBoard","tensorBoard.log.description":"Уровень регистрации расширения ведения журнала.","tensorBoard.logDirectory.description":"Задайте в качестве этого параметра предпочитаемый каталог журнала TensorBoard для пропуск запроса каталога журнала при запуске TensorBoard."}

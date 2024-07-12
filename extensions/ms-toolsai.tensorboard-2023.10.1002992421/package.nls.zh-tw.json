@@ -1,0 +1,1 @@
+{"launchTensorBoard.title":"啟動 Tensorboard","refreshTensorBoard.title":"重新整理 TensorBoard","tensorBoard.log.description":"延伸模組記錄的記錄層級。","tensorBoard.logDirectory.description":"將這個設定設為您偏好的 TensorBoard 記錄目錄，以在啟動 TensorBoard 時略過記錄目錄提示。"}

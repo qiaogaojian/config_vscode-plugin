@@ -1,0 +1,1 @@
+{"launchTensorBoard.title":"启动 Tensorboard","refreshTensorBoard.title":"刷新 TensorBoard","tensorBoard.log.description":"扩展日志所在的日志记录级别。","tensorBoard.logDirectory.description":"将此设置设置为首选 TensorBoard 日志目录，以便在启动 TensorBoard 时跳过日志目录提示。"}

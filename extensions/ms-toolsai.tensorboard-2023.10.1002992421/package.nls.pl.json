@@ -1,0 +1,1 @@
+{"launchTensorBoard.title":"Uruchom TensorBoard","refreshTensorBoard.title":"Odśwież TensorBoard","tensorBoard.log.description":"Poziom rejestrowania, na którym jest rejestrowane rozszerzenie.","tensorBoard.logDirectory.description":"Ustaw to ustawienie na preferowany katalog dziennika TensorBoard, aby pominąć monit katalogu dziennika podczas uruchamiania pakietu TensorBoard."}

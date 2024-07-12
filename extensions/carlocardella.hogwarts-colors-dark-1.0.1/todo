@@ -1,0 +1,42 @@
+All:
+    ☐ update the notification background color seen on mouse down
+    ☐ invert active tab and unsaved tab border colors (use bottom green for active tab, top red for unsaved tab)
+    ☐ 
+
+Hogwarts Dark:
+    ✔ tab.activeModifiedBorder does not work properly? the top border is not colored as expected @done(18-11-24 21:33)
+        - must enable workbench.editor.highlightModifiedTabs in user settings
+
+Hogwarts Light:
+    ✔ enable tab.activeModifiedBorder @done(18-12-01 10:02)
+
+Gryffindor Dark:
+    ✔ enable tab.activeModifiedBorder @done(18-12-01 10:02)
+    ✔ color the debug floating bar @done(18-12-01 10:01)
+    ✔ tab.border @done(18-12-01 10:01)
+
+Slitheryn Dark:
+    ✔ enable tab.activeModifiedBorder @done(18-11-28 08:06)
+    ✔ color the debug floating bar @done(18-12-01 10:01)
+    ✔ tab.border @done(18-12-01 10:01)
+    ✔ 9741498 Hogwarts Dark: fix constant.language.powershell color, (e.g. ), make it consistent with the $ sign @done(18-12-21 20:56)
+    
+Hufflepuff Dark:
+    ✔ enable tab.activeModifiedBorder @done(18-11-29 06:10)
+    ✔ color the debug floating bar @done(18-12-01 10:01)
+    ✔ tab.border @done(18-11-29 06:13)
+    ✔ 9741498 Hogwarts Dark: fix constant.language.powershell color, (e.g. ), make it consistent with the $ sign @done(18-12-21 20:56)
+    
+Ravenclaw Dark:
+    ✔ enable tab.activeModifiedBorder @done(18-11-29 06:06)
+    ✔ color the debug floating bar @done(18-12-01 10:01)
+    ✔ tab.border @done(18-12-01 10:01)
+    ✔ 9741498 Hogwarts Dark: fix constant.language.powershell color, (e.g. ), make it consistent with the $ sign @done(18-12-21 20:56)
+
+Gryffindor Light:
+
+Slitheryn Light:
+
+Hufflepuff Light:
+
+Ravenclaw Light:
