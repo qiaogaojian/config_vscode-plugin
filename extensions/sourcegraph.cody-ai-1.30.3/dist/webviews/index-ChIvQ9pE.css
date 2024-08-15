@@ -1,0 +1,4268 @@
+._editor-shell_14ket_1 {
+    position: relative;
+}
+
+._editor-shell_14ket_1 ._editor-container_14ket_5 {
+    position: relative;
+    display: block;
+}
+
+._editor-scroller_14ket_10 {
+    border: 0;
+    display: flex;
+    position: relative;
+    outline: 0;
+    overflow: auto;
+}
+
+._editor_14ket_1 {
+    flex: auto;
+    position: relative;
+}
+
+/* ContentEditable */
+._content-editable_14ket_24 {
+    border: 0;
+    display: block;
+    position: relative;
+    outline: 0;
+    caret-color: var(--vscode-input-foreground);
+}
+
+/* Placeholder */
+._placeholder_14ket_33 {
+    opacity: 0.6;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    top: 0;
+    left: 0;
+    right: 5px;
+    user-select: none;
+    white-space: nowrap;
+    display: inline-block;
+    pointer-events: none;
+}
+
+/* Theme */
+._theme-paragraph_14ket_48 {
+    margin: 0;
+}
+:root {
+    --description-font-size: 0.9em; /* match VS Code quickpick description */
+}
+
+._title_1vity_5, ._description_1vity_5, ._warning_1vity_5 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+._row_1vity_11 {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+._description_1vity_5, ._warning_1vity_5 {
+    font-size: var(--description-font-size);
+    opacity: 0.7;
+}
+
+._description_1vity_5 {
+    flex: 1;
+}
+._context-item-mention-node_19d28_1 {
+    --mention-color-opacity: 70%;
+
+    color: color-mix(in lch, var(--vscode-inputOption-activeForeground) calc(1.2*var(--mention-color-opacity)), transparent);
+    background-color: color-mix(in lch, var(--vscode-inputOption-activeBackground) var(--mention-color-opacity), transparent);
+    border-radius: 2px;
+    white-space: normal;
+    padding: 0 3px;
+    display: inline-flex;
+    align-items: baseline;
+    outline-offset: -1px;
+    cursor: pointer;
+
+    ._icon_19d28_14 {
+        display: inline-flex;
+        align-self: center;
+        width: 14px;
+        height: 14px;
+        margin-right: 2px;
+        opacity: 0.8;
+        transform: translateY(-1px);
+    }
+
+    & + ._context-item-mention-node_19d28_1 {
+        margin-left: 2px;
+    }
+
+    &._context-item-mention-chip-node--focused_19d28_28 {
+        --mention-color-opacity: 100%;
+
+        outline: solid 1px var(--vscode-inputOption-activeBorder);
+    }
+
+    &._is-too-large-or-ignored_19d28_34 {
+        text-decoration: line-through;
+        color: var(--vscode-editorWarning-foreground);
+    }
+}
+
+body:is([data-vscode-theme-kind='vscode-high-contrast'], [data-vscode-theme-kind='vscode-high-contrast-light']) ._context-item-mention-node_19d28_1 {
+    &:not(._context-item-mention-chip-node--focused_19d28_28) {
+        outline: solid 1px var(--vscode-input-foreground);
+    }
+}
+
+/* color-mix is not supported on JetBrains webview */
+html[data-ide=JetBrains] ._context-item-mention-node_19d28_1 {
+    color: var(--vscode-inputOption-activeForeground);
+    background-color: var(--vscode-badge-background);
+    gap: 0.2rem;
+
+    ._icon_19d28_14 {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+._template-input-node_14yoh_1 {
+    background-color: color-mix(in lch, var(--vscode-editorWarning-foreground) 20%, transparent);
+    border: 1px dashed var(--vscode-editorWarning-foreground);
+    border-radius: 3px;
+    white-space: normal;
+    padding: 0 3px;
+    display: inline-flex;
+    align-items: baseline;
+    outline-offset: -1px;
+    cursor: pointer;
+
+    & + ._template-input-node_14yoh_1 {
+        margin-left: 2px;
+    }
+
+    &._template-input-node--focused_14yoh_16 {
+        outline-style: solid;
+        background-color: color-mix(in lch, var(--vscode-editorWarning-foreground) 30%, transparent);
+    }
+}
+
+body:is([data-vscode-theme-kind='vscode-high-contrast'], [data-vscode-theme-kind='vscode-high-contrast-light']) ._template-input-node_14yoh_1 {
+    background-color: transparent;
+}
+
+/* color-mix is not supported on JetBrains webview */
+html[data-ide=JetBrains] ._template-input-node_14yoh_1 {
+    background-color: transparent;
+}
+._popover_xivxy_1 {
+    overflow: hidden;
+    background: var(--vscode-sideBar-background);
+    color: var(--vscode-sideBar-foreground);
+    box-shadow: 0 0 8px 2px var(--vscode-widget-shadow);
+    border-radius: 3px;
+
+    width: clamp(200px, 100vw, 400px);
+}
+
+._reset-anchor_xivxy_11 {
+    /* Without this, the popover position jitters by +/- ~13px. */
+    top: 0 !important;
+    left: 0 !important;
+}
+
+._container_1oafp_1 {
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: 3px;
+    outline: none;
+}
+
+._item_1oafp_7 {
+    &._context-item_1oafp_8 {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.2rem;
+    }
+}
+:root {
+    --prompt-editor-padding-y: 0.4375rem;
+    --prompt-editor-padding-x: 0.5rem;
+}
+
+._editor_1tq3k_6 {
+    font: inherit;
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+
+    /* Don't allow the input box to become larger than the webview to avoid submit buttons going off the screen */
+    max-height: 80vh; /* 80% of viewport height */
+}
+
+._editor_1tq3k_6:not(._seamless_1tq3k_16) {
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 2px;
+
+    padding: var(--prompt-editor-padding-y) var(--prompt-editor-padding-x);
+}
+
+._editor_1tq3k_6:not(._seamless_1tq3k_16):focus,
+._editor_1tq3k_6:not(._seamless_1tq3k_16):focus-visible,
+._editor_1tq3k_6:not(._seamless_1tq3k_16):focus-within {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+}
+
+._editor_1tq3k_6:not(._seamless_1tq3k_16) {
+    border-color: var(--vscode-input-border, transparent);
+}
+
+._disabled_1tq3k_38 {
+    color: var(--vscode-input-foreground);
+    opacity: 0.5;
+}
+._path_kr5rq_1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+._excluded_kr5rq_7 {
+    text-decoration: line-through !important;
+}
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+@font-face {
+	font-family: "codicon";
+	font-display: block;
+	src: url("./codicon-vYssfST5.ttf?79130123c9d3674a686cf03962523e8a") format("truetype");
+}
+
+.codicon[class*='codicon-'] {
+	font: normal normal normal 16px/1 codicon;
+	display: inline-block;
+	text-decoration: none;
+	text-rendering: auto;
+	text-align: center;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+/*---------------------
+ *  Modifiers
+ *-------------------*/
+
+@keyframes codicon-spin {
+	100% {
+		transform:rotate(360deg);
+	}
+}
+
+.codicon-sync.codicon-modifier-spin,
+.codicon-loading.codicon-modifier-spin,
+.codicon-gear.codicon-modifier-spin {
+	/* Use steps to throttle FPS to reduce CPU usage */
+	animation: codicon-spin 1.5s steps(30) infinite;
+}
+
+.codicon-modifier-disabled {
+	opacity: 0.5;
+}
+
+.codicon-modifier-hidden {
+	opacity: 0;
+}
+
+/* custom speed & easing for loading icon */
+
+.codicon-loading {
+	animation-duration: 1s !important;
+	animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67) !important;
+}
+
+/*---------------------
+ *  Icons
+ *-------------------*/
+
+.codicon-add:before { content: "\ea60" }
+
+.codicon-plus:before { content: "\ea60" }
+
+.codicon-gist-new:before { content: "\ea60" }
+
+.codicon-repo-create:before { content: "\ea60" }
+
+.codicon-lightbulb:before { content: "\ea61" }
+
+.codicon-light-bulb:before { content: "\ea61" }
+
+.codicon-repo:before { content: "\ea62" }
+
+.codicon-repo-delete:before { content: "\ea62" }
+
+.codicon-gist-fork:before { content: "\ea63" }
+
+.codicon-repo-forked:before { content: "\ea63" }
+
+.codicon-git-pull-request:before { content: "\ea64" }
+
+.codicon-git-pull-request-abandoned:before { content: "\ea64" }
+
+.codicon-record-keys:before { content: "\ea65" }
+
+.codicon-keyboard:before { content: "\ea65" }
+
+.codicon-tag:before { content: "\ea66" }
+
+.codicon-git-pull-request-label:before { content: "\ea66" }
+
+.codicon-tag-add:before { content: "\ea66" }
+
+.codicon-tag-remove:before { content: "\ea66" }
+
+.codicon-person:before { content: "\ea67" }
+
+.codicon-person-follow:before { content: "\ea67" }
+
+.codicon-person-outline:before { content: "\ea67" }
+
+.codicon-person-filled:before { content: "\ea67" }
+
+.codicon-git-branch:before { content: "\ea68" }
+
+.codicon-git-branch-create:before { content: "\ea68" }
+
+.codicon-git-branch-delete:before { content: "\ea68" }
+
+.codicon-source-control:before { content: "\ea68" }
+
+.codicon-mirror:before { content: "\ea69" }
+
+.codicon-mirror-public:before { content: "\ea69" }
+
+.codicon-star:before { content: "\ea6a" }
+
+.codicon-star-add:before { content: "\ea6a" }
+
+.codicon-star-delete:before { content: "\ea6a" }
+
+.codicon-star-empty:before { content: "\ea6a" }
+
+.codicon-comment:before { content: "\ea6b" }
+
+.codicon-comment-add:before { content: "\ea6b" }
+
+.codicon-alert:before { content: "\ea6c" }
+
+.codicon-warning:before { content: "\ea6c" }
+
+.codicon-search:before { content: "\ea6d" }
+
+.codicon-search-save:before { content: "\ea6d" }
+
+.codicon-log-out:before { content: "\ea6e" }
+
+.codicon-sign-out:before { content: "\ea6e" }
+
+.codicon-log-in:before { content: "\ea6f" }
+
+.codicon-sign-in:before { content: "\ea6f" }
+
+.codicon-eye:before { content: "\ea70" }
+
+.codicon-eye-unwatch:before { content: "\ea70" }
+
+.codicon-eye-watch:before { content: "\ea70" }
+
+.codicon-circle-filled:before { content: "\ea71" }
+
+.codicon-primitive-dot:before { content: "\ea71" }
+
+.codicon-close-dirty:before { content: "\ea71" }
+
+.codicon-debug-breakpoint:before { content: "\ea71" }
+
+.codicon-debug-breakpoint-disabled:before { content: "\ea71" }
+
+.codicon-debug-hint:before { content: "\ea71" }
+
+.codicon-terminal-decoration-success:before { content: "\ea71" }
+
+.codicon-primitive-square:before { content: "\ea72" }
+
+.codicon-edit:before { content: "\ea73" }
+
+.codicon-pencil:before { content: "\ea73" }
+
+.codicon-info:before { content: "\ea74" }
+
+.codicon-issue-opened:before { content: "\ea74" }
+
+.codicon-gist-private:before { content: "\ea75" }
+
+.codicon-git-fork-private:before { content: "\ea75" }
+
+.codicon-lock:before { content: "\ea75" }
+
+.codicon-mirror-private:before { content: "\ea75" }
+
+.codicon-close:before { content: "\ea76" }
+
+.codicon-remove-close:before { content: "\ea76" }
+
+.codicon-x:before { content: "\ea76" }
+
+.codicon-repo-sync:before { content: "\ea77" }
+
+.codicon-sync:before { content: "\ea77" }
+
+.codicon-clone:before { content: "\ea78" }
+
+.codicon-desktop-download:before { content: "\ea78" }
+
+.codicon-beaker:before { content: "\ea79" }
+
+.codicon-microscope:before { content: "\ea79" }
+
+.codicon-vm:before { content: "\ea7a" }
+
+.codicon-device-desktop:before { content: "\ea7a" }
+
+.codicon-file:before { content: "\ea7b" }
+
+.codicon-file-text:before { content: "\ea7b" }
+
+.codicon-more:before { content: "\ea7c" }
+
+.codicon-ellipsis:before { content: "\ea7c" }
+
+.codicon-kebab-horizontal:before { content: "\ea7c" }
+
+.codicon-mail-reply:before { content: "\ea7d" }
+
+.codicon-reply:before { content: "\ea7d" }
+
+.codicon-organization:before { content: "\ea7e" }
+
+.codicon-organization-filled:before { content: "\ea7e" }
+
+.codicon-organization-outline:before { content: "\ea7e" }
+
+.codicon-new-file:before { content: "\ea7f" }
+
+.codicon-file-add:before { content: "\ea7f" }
+
+.codicon-new-folder:before { content: "\ea80" }
+
+.codicon-file-directory-create:before { content: "\ea80" }
+
+.codicon-trash:before { content: "\ea81" }
+
+.codicon-trashcan:before { content: "\ea81" }
+
+.codicon-history:before { content: "\ea82" }
+
+.codicon-clock:before { content: "\ea82" }
+
+.codicon-folder:before { content: "\ea83" }
+
+.codicon-file-directory:before { content: "\ea83" }
+
+.codicon-symbol-folder:before { content: "\ea83" }
+
+.codicon-logo-github:before { content: "\ea84" }
+
+.codicon-mark-github:before { content: "\ea84" }
+
+.codicon-github:before { content: "\ea84" }
+
+.codicon-terminal:before { content: "\ea85" }
+
+.codicon-console:before { content: "\ea85" }
+
+.codicon-repl:before { content: "\ea85" }
+
+.codicon-zap:before { content: "\ea86" }
+
+.codicon-symbol-event:before { content: "\ea86" }
+
+.codicon-error:before { content: "\ea87" }
+
+.codicon-stop:before { content: "\ea87" }
+
+.codicon-variable:before { content: "\ea88" }
+
+.codicon-symbol-variable:before { content: "\ea88" }
+
+.codicon-array:before { content: "\ea8a" }
+
+.codicon-symbol-array:before { content: "\ea8a" }
+
+.codicon-symbol-module:before { content: "\ea8b" }
+
+.codicon-symbol-package:before { content: "\ea8b" }
+
+.codicon-symbol-namespace:before { content: "\ea8b" }
+
+.codicon-symbol-object:before { content: "\ea8b" }
+
+.codicon-symbol-method:before { content: "\ea8c" }
+
+.codicon-symbol-function:before { content: "\ea8c" }
+
+.codicon-symbol-constructor:before { content: "\ea8c" }
+
+.codicon-symbol-boolean:before { content: "\ea8f" }
+
+.codicon-symbol-null:before { content: "\ea8f" }
+
+.codicon-symbol-numeric:before { content: "\ea90" }
+
+.codicon-symbol-number:before { content: "\ea90" }
+
+.codicon-symbol-structure:before { content: "\ea91" }
+
+.codicon-symbol-struct:before { content: "\ea91" }
+
+.codicon-symbol-parameter:before { content: "\ea92" }
+
+.codicon-symbol-type-parameter:before { content: "\ea92" }
+
+.codicon-symbol-key:before { content: "\ea93" }
+
+.codicon-symbol-text:before { content: "\ea93" }
+
+.codicon-symbol-reference:before { content: "\ea94" }
+
+.codicon-go-to-file:before { content: "\ea94" }
+
+.codicon-symbol-enum:before { content: "\ea95" }
+
+.codicon-symbol-value:before { content: "\ea95" }
+
+.codicon-symbol-ruler:before { content: "\ea96" }
+
+.codicon-symbol-unit:before { content: "\ea96" }
+
+.codicon-activate-breakpoints:before { content: "\ea97" }
+
+.codicon-archive:before { content: "\ea98" }
+
+.codicon-arrow-both:before { content: "\ea99" }
+
+.codicon-arrow-down:before { content: "\ea9a" }
+
+.codicon-arrow-left:before { content: "\ea9b" }
+
+.codicon-arrow-right:before { content: "\ea9c" }
+
+.codicon-arrow-small-down:before { content: "\ea9d" }
+
+.codicon-arrow-small-left:before { content: "\ea9e" }
+
+.codicon-arrow-small-right:before { content: "\ea9f" }
+
+.codicon-arrow-small-up:before { content: "\eaa0" }
+
+.codicon-arrow-up:before { content: "\eaa1" }
+
+.codicon-bell:before { content: "\eaa2" }
+
+.codicon-bold:before { content: "\eaa3" }
+
+.codicon-book:before { content: "\eaa4" }
+
+.codicon-bookmark:before { content: "\eaa5" }
+
+.codicon-debug-breakpoint-conditional-unverified:before { content: "\eaa6" }
+
+.codicon-debug-breakpoint-conditional:before { content: "\eaa7" }
+
+.codicon-debug-breakpoint-conditional-disabled:before { content: "\eaa7" }
+
+.codicon-debug-breakpoint-data-unverified:before { content: "\eaa8" }
+
+.codicon-debug-breakpoint-data:before { content: "\eaa9" }
+
+.codicon-debug-breakpoint-data-disabled:before { content: "\eaa9" }
+
+.codicon-debug-breakpoint-log-unverified:before { content: "\eaaa" }
+
+.codicon-debug-breakpoint-log:before { content: "\eaab" }
+
+.codicon-debug-breakpoint-log-disabled:before { content: "\eaab" }
+
+.codicon-briefcase:before { content: "\eaac" }
+
+.codicon-broadcast:before { content: "\eaad" }
+
+.codicon-browser:before { content: "\eaae" }
+
+.codicon-bug:before { content: "\eaaf" }
+
+.codicon-calendar:before { content: "\eab0" }
+
+.codicon-case-sensitive:before { content: "\eab1" }
+
+.codicon-check:before { content: "\eab2" }
+
+.codicon-checklist:before { content: "\eab3" }
+
+.codicon-chevron-down:before { content: "\eab4" }
+
+.codicon-chevron-left:before { content: "\eab5" }
+
+.codicon-chevron-right:before { content: "\eab6" }
+
+.codicon-chevron-up:before { content: "\eab7" }
+
+.codicon-chrome-close:before { content: "\eab8" }
+
+.codicon-chrome-maximize:before { content: "\eab9" }
+
+.codicon-chrome-minimize:before { content: "\eaba" }
+
+.codicon-chrome-restore:before { content: "\eabb" }
+
+.codicon-circle-outline:before { content: "\eabc" }
+
+.codicon-circle:before { content: "\eabc" }
+
+.codicon-debug-breakpoint-unverified:before { content: "\eabc" }
+
+.codicon-terminal-decoration-incomplete:before { content: "\eabc" }
+
+.codicon-circle-slash:before { content: "\eabd" }
+
+.codicon-circuit-board:before { content: "\eabe" }
+
+.codicon-clear-all:before { content: "\eabf" }
+
+.codicon-clippy:before { content: "\eac0" }
+
+.codicon-close-all:before { content: "\eac1" }
+
+.codicon-cloud-download:before { content: "\eac2" }
+
+.codicon-cloud-upload:before { content: "\eac3" }
+
+.codicon-code:before { content: "\eac4" }
+
+.codicon-collapse-all:before { content: "\eac5" }
+
+.codicon-color-mode:before { content: "\eac6" }
+
+.codicon-comment-discussion:before { content: "\eac7" }
+
+.codicon-credit-card:before { content: "\eac9" }
+
+.codicon-dash:before { content: "\eacc" }
+
+.codicon-dashboard:before { content: "\eacd" }
+
+.codicon-database:before { content: "\eace" }
+
+.codicon-debug-continue:before { content: "\eacf" }
+
+.codicon-debug-disconnect:before { content: "\ead0" }
+
+.codicon-debug-pause:before { content: "\ead1" }
+
+.codicon-debug-restart:before { content: "\ead2" }
+
+.codicon-debug-start:before { content: "\ead3" }
+
+.codicon-debug-step-into:before { content: "\ead4" }
+
+.codicon-debug-step-out:before { content: "\ead5" }
+
+.codicon-debug-step-over:before { content: "\ead6" }
+
+.codicon-debug-stop:before { content: "\ead7" }
+
+.codicon-debug:before { content: "\ead8" }
+
+.codicon-device-camera-video:before { content: "\ead9" }
+
+.codicon-device-camera:before { content: "\eada" }
+
+.codicon-device-mobile:before { content: "\eadb" }
+
+.codicon-diff-added:before { content: "\eadc" }
+
+.codicon-diff-ignored:before { content: "\eadd" }
+
+.codicon-diff-modified:before { content: "\eade" }
+
+.codicon-diff-removed:before { content: "\eadf" }
+
+.codicon-diff-renamed:before { content: "\eae0" }
+
+.codicon-diff:before { content: "\eae1" }
+
+.codicon-discard:before { content: "\eae2" }
+
+.codicon-editor-layout:before { content: "\eae3" }
+
+.codicon-empty-window:before { content: "\eae4" }
+
+.codicon-exclude:before { content: "\eae5" }
+
+.codicon-extensions:before { content: "\eae6" }
+
+.codicon-eye-closed:before { content: "\eae7" }
+
+.codicon-file-binary:before { content: "\eae8" }
+
+.codicon-file-code:before { content: "\eae9" }
+
+.codicon-file-media:before { content: "\eaea" }
+
+.codicon-file-pdf:before { content: "\eaeb" }
+
+.codicon-file-submodule:before { content: "\eaec" }
+
+.codicon-file-symlink-directory:before { content: "\eaed" }
+
+.codicon-file-symlink-file:before { content: "\eaee" }
+
+.codicon-file-zip:before { content: "\eaef" }
+
+.codicon-files:before { content: "\eaf0" }
+
+.codicon-filter:before { content: "\eaf1" }
+
+.codicon-flame:before { content: "\eaf2" }
+
+.codicon-fold-down:before { content: "\eaf3" }
+
+.codicon-fold-up:before { content: "\eaf4" }
+
+.codicon-fold:before { content: "\eaf5" }
+
+.codicon-folder-active:before { content: "\eaf6" }
+
+.codicon-folder-opened:before { content: "\eaf7" }
+
+.codicon-gear:before { content: "\eaf8" }
+
+.codicon-gift:before { content: "\eaf9" }
+
+.codicon-gist-secret:before { content: "\eafa" }
+
+.codicon-gist:before { content: "\eafb" }
+
+.codicon-git-commit:before { content: "\eafc" }
+
+.codicon-git-compare:before { content: "\eafd" }
+
+.codicon-compare-changes:before { content: "\eafd" }
+
+.codicon-git-merge:before { content: "\eafe" }
+
+.codicon-github-action:before { content: "\eaff" }
+
+.codicon-github-alt:before { content: "\eb00" }
+
+.codicon-globe:before { content: "\eb01" }
+
+.codicon-grabber:before { content: "\eb02" }
+
+.codicon-graph:before { content: "\eb03" }
+
+.codicon-gripper:before { content: "\eb04" }
+
+.codicon-heart:before { content: "\eb05" }
+
+.codicon-home:before { content: "\eb06" }
+
+.codicon-horizontal-rule:before { content: "\eb07" }
+
+.codicon-hubot:before { content: "\eb08" }
+
+.codicon-inbox:before { content: "\eb09" }
+
+.codicon-issue-reopened:before { content: "\eb0b" }
+
+.codicon-issues:before { content: "\eb0c" }
+
+.codicon-italic:before { content: "\eb0d" }
+
+.codicon-jersey:before { content: "\eb0e" }
+
+.codicon-json:before { content: "\eb0f" }
+
+.codicon-kebab-vertical:before { content: "\eb10" }
+
+.codicon-key:before { content: "\eb11" }
+
+.codicon-law:before { content: "\eb12" }
+
+.codicon-lightbulb-autofix:before { content: "\eb13" }
+
+.codicon-link-external:before { content: "\eb14" }
+
+.codicon-link:before { content: "\eb15" }
+
+.codicon-list-ordered:before { content: "\eb16" }
+
+.codicon-list-unordered:before { content: "\eb17" }
+
+.codicon-live-share:before { content: "\eb18" }
+
+.codicon-loading:before { content: "\eb19" }
+
+.codicon-location:before { content: "\eb1a" }
+
+.codicon-mail-read:before { content: "\eb1b" }
+
+.codicon-mail:before { content: "\eb1c" }
+
+.codicon-markdown:before { content: "\eb1d" }
+
+.codicon-megaphone:before { content: "\eb1e" }
+
+.codicon-mention:before { content: "\eb1f" }
+
+.codicon-milestone:before { content: "\eb20" }
+
+.codicon-git-pull-request-milestone:before { content: "\eb20" }
+
+.codicon-mortar-board:before { content: "\eb21" }
+
+.codicon-move:before { content: "\eb22" }
+
+.codicon-multiple-windows:before { content: "\eb23" }
+
+.codicon-mute:before { content: "\eb24" }
+
+.codicon-no-newline:before { content: "\eb25" }
+
+.codicon-note:before { content: "\eb26" }
+
+.codicon-octoface:before { content: "\eb27" }
+
+.codicon-open-preview:before { content: "\eb28" }
+
+.codicon-package:before { content: "\eb29" }
+
+.codicon-paintcan:before { content: "\eb2a" }
+
+.codicon-pin:before { content: "\eb2b" }
+
+.codicon-play:before { content: "\eb2c" }
+
+.codicon-run:before { content: "\eb2c" }
+
+.codicon-plug:before { content: "\eb2d" }
+
+.codicon-preserve-case:before { content: "\eb2e" }
+
+.codicon-preview:before { content: "\eb2f" }
+
+.codicon-project:before { content: "\eb30" }
+
+.codicon-pulse:before { content: "\eb31" }
+
+.codicon-question:before { content: "\eb32" }
+
+.codicon-quote:before { content: "\eb33" }
+
+.codicon-radio-tower:before { content: "\eb34" }
+
+.codicon-reactions:before { content: "\eb35" }
+
+.codicon-references:before { content: "\eb36" }
+
+.codicon-refresh:before { content: "\eb37" }
+
+.codicon-regex:before { content: "\eb38" }
+
+.codicon-remote-explorer:before { content: "\eb39" }
+
+.codicon-remote:before { content: "\eb3a" }
+
+.codicon-remove:before { content: "\eb3b" }
+
+.codicon-replace-all:before { content: "\eb3c" }
+
+.codicon-replace:before { content: "\eb3d" }
+
+.codicon-repo-clone:before { content: "\eb3e" }
+
+.codicon-repo-force-push:before { content: "\eb3f" }
+
+.codicon-repo-pull:before { content: "\eb40" }
+
+.codicon-repo-push:before { content: "\eb41" }
+
+.codicon-report:before { content: "\eb42" }
+
+.codicon-request-changes:before { content: "\eb43" }
+
+.codicon-rocket:before { content: "\eb44" }
+
+.codicon-root-folder-opened:before { content: "\eb45" }
+
+.codicon-root-folder:before { content: "\eb46" }
+
+.codicon-rss:before { content: "\eb47" }
+
+.codicon-ruby:before { content: "\eb48" }
+
+.codicon-save-all:before { content: "\eb49" }
+
+.codicon-save-as:before { content: "\eb4a" }
+
+.codicon-save:before { content: "\eb4b" }
+
+.codicon-screen-full:before { content: "\eb4c" }
+
+.codicon-screen-normal:before { content: "\eb4d" }
+
+.codicon-search-stop:before { content: "\eb4e" }
+
+.codicon-server:before { content: "\eb50" }
+
+.codicon-settings-gear:before { content: "\eb51" }
+
+.codicon-settings:before { content: "\eb52" }
+
+.codicon-shield:before { content: "\eb53" }
+
+.codicon-smiley:before { content: "\eb54" }
+
+.codicon-sort-precedence:before { content: "\eb55" }
+
+.codicon-split-horizontal:before { content: "\eb56" }
+
+.codicon-split-vertical:before { content: "\eb57" }
+
+.codicon-squirrel:before { content: "\eb58" }
+
+.codicon-star-full:before { content: "\eb59" }
+
+.codicon-star-half:before { content: "\eb5a" }
+
+.codicon-symbol-class:before { content: "\eb5b" }
+
+.codicon-symbol-color:before { content: "\eb5c" }
+
+.codicon-symbol-constant:before { content: "\eb5d" }
+
+.codicon-symbol-enum-member:before { content: "\eb5e" }
+
+.codicon-symbol-field:before { content: "\eb5f" }
+
+.codicon-symbol-file:before { content: "\eb60" }
+
+.codicon-symbol-interface:before { content: "\eb61" }
+
+.codicon-symbol-keyword:before { content: "\eb62" }
+
+.codicon-symbol-misc:before { content: "\eb63" }
+
+.codicon-symbol-operator:before { content: "\eb64" }
+
+.codicon-symbol-property:before { content: "\eb65" }
+
+.codicon-wrench:before { content: "\eb65" }
+
+.codicon-wrench-subaction:before { content: "\eb65" }
+
+.codicon-symbol-snippet:before { content: "\eb66" }
+
+.codicon-tasklist:before { content: "\eb67" }
+
+.codicon-telescope:before { content: "\eb68" }
+
+.codicon-text-size:before { content: "\eb69" }
+
+.codicon-three-bars:before { content: "\eb6a" }
+
+.codicon-thumbsdown:before { content: "\eb6b" }
+
+.codicon-thumbsup:before { content: "\eb6c" }
+
+.codicon-tools:before { content: "\eb6d" }
+
+.codicon-triangle-down:before { content: "\eb6e" }
+
+.codicon-triangle-left:before { content: "\eb6f" }
+
+.codicon-triangle-right:before { content: "\eb70" }
+
+.codicon-triangle-up:before { content: "\eb71" }
+
+.codicon-twitter:before { content: "\eb72" }
+
+.codicon-unfold:before { content: "\eb73" }
+
+.codicon-unlock:before { content: "\eb74" }
+
+.codicon-unmute:before { content: "\eb75" }
+
+.codicon-unverified:before { content: "\eb76" }
+
+.codicon-verified:before { content: "\eb77" }
+
+.codicon-versions:before { content: "\eb78" }
+
+.codicon-vm-active:before { content: "\eb79" }
+
+.codicon-vm-outline:before { content: "\eb7a" }
+
+.codicon-vm-running:before { content: "\eb7b" }
+
+.codicon-watch:before { content: "\eb7c" }
+
+.codicon-whitespace:before { content: "\eb7d" }
+
+.codicon-whole-word:before { content: "\eb7e" }
+
+.codicon-window:before { content: "\eb7f" }
+
+.codicon-word-wrap:before { content: "\eb80" }
+
+.codicon-zoom-in:before { content: "\eb81" }
+
+.codicon-zoom-out:before { content: "\eb82" }
+
+.codicon-list-filter:before { content: "\eb83" }
+
+.codicon-list-flat:before { content: "\eb84" }
+
+.codicon-list-selection:before { content: "\eb85" }
+
+.codicon-selection:before { content: "\eb85" }
+
+.codicon-list-tree:before { content: "\eb86" }
+
+.codicon-debug-breakpoint-function-unverified:before { content: "\eb87" }
+
+.codicon-debug-breakpoint-function:before { content: "\eb88" }
+
+.codicon-debug-breakpoint-function-disabled:before { content: "\eb88" }
+
+.codicon-debug-stackframe-active:before { content: "\eb89" }
+
+.codicon-circle-small-filled:before { content: "\eb8a" }
+
+.codicon-debug-stackframe-dot:before { content: "\eb8a" }
+
+.codicon-terminal-decoration-mark:before { content: "\eb8a" }
+
+.codicon-debug-stackframe:before { content: "\eb8b" }
+
+.codicon-debug-stackframe-focused:before { content: "\eb8b" }
+
+.codicon-debug-breakpoint-unsupported:before { content: "\eb8c" }
+
+.codicon-symbol-string:before { content: "\eb8d" }
+
+.codicon-debug-reverse-continue:before { content: "\eb8e" }
+
+.codicon-debug-step-back:before { content: "\eb8f" }
+
+.codicon-debug-restart-frame:before { content: "\eb90" }
+
+.codicon-debug-alt:before { content: "\eb91" }
+
+.codicon-call-incoming:before { content: "\eb92" }
+
+.codicon-call-outgoing:before { content: "\eb93" }
+
+.codicon-menu:before { content: "\eb94" }
+
+.codicon-expand-all:before { content: "\eb95" }
+
+.codicon-feedback:before { content: "\eb96" }
+
+.codicon-git-pull-request-reviewer:before { content: "\eb96" }
+
+.codicon-group-by-ref-type:before { content: "\eb97" }
+
+.codicon-ungroup-by-ref-type:before { content: "\eb98" }
+
+.codicon-account:before { content: "\eb99" }
+
+.codicon-git-pull-request-assignee:before { content: "\eb99" }
+
+.codicon-bell-dot:before { content: "\eb9a" }
+
+.codicon-debug-console:before { content: "\eb9b" }
+
+.codicon-library:before { content: "\eb9c" }
+
+.codicon-output:before { content: "\eb9d" }
+
+.codicon-run-all:before { content: "\eb9e" }
+
+.codicon-sync-ignored:before { content: "\eb9f" }
+
+.codicon-pinned:before { content: "\eba0" }
+
+.codicon-github-inverted:before { content: "\eba1" }
+
+.codicon-server-process:before { content: "\eba2" }
+
+.codicon-server-environment:before { content: "\eba3" }
+
+.codicon-pass:before { content: "\eba4" }
+
+.codicon-issue-closed:before { content: "\eba4" }
+
+.codicon-stop-circle:before { content: "\eba5" }
+
+.codicon-play-circle:before { content: "\eba6" }
+
+.codicon-record:before { content: "\eba7" }
+
+.codicon-debug-alt-small:before { content: "\eba8" }
+
+.codicon-vm-connect:before { content: "\eba9" }
+
+.codicon-cloud:before { content: "\ebaa" }
+
+.codicon-merge:before { content: "\ebab" }
+
+.codicon-export:before { content: "\ebac" }
+
+.codicon-graph-left:before { content: "\ebad" }
+
+.codicon-magnet:before { content: "\ebae" }
+
+.codicon-notebook:before { content: "\ebaf" }
+
+.codicon-redo:before { content: "\ebb0" }
+
+.codicon-check-all:before { content: "\ebb1" }
+
+.codicon-pinned-dirty:before { content: "\ebb2" }
+
+.codicon-pass-filled:before { content: "\ebb3" }
+
+.codicon-circle-large-filled:before { content: "\ebb4" }
+
+.codicon-circle-large:before { content: "\ebb5" }
+
+.codicon-circle-large-outline:before { content: "\ebb5" }
+
+.codicon-combine:before { content: "\ebb6" }
+
+.codicon-gather:before { content: "\ebb6" }
+
+.codicon-table:before { content: "\ebb7" }
+
+.codicon-variable-group:before { content: "\ebb8" }
+
+.codicon-type-hierarchy:before { content: "\ebb9" }
+
+.codicon-type-hierarchy-sub:before { content: "\ebba" }
+
+.codicon-type-hierarchy-super:before { content: "\ebbb" }
+
+.codicon-git-pull-request-create:before { content: "\ebbc" }
+
+.codicon-run-above:before { content: "\ebbd" }
+
+.codicon-run-below:before { content: "\ebbe" }
+
+.codicon-notebook-template:before { content: "\ebbf" }
+
+.codicon-debug-rerun:before { content: "\ebc0" }
+
+.codicon-workspace-trusted:before { content: "\ebc1" }
+
+.codicon-workspace-untrusted:before { content: "\ebc2" }
+
+.codicon-workspace-unknown:before { content: "\ebc3" }
+
+.codicon-terminal-cmd:before { content: "\ebc4" }
+
+.codicon-terminal-debian:before { content: "\ebc5" }
+
+.codicon-terminal-linux:before { content: "\ebc6" }
+
+.codicon-terminal-powershell:before { content: "\ebc7" }
+
+.codicon-terminal-tmux:before { content: "\ebc8" }
+
+.codicon-terminal-ubuntu:before { content: "\ebc9" }
+
+.codicon-terminal-bash:before { content: "\ebca" }
+
+.codicon-arrow-swap:before { content: "\ebcb" }
+
+.codicon-copy:before { content: "\ebcc" }
+
+.codicon-person-add:before { content: "\ebcd" }
+
+.codicon-filter-filled:before { content: "\ebce" }
+
+.codicon-wand:before { content: "\ebcf" }
+
+.codicon-debug-line-by-line:before { content: "\ebd0" }
+
+.codicon-inspect:before { content: "\ebd1" }
+
+.codicon-layers:before { content: "\ebd2" }
+
+.codicon-layers-dot:before { content: "\ebd3" }
+
+.codicon-layers-active:before { content: "\ebd4" }
+
+.codicon-compass:before { content: "\ebd5" }
+
+.codicon-compass-dot:before { content: "\ebd6" }
+
+.codicon-compass-active:before { content: "\ebd7" }
+
+.codicon-azure:before { content: "\ebd8" }
+
+.codicon-issue-draft:before { content: "\ebd9" }
+
+.codicon-git-pull-request-closed:before { content: "\ebda" }
+
+.codicon-git-pull-request-draft:before { content: "\ebdb" }
+
+.codicon-debug-all:before { content: "\ebdc" }
+
+.codicon-debug-coverage:before { content: "\ebdd" }
+
+.codicon-run-errors:before { content: "\ebde" }
+
+.codicon-folder-library:before { content: "\ebdf" }
+
+.codicon-debug-continue-small:before { content: "\ebe0" }
+
+.codicon-beaker-stop:before { content: "\ebe1" }
+
+.codicon-graph-line:before { content: "\ebe2" }
+
+.codicon-graph-scatter:before { content: "\ebe3" }
+
+.codicon-pie-chart:before { content: "\ebe4" }
+
+.codicon-bracket:before { content: "\eb0f" }
+
+.codicon-bracket-dot:before { content: "\ebe5" }
+
+.codicon-bracket-error:before { content: "\ebe6" }
+
+.codicon-lock-small:before { content: "\ebe7" }
+
+.codicon-azure-devops:before { content: "\ebe8" }
+
+.codicon-verified-filled:before { content: "\ebe9" }
+
+.codicon-newline:before { content: "\ebea" }
+
+.codicon-layout:before { content: "\ebeb" }
+
+.codicon-layout-activitybar-left:before { content: "\ebec" }
+
+.codicon-layout-activitybar-right:before { content: "\ebed" }
+
+.codicon-layout-panel-left:before { content: "\ebee" }
+
+.codicon-layout-panel-center:before { content: "\ebef" }
+
+.codicon-layout-panel-justify:before { content: "\ebf0" }
+
+.codicon-layout-panel-right:before { content: "\ebf1" }
+
+.codicon-layout-panel:before { content: "\ebf2" }
+
+.codicon-layout-sidebar-left:before { content: "\ebf3" }
+
+.codicon-layout-sidebar-right:before { content: "\ebf4" }
+
+.codicon-layout-statusbar:before { content: "\ebf5" }
+
+.codicon-layout-menubar:before { content: "\ebf6" }
+
+.codicon-layout-centered:before { content: "\ebf7" }
+
+.codicon-target:before { content: "\ebf8" }
+
+.codicon-indent:before { content: "\ebf9" }
+
+.codicon-record-small:before { content: "\ebfa" }
+
+.codicon-error-small:before { content: "\ebfb" }
+
+.codicon-terminal-decoration-error:before { content: "\ebfb" }
+
+.codicon-arrow-circle-down:before { content: "\ebfc" }
+
+.codicon-arrow-circle-left:before { content: "\ebfd" }
+
+.codicon-arrow-circle-right:before { content: "\ebfe" }
+
+.codicon-arrow-circle-up:before { content: "\ebff" }
+
+.codicon-layout-sidebar-right-off:before { content: "\ec00" }
+
+.codicon-layout-panel-off:before { content: "\ec01" }
+
+.codicon-layout-sidebar-left-off:before { content: "\ec02" }
+
+.codicon-blank:before { content: "\ec03" }
+
+.codicon-heart-filled:before { content: "\ec04" }
+
+.codicon-map:before { content: "\ec05" }
+
+.codicon-map-filled:before { content: "\ec06" }
+
+.codicon-circle-small:before { content: "\ec07" }
+
+.codicon-bell-slash:before { content: "\ec08" }
+
+.codicon-bell-slash-dot:before { content: "\ec09" }
+
+.codicon-comment-unresolved:before { content: "\ec0a" }
+
+.codicon-git-pull-request-go-to-changes:before { content: "\ec0b" }
+
+.codicon-git-pull-request-new-changes:before { content: "\ec0c" }
+
+.codicon-search-fuzzy:before { content: "\ec0d" }
+
+.codicon-comment-draft:before { content: "\ec0e" }
+
+.codicon-send:before { content: "\ec0f" }
+
+.codicon-sparkle:before { content: "\ec10" }
+
+.codicon-insert:before { content: "\ec11" }
+
+.codicon-mic:before { content: "\ec12" }
+
+.codicon-thumbsdown-filled:before { content: "\ec13" }
+
+.codicon-thumbsup-filled:before { content: "\ec14" }
+
+.codicon-coffee:before { content: "\ec15" }
+
+.codicon-snake:before { content: "\ec16" }
+
+.codicon-game:before { content: "\ec17" }
+
+.codicon-vr:before { content: "\ec18" }
+
+.codicon-chip:before { content: "\ec19" }
+
+.codicon-piano:before { content: "\ec1a" }
+
+.codicon-music:before { content: "\ec1b" }
+
+.codicon-mic-filled:before { content: "\ec1c" }
+
+.codicon-git-fetch:before { content: "\ec1d" }
+
+.codicon-copilot:before { content: "\ec1e" }
+
+:root {
+	--hl-gray-0: #bdd4e3;
+	--hl-gray-1: #8fa1b3;
+	--hl-gray-2: #c0c5ce;
+	--hl-gray-4: #4f5b66;
+	--hl-gray-5: #96b5b4;
+	--hl-gray-6: #969896;
+	--hl-dark-green: #359448;
+	--hl-dark-blue-1: #329af0;
+	--hl-dark-blue-2: #268bd2;
+	--hl-dark-blue-3: #35a5ff;
+	--hl-dark-yellow: #ebcb8b;
+	--hl-dark-red: #bf616a;
+	--hl-blue: #72c3fc;
+	--hl-yellow: #fff3bf;
+	--hl-red: #ffb0af;
+	--hl-green-1: #d3f9d8;
+	--hl-green-2: #a3be8c;
+	--hl-purple: #b48ead;
+	--hl-orange: #d08770;
+	--hl-brown: #ab7967;
+	--hl-black: #2b303b;
+	--hl-white: #f2f4f8;
+	--hl-bg-red: #bf616a;
+	--hl-bg-dark-red: #350b10;
+	--hl-bg-dark-green: #0e2414;
+	--hl-scip-identifier: #859900;
+}
+
+.hljs-keyword,
+.hljs-literal,
+.hljs-symbol,
+.hljs-name {
+	color: #569cd6;
+}
+
+.hljs-link {
+	color: #569cd6;
+	text-decoration: underline;
+}
+
+.hljs-built_in,
+.hljs-type {
+	color: #4ec9b0;
+}
+
+.hljs-number,
+.hljs-class {
+	color: #b8d7a3;
+}
+
+.hljs-string,
+.hljs-meta-string {
+	color: #d69d85;
+}
+
+.hljs-regexp,
+.hljs-template-tag {
+	color: #9a5334;
+}
+
+.hljs-subst,
+.hljs-function,
+.hljs-title,
+.hljs-params,
+.hljs-formula {
+	color: #dcdcdc;
+}
+
+.hljs-comment,
+.hljs-quote {
+	color: #57a64a;
+}
+
+.hljs-doctag {
+	color: #608b4e;
+}
+
+.hljs-meta,
+.hljs-meta-keyword,
+.hljs-tag {
+	color: #9b9b9b;
+}
+
+.hljs-variable,
+.hljs-template-variable {
+	color: #bd63c5;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-builtin-name {
+	color: #9cdcfe;
+}
+
+.hljs-section {
+	color: #ffd700;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+
+.hljs-bullet,
+.hljs-selector-tag,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #d7ba7d;
+}
+
+.hljs-addition {
+	background-color: #024c00;
+	color: #d9f2d8;
+}
+
+.hljs-deletion {
+	background-color: #4c0000;
+	color: #fecccc;
+}
+
+.hl-source,
+.hl-text {
+	color: var(--hl-gray-2);
+}
+
+.hl-variable.hl-parameter.hl-function {
+	color: var(--hl-gray-0);
+}
+
+.hl-punctuation.hl-definition {
+	color: var(--hl-gray-0);
+}
+
+.hl-comment,
+.hl-punctuation.hl-definition.hl-comment {
+	color: var(--hl-dark-green);
+}
+
+.hl-keyword.hl-operator {
+	color: var(--hl-dark-blue-1);
+}
+
+.hl-keyword {
+	color: var(--hl-dark-blue-3);
+}
+
+.hl-variable {
+	color: var(--hl-blue);
+}
+
+.hl-entity.hl-name.hl-function,
+.hl-meta.hl-require,
+.hl-support.hl-function.hl-any-method,
+.hl-variable.hl-function {
+	color: var(--hl-yellow);
+}
+
+.hl-support.hl-class,
+.hl-entity.hl-name.hl-class,
+.hl-meta.hl-class {
+	color: var(--hl-blue);
+}
+
+.hl-entity.hl-other.hl-inherited-class {
+	color: var(--hl-red);
+}
+
+.hl-keyword.hl-other.hl-special-method {
+	color: var(--hl-gray-1);
+}
+
+.hl-storage {
+	color: var(--hl-dark-blue-1);
+}
+
+.hl-support.hl-function {
+	color: var(--hl-yellow);
+}
+
+.hl-string,
+.hl-constant.hl-other.hl-symbol {
+	color: var(--hl-red);
+}
+
+.hl-string.hl-regexp {
+	color: var(--hl-gray-5);
+}
+
+.hl-constant.hl-character.hl-escape {
+	color: var(--hl-gray-5);
+}
+
+.hl-constant {
+	color: var(--hl-dark-blue-1);
+}
+
+.hl-constant.hl-numeric {
+	color: var(--hl-green-1);
+}
+
+.hl-constant.hl-other.hl-color {
+	color: var(--hl-gray-5);
+}
+
+.hl-entity.hl-name.hl-tag {
+	color: var(--hl-dark-blue-1);
+}
+
+.hl-entity.hl-other.hl-attribute-name {
+	color: var(--hl-blue);
+}
+
+.hl-entity.hl-other.hl-attribute-name.hl-id,
+.hl-punctuation.hl-definition.hl-entity {
+	color: var(--hl-gray-1);
+}
+
+.hl-meta.hl-selector {
+	color: var(--hl-purple);
+}
+
+.hl-markup.hl-heading,
+.hl-punctuation.hl-definition.hl-heading,
+.hl-entity.hl-name.hl-section {
+	color: var(--hl-gray-1);
+}
+
+.hl-keyword.hl-other.hl-unit {
+	color: var(--hl-orange);
+}
+
+.hl-markup.hl-raw.hl-inline {
+	color: var(--hl-green-2);
+	/* Links */
+}
+
+.hl-string.hl-other.hl-link {
+	color: var(--hl-dark-red);
+}
+
+.hl-meta.hl-link {
+	color: var(--hl-orange);
+}
+
+.hl-meta.hl-image {
+	color: var(--hl-orange);
+}
+
+.hl-markup.hl-list {
+	color: var(--hl-dark-red);
+}
+
+.hl-punctuation.hl-section.hl-embedded,
+.hl-variable.hl-interpolation {
+	color: var(--hl-brown);
+}
+
+.hl-source.hl-diff {
+	color: var(--hl-gray-6);
+}
+
+.hl-source.hl-diff .hl-meta.hl-range {
+	color: var(--hl-dark-blue-2);
+}
+
+.hl-source.hl-diff .hl-markup.hl-deleted {
+	color: var(--hl-white);
+	background: var(--diff-remove-bg);
+}
+
+.hl-source.hl-diff .hl-markup.hl-inserted {
+	color: var(--hl-white);
+	background: var(--diff-add-bg);
+}
+
+.hl-json .hl-key .hl-string {
+	color: var(--hl-green-2);
+}
+
+.hl-typed-Comment {
+	color: var(--hl-dark-green);
+}
+
+.hl-typed-PunctuationDelimiter {
+	color: var(--hl-gray-2);
+}
+
+.hl-typed-PunctuationBracket {
+	color: var(--hl-gray-2);
+}
+
+.hl-typed-IdentifierKeyword {
+	color: var(--hl-dark-blue-2);
+}
+
+.hl-typed-IdentifierOperator {
+	color: var(--hl-gray-0);
+}
+
+.hl-typed-Identifier {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierFunction {
+	color: var(--hl-dark-yellow);
+}
+
+.hl-typed-IdentifierType {
+	color: var(--hl-gray-1);
+}
+
+.hl-typed-IdentifierBuiltin {
+	color: var(--hl-purple);
+}
+
+.hl-typed-IdentifierNull {
+	color: var(--hl-orange);
+}
+
+.hl-typed-BooleanLiteral {
+	color: var(--hl-orange);
+}
+
+.hl-typed-IdentifierConstant {
+	color: var(--hl-orange);
+}
+
+.hl-typed-IdentifierMutableGlobal {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierParameter {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierLocal {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierShadowed {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierModule {
+	color: var(--hl-blue);
+}
+
+.hl-typed-IdentifierFunctionDefinition {
+	color: var(--hl-yellow);
+}
+
+.hl-typed-IdentifierMacro {
+	color: var(--hl-yellow);
+}
+
+.hl-typed-IdentifierMacroDefinition {
+	color: var(--hl-yellow);
+}
+
+.hl-typed-IdentifierBuiltinType {
+	color: var(--hl-orange);
+}
+
+.hl-typed-IdentifierAttribute {
+	color: var(--hl-purple);
+}
+
+.hl-typed-StringLiteral {
+	color: var(--hl-red);
+}
+
+.hl-typed-StringLiteralEscape {
+	color: var(--hl-red);
+}
+
+.hl-typed-StringLiteralSpecial {
+	color: var(--hl-red);
+}
+
+.hl-typed-StringLiteralKey {
+	color: var(--hl-red);
+}
+
+.hl-typed-CharacterLiteral {
+	color: var(--hl-red);
+}
+
+.hl-typed-NumericLiteral {
+	color: var(--hl-green-1);
+}
+
+.hl-typed-TagAttribute {
+	color: var(--hl-gray-3);
+}
+
+.theme-light .theme-contrast-compliant-syntax-highlighting {
+	--hl-property: #d33682;
+	--hl-string: #058356;
+	--hl-function: #886700;
+	--hl-object: #677700;
+	--hl-keyword: #c44e06;
+	--hl-type: #2178b6;
+	--hl-const-num: #5f66e0;
+	--hl-punctuation: #767676;
+	--hl-symbol: #6d6c6c;
+	--hl-comment: #767676;
+	--hl-modifier: #1626b8;
+	--hl-pink: var(--hl-property);
+	--hl-cyan: var(--hl-string);
+	--hl-yellow: var(--hl-function);
+	--hl-green: var(--hl-object);
+	--hl-orange: var(--hl-keyword);
+	--hl-blue: var(--hl-type);
+	--hl-purple: var(--hl-purple);
+	--hl-gray-0: var(--hl-comment);
+	--hl-gray-1: var(--hl-comment);
+	--hl-gray-2: var(--hl-comment);
+	--hl-gray-3: var(--hl-symbol);
+}
+
+.theme-light .theme-contrast-compliant-syntax-highlighting .hl-punctuation.hl-definition.hl-string {
+	color: var(--hl-punctuation);
+}
+
+.theme-light .theme-contrast-compliant-syntax-highlighting .hl-storage.hl-modifier {
+	color: var(--hl-modifier);
+}
+
+.theme-contrast-compliant-syntax-highlighting {
+	--hl-property: #eb519c;
+	--hl-string: #fb90c4;
+	--hl-function: #b58900;
+	--hl-object: #859900;
+	--hl-keyword: #329af0;
+	--hl-type: #329af0;
+	--hl-const-num: #777dec;
+	--hl-punctuation: #d66f6d;
+	--hl-symbol: #bbbbbb;
+	--hl-comment: #3ba04f;
+	--hl-other: #d08770;
+	--hl-pink: var(--hl-property);
+	--hl-yellow: var(--hl-function);
+	--hl-dark-blue-3: var(--hl-keyword);
+	--hl-dark-blue-1: var(--hl-type);
+	--hl-purple: var(--hl-const-num);
+	--hl-gray-3: var(--hl-symbol);
+	--hl-dark-green: var(--hl-comment);
+	--hl-red: var(--hl-string);
+}
+
+.theme-contrast-compliant-syntax-highlighting .hl-keyword.hl-other.hl-unit {
+	color: var(--hl-other);
+}
+
+.theme-contrast-compliant-syntax-highlighting .hl-punctuation.hl-section.hl-embedded,
+.theme-contrast-compliant-syntax-highlighting .hl-variable.hl-interpolation {
+	color: var(--hl-gray-2);
+}
+
+/*! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com*/
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box; /* 1 */
+  border-width: 0; /* 2 */
+  border-style: solid; /* 2 */
+  border-color: #e5e7eb; /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
+html,
+:host {
+  line-height: 1.5; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+  -moz-tab-size: 4; /* 3 */
+  tab-size: 4; /* 3 */
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+  font-feature-settings: normal; /* 5 */
+  font-variation-settings: normal; /* 6 */
+  -webkit-tap-highlight-color: transparent; /* 7 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0; /* 1 */
+  line-height: inherit; /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0; /* 1 */
+  color: inherit; /* 2 */
+  border-top-width: 1px; /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
+  font-feature-settings: normal; /* 2 */
+  font-variation-settings: normal; /* 3 */
+  font-size: 1em; /* 4 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0; /* 1 */
+  border-color: inherit; /* 2 */
+  border-collapse: collapse; /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 */
+  font-feature-settings: inherit; /* 1 */
+  font-variation-settings: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  font-weight: inherit; /* 1 */
+  line-height: inherit; /* 1 */
+  letter-spacing: inherit; /* 1 */
+  color: inherit; /* 1 */
+  margin: 0; /* 2 */
+  padding: 0; /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button; /* 1 */
+  background-color: transparent; /* 2 */
+  background-image: none; /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Reset default styling for dialogs.
+*/
+
+dialog {
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1; /* 1 */
+  color: #9ca3af; /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block; /* 1 */
+  vertical-align: middle; /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+[hidden] {
+  display: none;
+}
+
+*, ::before, ::after {
+	--tw-border-spacing-x: 0;
+	--tw-border-spacing-y: 0;
+	--tw-translate-x: 0;
+	--tw-translate-y: 0;
+	--tw-rotate: 0;
+	--tw-skew-x: 0;
+	--tw-skew-y: 0;
+	--tw-scale-x: 1;
+	--tw-scale-y: 1;
+	--tw-pan-x:  ;
+	--tw-pan-y:  ;
+	--tw-pinch-zoom:  ;
+	--tw-scroll-snap-strictness: proximity;
+	--tw-gradient-from-position:  ;
+	--tw-gradient-via-position:  ;
+	--tw-gradient-to-position:  ;
+	--tw-ordinal:  ;
+	--tw-slashed-zero:  ;
+	--tw-numeric-figure:  ;
+	--tw-numeric-spacing:  ;
+	--tw-numeric-fraction:  ;
+	--tw-ring-inset:  ;
+	--tw-ring-offset-width: 0px;
+	--tw-ring-offset-color: #fff;
+	--tw-ring-color: rgb(59 130 246 / 0.5);
+	--tw-ring-offset-shadow: 0 0 #0000;
+	--tw-ring-shadow: 0 0 #0000;
+	--tw-shadow: 0 0 #0000;
+	--tw-shadow-colored: 0 0 #0000;
+	--tw-blur:  ;
+	--tw-brightness:  ;
+	--tw-contrast:  ;
+	--tw-grayscale:  ;
+	--tw-hue-rotate:  ;
+	--tw-invert:  ;
+	--tw-saturate:  ;
+	--tw-sepia:  ;
+	--tw-drop-shadow:  ;
+	--tw-backdrop-blur:  ;
+	--tw-backdrop-brightness:  ;
+	--tw-backdrop-contrast:  ;
+	--tw-backdrop-grayscale:  ;
+	--tw-backdrop-hue-rotate:  ;
+	--tw-backdrop-invert:  ;
+	--tw-backdrop-opacity:  ;
+	--tw-backdrop-saturate:  ;
+	--tw-backdrop-sepia:  ;
+	--tw-contain-size:  ;
+	--tw-contain-layout:  ;
+	--tw-contain-paint:  ;
+	--tw-contain-style:  ;
+}
+
+::backdrop {
+	--tw-border-spacing-x: 0;
+	--tw-border-spacing-y: 0;
+	--tw-translate-x: 0;
+	--tw-translate-y: 0;
+	--tw-rotate: 0;
+	--tw-skew-x: 0;
+	--tw-skew-y: 0;
+	--tw-scale-x: 1;
+	--tw-scale-y: 1;
+	--tw-pan-x:  ;
+	--tw-pan-y:  ;
+	--tw-pinch-zoom:  ;
+	--tw-scroll-snap-strictness: proximity;
+	--tw-gradient-from-position:  ;
+	--tw-gradient-via-position:  ;
+	--tw-gradient-to-position:  ;
+	--tw-ordinal:  ;
+	--tw-slashed-zero:  ;
+	--tw-numeric-figure:  ;
+	--tw-numeric-spacing:  ;
+	--tw-numeric-fraction:  ;
+	--tw-ring-inset:  ;
+	--tw-ring-offset-width: 0px;
+	--tw-ring-offset-color: #fff;
+	--tw-ring-color: rgb(59 130 246 / 0.5);
+	--tw-ring-offset-shadow: 0 0 #0000;
+	--tw-ring-shadow: 0 0 #0000;
+	--tw-shadow: 0 0 #0000;
+	--tw-shadow-colored: 0 0 #0000;
+	--tw-blur:  ;
+	--tw-brightness:  ;
+	--tw-contrast:  ;
+	--tw-grayscale:  ;
+	--tw-hue-rotate:  ;
+	--tw-invert:  ;
+	--tw-saturate:  ;
+	--tw-sepia:  ;
+	--tw-drop-shadow:  ;
+	--tw-backdrop-blur:  ;
+	--tw-backdrop-brightness:  ;
+	--tw-backdrop-contrast:  ;
+	--tw-backdrop-grayscale:  ;
+	--tw-backdrop-hue-rotate:  ;
+	--tw-backdrop-invert:  ;
+	--tw-backdrop-opacity:  ;
+	--tw-backdrop-saturate:  ;
+	--tw-backdrop-sepia:  ;
+	--tw-contain-size:  ;
+	--tw-contain-layout:  ;
+	--tw-contain-paint:  ;
+	--tw-contain-style:  ;
+}
+
+.tw-invisible {
+	visibility: hidden;
+}
+
+.tw-absolute {
+	position: absolute;
+}
+
+.tw-relative {
+	position: relative;
+}
+
+.tw-sticky {
+	position: sticky;
+}
+
+.tw-bottom-0 {
+	bottom: 0px;
+}
+
+.tw-left-\[0px\] {
+	left: 0px;
+}
+
+.tw-left-\[5\.5px\] {
+	left: 5.5px;
+}
+
+.tw-top-0 {
+	top: 0px;
+}
+
+.tw-top-\[0px\] {
+	top: 0px;
+}
+
+.tw-top-\[5\.5px\] {
+	top: 5.5px;
+}
+
+.tw-z-50 {
+	z-index: 50;
+}
+
+.tw-col-span-4 {
+	grid-column: span 4 / span 4;
+}
+
+.tw--mx-2 {
+	margin-left: -4px;
+	margin-right: -4px;
+}
+
+.tw-my-2 {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.tw-mb-4 {
+	margin-bottom: 8px;
+}
+
+.tw-mb-6 {
+	margin-bottom: 12px;
+}
+
+.tw-ml-1 {
+	margin-left: 2px;
+}
+
+.tw-ml-2 {
+	margin-left: 4px;
+}
+
+.tw-ml-4 {
+	margin-left: 8px;
+}
+
+.tw-ml-auto {
+	margin-left: auto;
+}
+
+.tw-mr-1 {
+	margin-right: 2px;
+}
+
+.tw-mr-2 {
+	margin-right: 4px;
+}
+
+.tw-mt-0 {
+	margin-top: 0px;
+}
+
+.tw-mt-0\.5 {
+	margin-top: 0.125rem;
+}
+
+.tw-mt-1 {
+	margin-top: 2px;
+}
+
+.tw-mt-2 {
+	margin-top: 4px;
+}
+
+.tw-mt-4 {
+	margin-top: 8px;
+}
+
+.tw-mt-\[2px\] {
+	margin-top: 2px;
+}
+
+.tw-flex {
+	display: flex;
+}
+
+.tw-inline-flex {
+	display: inline-flex;
+}
+
+.tw-grid {
+	display: grid;
+}
+
+.tw-hidden {
+	display: none;
+}
+
+.\!tw-h-\[30px\] {
+	height: 30px !important;
+}
+
+.tw-h-8 {
+	height: 16px;
+}
+
+.tw-h-\[1\.375rem\] {
+	height: 1.375rem;
+}
+
+.tw-h-\[18px\] {
+	height: 18px;
+}
+
+.tw-h-\[1em\] {
+	height: 1em;
+}
+
+.tw-h-\[20px\] {
+	height: 20px;
+}
+
+.tw-h-\[7px\] {
+	height: 7px;
+}
+
+.tw-h-full {
+	height: 100%;
+}
+
+.tw-h-px {
+	height: 1px;
+}
+
+.\!tw-max-h-\[392px\] {
+	max-height: 392px !important;
+}
+
+.\!tw-max-h-\[unset\] {
+	max-height: unset !important;
+}
+
+.tw-max-h-\[500px\] {
+	max-height: 500px;
+}
+
+.tw-w-72 {
+	width: 18rem;
+}
+
+.tw-w-8 {
+	width: 16px;
+}
+
+.tw-w-\[1\.375rem\] {
+	width: 1.375rem;
+}
+
+.tw-w-\[18px\] {
+	width: 18px;
+}
+
+.tw-w-\[1em\] {
+	width: 1em;
+}
+
+.tw-w-\[20px\] {
+	width: 20px;
+}
+
+.tw-w-\[75vw\] {
+	width: 75vw;
+}
+
+.tw-w-\[7px\] {
+	width: 7px;
+}
+
+.tw-w-\[unset\] {
+	width: unset;
+}
+
+.tw-w-full {
+	width: 100%;
+}
+
+.tw-min-w-\[1\.5em\] {
+	min-width: 1.5em;
+}
+
+.tw-min-w-\[325px\] {
+	min-width: 325px;
+}
+
+.\!tw-max-w-\[unset\] {
+	max-width: unset !important;
+}
+
+.tw-max-w-72 {
+	max-width: 18rem;
+}
+
+.tw-max-w-\[550px\] {
+	max-width: 550px;
+}
+
+.tw-max-w-\[90\%\] {
+	max-width: 90%;
+}
+
+.tw-max-w-full {
+	max-width: 100%;
+}
+
+.tw-max-w-lg {
+	max-width: 32rem;
+}
+
+.tw-flex-1 {
+	flex: 1 1 0%;
+}
+
+.tw-flex-none {
+	flex: none;
+}
+
+.tw-shrink-0 {
+	flex-shrink: 0;
+}
+
+.tw-flex-grow {
+	flex-grow: 1;
+}
+
+.tw-grow {
+	flex-grow: 1;
+}
+
+.-tw-translate-y-\[\.2em\] {
+	--tw-translate-y: -.2em;
+	transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.tw-translate-x-\[1px\] {
+	--tw-translate-x: 1px;
+	transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.tw-translate-y-\[1px\] {
+	--tw-translate-y: 1px;
+	transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+@keyframes tw-spin {
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.tw-animate-spin {
+	animation: tw-spin 1s linear infinite;
+}
+
+.tw-cursor-default {
+	cursor: default;
+}
+
+.tw-cursor-pointer {
+	cursor: pointer;
+}
+
+.tw-select-none {
+	user-select: none;
+}
+
+.tw-list-none {
+	list-style-type: none;
+}
+
+.tw-grid-cols-5 {
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.tw-flex-col {
+	flex-direction: column;
+}
+
+.tw-flex-wrap {
+	flex-wrap: wrap;
+}
+
+.\!tw-items-start {
+	align-items: flex-start !important;
+}
+
+.tw-items-start {
+	align-items: flex-start;
+}
+
+.tw-items-end {
+	align-items: flex-end;
+}
+
+.tw-items-center {
+	align-items: center;
+}
+
+.tw-items-baseline {
+	align-items: baseline;
+}
+
+.tw-items-stretch {
+	align-items: stretch;
+}
+
+.tw-justify-center {
+	justify-content: center;
+}
+
+.tw-justify-between {
+	justify-content: space-between;
+}
+
+.tw-gap-0 {
+	gap: 0px;
+}
+
+.tw-gap-0\.5 {
+	gap: 0.125rem;
+}
+
+.tw-gap-1 {
+	gap: 2px;
+}
+
+.tw-gap-1\.5 {
+	gap: 3px;
+}
+
+.tw-gap-10 {
+	gap: 20px;
+}
+
+.tw-gap-2 {
+	gap: 4px;
+}
+
+.tw-gap-3 {
+	gap: 6px;
+}
+
+.tw-gap-4 {
+	gap: 8px;
+}
+
+.tw-gap-5 {
+	gap: 10px;
+}
+
+.tw-gap-6 {
+	gap: 12px;
+}
+
+.tw-gap-8 {
+	gap: 16px;
+}
+
+.tw-gap-x-3 {
+	column-gap: 6px;
+}
+
+.tw-gap-x-4 {
+	column-gap: 8px;
+}
+
+.tw-gap-y-1 {
+	row-gap: 2px;
+}
+
+.tw-gap-y-2 {
+	row-gap: 4px;
+}
+
+.tw-divide-x > :not([hidden]) ~ :not([hidden]) {
+	--tw-divide-x-reverse: 0;
+	border-right-width: calc(1px * var(--tw-divide-x-reverse));
+	border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.tw-divide-muted > :not([hidden]) ~ :not([hidden]) {
+	border-color: var(--vscode-input-background);
+}
+
+.tw-self-stretch {
+	align-self: stretch;
+}
+
+.tw-overflow-auto {
+	overflow: auto;
+}
+
+.tw-overflow-hidden {
+	overflow: hidden;
+}
+
+.tw-overflow-clip {
+	overflow: clip;
+}
+
+.tw-overflow-y-auto {
+	overflow-y: auto;
+}
+
+.tw-overflow-x-hidden {
+	overflow-x: hidden;
+}
+
+.tw-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tw-text-ellipsis {
+	text-overflow: ellipsis;
+}
+
+.tw-whitespace-nowrap {
+	white-space: nowrap;
+}
+
+.tw-whitespace-pre-line {
+	white-space: pre-line;
+}
+
+.tw-text-nowrap {
+	text-wrap: nowrap;
+}
+
+.\!tw-rounded-full {
+	border-radius: 9999px !important;
+}
+
+.\!tw-rounded-none {
+	border-radius: 0px !important;
+}
+
+.tw-rounded {
+	border-radius: 0.25rem;
+}
+
+.tw-rounded-\[0\.5px\] {
+	border-radius: 0.5px;
+}
+
+.tw-rounded-\[2px\] {
+	border-radius: 2px;
+}
+
+.tw-rounded-full {
+	border-radius: 9999px;
+}
+
+.tw-rounded-lg {
+	border-radius: 6px;
+}
+
+.tw-rounded-md {
+	border-radius: 4px;
+}
+
+.tw-rounded-none {
+	border-radius: 0px;
+}
+
+.tw-rounded-sm {
+	border-radius: 2px;
+}
+
+.tw-border {
+	border-width: 1px;
+}
+
+.tw-border-\[1px\] {
+	border-width: 1px;
+}
+
+.\!tw-border-b-0 {
+	border-bottom-width: 0px !important;
+}
+
+.tw-border-b {
+	border-bottom-width: 1px;
+}
+
+.tw-border-b-\[1px\] {
+	border-bottom-width: 1px;
+}
+
+.tw-border-solid {
+	border-style: solid;
+}
+
+.tw-border-none {
+	border-style: none;
+}
+
+.\!tw-border-\[var\(--vscode-tab-activeBorderTop\)\] {
+	border-color: var(--vscode-tab-activeBorderTop) !important;
+}
+
+.tw-border-border {
+	border-color: var(--vscode-dropdown-border);
+}
+
+.tw-border-button-border {
+	border-color: var(--vscode-button-border, transparent);
+}
+
+.tw-border-current {
+	border-color: currentColor;
+}
+
+.tw-border-keybinding-border {
+	border-color: var(--vscode-keybindingLabel-border);
+}
+
+.tw-border-muted-transparent {
+	border-color: color-mix(in lch, currentColor 15%, transparent);
+}
+
+.tw-border-ring {
+	border-color: var(--vscode-focusBorder);
+}
+
+.tw-border-transparent {
+	border-color: transparent;
+}
+
+.tw-border-b-border {
+	border-bottom-color: var(--vscode-dropdown-border);
+}
+
+.tw-border-e-transparent {
+	border-inline-end-color: transparent;
+}
+
+.\!tw-bg-\[unset\] {
+	background-color: unset !important;
+}
+
+.tw-bg-\[unset\] {
+	background-color: unset;
+}
+
+.tw-bg-background {
+	background-color: var(--vscode-editor-background);
+}
+
+.tw-bg-badge-background {
+	background-color: var(--vscode-badge-background);
+}
+
+.tw-bg-border {
+	background-color: var(--vscode-dropdown-border);
+}
+
+.tw-bg-button-background {
+	background-color: var(--vscode-button-background);
+}
+
+.tw-bg-button-secondary-background {
+	background-color: var(--vscode-button-secondaryBackground);
+}
+
+.tw-bg-current {
+	background-color: currentColor;
+}
+
+.tw-bg-keybinding-background {
+	background-color: var(--vscode-keybindingLabel-background);
+}
+
+.tw-bg-popover {
+	background-color: var(--vscode-quickInput-background);
+}
+
+.tw-bg-transparent {
+	background-color: transparent;
+}
+
+.\!tw-p-0 {
+	padding: 0px !important;
+}
+
+.\!tw-p-2 {
+	padding: 4px !important;
+}
+
+.\!tw-p-3 {
+	padding: 6px !important;
+}
+
+.tw-p-0 {
+	padding: 0px;
+}
+
+.tw-p-1 {
+	padding: 2px;
+}
+
+.tw-p-2 {
+	padding: 4px;
+}
+
+.tw-p-4 {
+	padding: 8px;
+}
+
+.tw-p-6 {
+	padding: 12px;
+}
+
+.tw-p-8 {
+	padding: 16px;
+}
+
+.tw-px-0 {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.tw-px-2 {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.tw-px-3 {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.tw-px-4 {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.tw-px-8 {
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.tw-px-\[5px\] {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.tw-py-0 {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.tw-py-2 {
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.tw-py-3 {
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.tw-py-4 {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+.tw-py-6 {
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.tw-py-\[\.1rem\] {
+	padding-top: .1rem;
+	padding-bottom: .1rem;
+}
+
+.tw-pb-12 {
+	padding-bottom: 24px;
+}
+
+.tw-pb-3 {
+	padding-bottom: 6px;
+}
+
+.tw-pb-6 {
+	padding-bottom: 12px;
+}
+
+.tw-pl-5 {
+	padding-left: 10px;
+}
+
+.tw-pl-\[15px\] {
+	padding-left: 15px;
+}
+
+.tw-pr-4 {
+	padding-right: 8px;
+}
+
+.tw-pt-1 {
+	padding-top: 2px;
+}
+
+.tw-pt-1\.5 {
+	padding-top: 3px;
+}
+
+.tw-pt-2 {
+	padding-top: 4px;
+}
+
+.tw-pt-4 {
+	padding-top: 8px;
+}
+
+.tw-pt-6 {
+	padding-top: 12px;
+}
+
+.tw-pt-\[2px\] {
+	padding-top: 2px;
+}
+
+.tw-text-left {
+	text-align: left;
+}
+
+.tw-text-center {
+	text-align: center;
+}
+
+.tw-align-middle {
+	vertical-align: middle;
+}
+
+.\!tw-text-md {
+	font-size: var(--vscode-font-size) !important;
+}
+
+.tw-text-lg {
+	font-size: calc(var(--vscode-font-size) * 15 / 13);
+}
+
+.tw-text-md {
+	font-size: var(--vscode-font-size);
+}
+
+.tw-text-sm {
+	font-size: calc(calc(12/13)*var(--vscode-font-size));
+}
+
+.tw-text-xs {
+	font-size: calc(calc(11/13)*var(--vscode-font-size));
+}
+
+.tw-text-xxs {
+	font-size: calc(calc(10/13)*var(--vscode-font-size));
+}
+
+.tw-font-medium {
+	font-weight: 500;
+}
+
+.tw-font-semibold {
+	font-weight: 600;
+}
+
+.tw-uppercase {
+	text-transform: uppercase;
+}
+
+.\!tw-leading-\[1\.2\] {
+	line-height: 1.2 !important;
+}
+
+.tw-leading-none {
+	line-height: 1;
+}
+
+.tw-leading-tight {
+	line-height: 1.25;
+}
+
+.tw-tracking-tight {
+	letter-spacing: -0.025em;
+}
+
+.tw-tracking-widest {
+	letter-spacing: 0.1em;
+}
+
+.\!tw-text-\[unset\] {
+	color: unset !important;
+}
+
+.\!tw-text-foreground {
+	color: var(--vscode-foreground) !important;
+}
+
+.\!tw-text-muted-foreground {
+	color: var(--vscode-input-placeholderForeground) !important;
+}
+
+.tw-text-accent-foreground {
+	color: var(--vscode-list-activeSelectionForeground);
+}
+
+.tw-text-badge-foreground {
+	color: var(--vscode-badge-foreground);
+}
+
+.tw-text-button-foreground {
+	color: var(--vscode-button-foreground);
+}
+
+.tw-text-button-secondary-foreground {
+	color: var(--vscode-button-secondaryForeground);
+}
+
+.tw-text-foreground {
+	color: var(--vscode-foreground);
+}
+
+.tw-text-keybinding-foreground {
+	color: var(--vscode-keybindingLabel-foreground);
+}
+
+.tw-text-link {
+	color: var(--vscode-textLink-foreground);
+}
+
+.tw-text-muted-foreground {
+	color: var(--vscode-input-placeholderForeground);
+}
+
+.tw-text-popover-foreground {
+	color: var(--vscode-dropdown-foreground);
+}
+
+.tw-underline-offset-4 {
+	text-underline-offset: 4px;
+}
+
+.\!tw-opacity-100 {
+	opacity: 1 !important;
+}
+
+.tw-opacity-30 {
+	opacity: 0.3;
+}
+
+.tw-opacity-60 {
+	opacity: 0.6;
+}
+
+.tw-opacity-65 {
+	opacity: 0.65;
+}
+
+.tw-opacity-75 {
+	opacity: 0.75;
+}
+
+.tw-opacity-80 {
+	opacity: 0.8;
+}
+
+.tw-shadow-lg {
+	--tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	--tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+	box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.tw-shadow-md {
+	--tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+	box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.tw-outline-none {
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.tw-transition {
+	transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}
+
+.tw-transition-all {
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}
+
+.tw-transition-transform {
+	transition-property: transform;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
+}
+
+.tw-duration-150 {
+	transition-duration: 150ms;
+}
+
+.tw-duration-75 {
+	transition-duration: 75ms;
+}
+
+/* incremental improvements coming */
+
+html[data-ide=JetBrains] {
+    --vscode-actionBar-toggledBackground: var(--jetbrains-ToolbarComboWidget-background);
+    --vscode-activityBar-background: var(--jetbrains-ToolBar-background);
+    --vscode-activityBar-border: var(--jetbrains-ToolbarComboWidget-background);
+    --vscode-activityBar-foreground: var(--jetbrains-ToolBar-foreground);
+    --vscode-activityBar-inactiveForeground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-activityBarBadge-background: var(--jetbrains-ToolBar-background);
+    --vscode-activityBarBadge-foreground: var(--jetbrains-ToolBar-foreground);
+    --vscode-activityBarTop-activeBorder: var(--jetbrains-MenuBar-borderColor);
+    --vscode-activityBarTop-dropBorder: var(--jetbrains-MenuBar-borderColor);
+    --vscode-activityBarTop-foreground: var(--jetbrains-MenuBar-foreground);
+    --vscode-activityBarTop-inactiveForeground: var(--jetbrains-MenuBar-selectionForeground);
+    --vscode-badge-background: var(--jetbrains-Tag-background);
+    --vscode-badge-foreground: var(--jetbrains-Label-foreground);
+    --vscode-banner-iconForeground: var(--jetbrains-Button-foreground);
+    --vscode-breadcrumb-activeSelectionForeground: var(--jetbrains-Lesson-badge-newLessonForeground);
+    --vscode-breadcrumb-background: var(--jetbrains-EditorPane-background);
+    --vscode-breadcrumb-focusForeground: var(--jetbrains-EditorPane-caretForeground);
+    --vscode-breadcrumb-foreground: var(--jetbrains-EditorPane-foreground);
+    --vscode-breadcrumbPicker-background: var(--jetbrains-EditorPane-inactiveBackground);
+    --vscode-button-border: var(--jetbrains-Button-startBorderColor);
+    --vscode-button-foreground: var(--jetbrains-Button-foreground);
+    --vscode-button-secondaryForeground: var(--jetbrains-Button-disabledText);
+    --vscode-button-separator: var(--jetbrains-Button-shadow);
+    --vscode-charts-blue: var(--jetbrains-CheckBox-foreground);
+    --vscode-charts-foreground: var(--jetbrains-ControlText);
+    --vscode-charts-green: var(--jetbrains-ProgressBar-passedColor);
+    --vscode-charts-lines: var(--jetbrains-Table-gridColor);
+    --vscode-charts-orange: var(--jetbrains-Bookmark-iconBackground);
+    --vscode-charts-purple: var(--jetbrains-Tooltip-learning-background);
+    --vscode-charts-red: var(--jetbrains-ProgressBar-failedColor);
+    --vscode-charts-yellow: var(--jetbrains-ValidationTooltip-warningBackground);
+    --vscode-chat-avatarBackground: var(--jetbrains-RadioButtonMenuItem-background);
+    --vscode-chat-avatarForeground: var(--jetbrains-Tooltip-foreground);
+    --vscode-chat-requestBackground: var(--jetbrains-List-background);
+    --vscode-chat-requestBorder: var(--jetbrains-Component-borderColor);
+    --vscode-chat-slashCommandBackground: var(--jetbrains-ToolbarComboWidget-background);
+    --vscode-chat-slashCommandForeground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-checkbox-background: var(--jetbrains-CheckBox-background);
+    --vscode-checkbox-border: var(--jetbrains-Component-borderColor);
+    --vscode-checkbox-foreground: var(--jetbrains-CheckBox-foreground);
+    --vscode-checkbox-selectBackground: var(--jetbrains-TextField-selectionBackground);
+    --vscode-checkbox-selectBorder: var(--jetbrains-TextField-darkShadow);
+    --vscode-commandCenter-activeBorder: var(--jetbrains-Button-default-focusColor);
+    --vscode-commandCenter-activeForeground: var(--jetbrains-Button-default-foreground);
+    --vscode-commandCenter-border: var(--jetbrains-Component-borderColor);
+    --vscode-commandCenter-debuggingBackground: var(--jetbrains-InternalFrame-borderHighlight);
+    --vscode-commandCenter-foreground: var(--jetbrains-ToolBar-foreground);
+    --vscode-commentsView-resolvedIcon: var(--jetbrains-List-selectionForeground);
+    --vscode-commentsView-unresolvedIcon: var(--jetbrains-Bookmark-mnemonic-current-foreground);
+    --vscode-contrastActiveBorder: var(--jetbrains-ActionButton-focusedBorderColor);
+    --vscode-contrastBorder: var(--jetbrains-ActionButton-hoverBorderColor);
+    --vscode-debugConsole-errorForeground: var(--jetbrains-Component-errorFocusColor);
+    --vscode-debugConsole-infoForeground: var(--jetbrains-Info);
+    --vscode-debugConsole-sourceForeground: var(--jetbrains-EditorPane-foreground);
+    --vscode-debugConsole-warningForeground: var(--jetbrains-ValidationTooltip-warningBorderColor);
+    --vscode-debugConsoleInputIcon-foreground: var(--jetbrains-Component-infoForeground);
+    --vscode-debugExceptionWidget-background: var(--jetbrains-OptionPane-background);
+    --vscode-debugExceptionWidget-border: var(--jetbrains-Component-borderColor);
+    --vscode-debugIcon-breakpointCurrentStackframeForeground: var(--jetbrains-Tree-selectionForeground);
+    --vscode-debugIcon-breakpointDisabledForeground: var(--jetbrains-RadioButton-darcula-selectionDisabledColor);
+    --vscode-debugIcon-breakpointForeground: var(--jetbrains-BookmarkMnemonicCurrent-foreground);
+    --vscode-debugIcon-breakpointStackframeForeground: var(--jetbrains-Tree-selectionForeground);
+    --vscode-debugIcon-breakpointUnverifiedForeground: var(--jetbrains-RadioButton-darcula-selectionDisabledColor);
+    --vscode-debugIcon-continueForeground: var(--jetbrains-ToolWindow-HeaderCloseButton-background);
+    --vscode-debugIcon-disconnectForeground: var(--jetbrains-Button-shadowColor);
+    --vscode-debugIcon-pauseForeground: var(--jetbrains-Button-light);
+    --vscode-debugIcon-restartForeground: var(--jetbrains-Button-highlight);
+    --vscode-debugIcon-startForeground: var(--jetbrains-Button-highlight);
+    --vscode-debugIcon-stepBackForeground: var(--jetbrains-Button-light);
+    --vscode-debugIcon-stepIntoForeground: var(--jetbrains-Button-light);
+    --vscode-debugIcon-stepOutForeground: var(--jetbrains-Button-light);
+    --vscode-debugIcon-stepOverForeground: var(--jetbrains-Button-light);
+    --vscode-debugIcon-stopForeground: var(--jetbrains-ToolWindow-HeaderCloseButton-background);
+    --vscode-debugTokenExpression-boolean: var(--jetbrains-Table-foreground);
+    --vscode-debugTokenExpression-error: var(--jetbrains-ValidationTooltip-errorBackground);
+    --vscode-debugTokenExpression-name: var(--jetbrains-ToolTip-foreground);
+    --vscode-debugTokenExpression-number: var(--jetbrains-Table-focusCellForeground);
+    --vscode-debugTokenExpression-string: var(--jetbrains-TextField-foreground);
+    --vscode-debugTokenExpression-value: var(--jetbrains-ToolTip-foreground);
+    --vscode-debugToolBar-background: var(--jetbrains-ToolWindow-Header-background);
+    --vscode-debugView-exceptionLabelBackground: var(--jetbrains-ValidationTooltip-errorBackground);
+    --vscode-debugView-exceptionLabelForeground: var(--jetbrains-ToolTip-foreground);
+    --vscode-debugView-stateLabelBackground: var(--jetbrains-ValidationTooltip-warningBackground);
+    --vscode-debugView-stateLabelForeground: var(--jetbrains-ToolTip-foreground);
+    --vscode-debugView-valueChangedHighlight: var(--jetbrains-ProgressBar-passedColor);
+    --vscode-descriptionForeground: var(--jetbrains-Label-foreground);
+    --vscode-diffEditor-border: var(--jetbrains-SplitPaneDivider-draggingColor);
+    --vscode-diffEditor-insertedTextBorder: var(--jetbrains-Table-selectionBackground);
+    --vscode-diffEditor-move-border: var(--jetbrains-ToolWindow-HeaderTab-selectedInactiveBackground);
+    --vscode-diffEditor-moveActive-border: var(--jetbrains-ToolWindow-HeaderTab-selectedBackground);
+    --vscode-diffEditor-removedTextBorder: var(--jetbrains-ProgressBar-failedEndColor);
+    --vscode-diffEditor-unchangedRegionBackground: var(--jetbrains-Table-selectionInactiveBackground);
+    --vscode-diffEditor-unchangedRegionForeground: var(--jetbrains-Table-foreground);
+    --vscode-diffEditor-unchangedRegionShadow: var(--jetbrains-ScrollBar-thumbDarkShadow);
+    --vscode-disabledForeground: var(--jetbrains-CheckBoxMenuItem-disabledForeground);
+    --vscode-dropdown-background: var(--jetbrains-ComboBox-background);
+    --vscode-dropdown-border: var(--jetbrains-MenuBar-borderColor);
+    --vscode-dropdown-foreground: var(--jetbrains-ComboBox-foreground);
+    --vscode-dropdown-listBackground: var(--jetbrains-ComboBox-buttonBackground);
+    --vscode-editor-background: var(--jetbrains-EditorPane-background);
+    --vscode-editor-findMatchBorder: var(--jetbrains-DragAndDrop-borderColor);
+    --vscode-editor-findMatchHighlightBorder: var(--jetbrains-SegmentedButton-selectedEndBorderColor);
+    --vscode-editor-findRangeHighlightBorder: var(--jetbrains-Table-dropLineShortColor);
+    --vscode-editor-focusedStackFrameHighlightBackground: var(--jetbrains-Table-selectionBackground);
+    --vscode-editor-foreground: var(--jetbrains-EditorPane-foreground);
+    --vscode-editor-hoverHighlightBackground: var(--jetbrains-ActionButton-hoverBackground);
+    --vscode-editor-inactiveSelectionBackground: var(--jetbrains-TextComponent-selectionBackgroundInactive);
+    --vscode-editor-inlineValuesBackground: var(--jetbrains-BookmarkMnemonicAvailable-background);
+    --vscode-editor-inlineValuesForeground: var(--jetbrains-Label-foreground);
+    --vscode-editor-lineHighlightBorder: var(--jetbrains-Separator-foreground);
+    --vscode-editor-linkedEditingBackground: var(--jetbrains-Menu-selectionBackground);
+    --vscode-editor-rangeHighlightBorder: var(--jetbrains-Component-focusedBorderColor);
+    --vscode-editor-selectionBackground: var(--jetbrains-EditorPane-selectionBackground);
+    --vscode-editor-selectionForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-editor-selectionHighlightBorder: var(--jetbrains-SegmentedButton-selectedStartBorderColor);
+    --vscode-editor-snippetFinalTabstopHighlightBorder: var(--jetbrains-SegmentedButton-focusColor);
+    --vscode-editor-snippetTabstopHighlightBackground: var(--jetbrains-SegmentedButton-selectedButtonColor);
+    --vscode-editor-stackFrameHighlightBackground: var(--jetbrains-Table-selectionInactiveBackground);
+    --vscode-editor-symbolHighlightBorder: var(--jetbrains-MenuItem-selectionBackground);
+    --vscode-editor-wordHighlightBorder: var(--jetbrains-Button-default-startBorderColor);
+    --vscode-editor-wordHighlightStrongBorder: var(--jetbrains-TextField-darkShadow);
+    --vscode-editor-wordHighlightTextBorder: var(--jetbrains-Component-errorFocusColor);
+    --vscode-editorActiveLineNumber-foreground: var(--jetbrains-TextField-highlight);
+    --vscode-editorBracketHighlight-foreground1: var(--jetbrains-MenuItem-acceleratorForeground);
+    --vscode-editorBracketHighlight-foreground2: var(--jetbrains-Table-selectionForeground);
+    --vscode-editorBracketHighlight-foreground3: var(--jetbrains-ToolTip-infoForeground);
+    --vscode-editorBracketHighlight-foreground4: var(--jetbrains-Tree-textForeground);
+    --vscode-editorBracketHighlight-foreground5: var(--jetbrains-InfoText);
+    --vscode-editorBracketHighlight-foreground6: var(--jetbrains-Tree-foreground);
+    --vscode-editorBracketHighlight-unexpectedBracket-foreground: var(--jetbrains-Hyperlink-linkColor);
+    --vscode-editorBracketMatch-background: var(--jetbrains-EditorBracketMatch-background);
+    --vscode-editorBracketMatch-border: var(--jetbrains-EditorBracketMatch-border);
+    --vscode-editorBracketPairGuide-activeBackground1: var(--jetbrains-EditorBracketPairGuide-activeBackground1);
+    --vscode-editorBracketPairGuide-activeBackground2: var(--jetbrains-EditorBracketPairGuide-activeBackground2);
+    --vscode-editorBracketPairGuide-activeBackground3: var(--jetbrains-EditorBracketPairGuide-activeBackground3);
+    --vscode-editorBracketPairGuide-activeBackground4: var(--jetbrains-EditorBracketPairGuide-activeBackground4);
+    --vscode-editorBracketPairGuide-activeBackground5: var(--jetbrains-EditorBracketPairGuide-activeBackground5);
+    --vscode-editorBracketPairGuide-activeBackground6: var(--jetbrains-EditorBracketPairGuide-activeBackground6);
+    --vscode-editorBracketPairGuide-background1: var(--jetbrains-EditorBracketPairGuide-background1);
+    --vscode-editorBracketPairGuide-background2: var(--jetbrains-EditorBracketPairGuide-background2);
+    --vscode-editorBracketPairGuide-background3: var(--jetbrains-EditorBracketPairGuide-background3);
+    --vscode-editorBracketPairGuide-background4: var(--jetbrains-EditorBracketPairGuide-background4);
+    --vscode-editorBracketPairGuide-background5: var(--jetbrains-EditorBracketPairGuide-background5);
+    --vscode-editorBracketPairGuide-background6: var(--jetbrains-EditorBracketPairGuide-background6);
+    --vscode-editorCodeLens-foreground: var(--jetbrains-EditorCodeLens-foreground);
+    --vscode-editorCommentsWidget-rangeActiveBackground: var(--jetbrains-EditorCommentsWidget-rangeActiveBackground);
+    --vscode-editorCommentsWidget-rangeBackground: var(--jetbrains-EditorCommentsWidget-rangeBackground);
+    --vscode-editorCommentsWidget-replyInputBackground: var(--jetbrains-EditorCommentsWidget-replyInputBackground);
+    --vscode-editorCommentsWidget-resolvedBorder: var(--jetbrains-EditorCommentsWidget-resolvedBorder);
+    --vscode-editorCommentsWidget-unresolvedBorder: var(--jetbrains-EditorCommentsWidget-unresolvedBorder);
+    --vscode-editorCursor-foreground: var(--jetbrains-EditorCursor-foreground);
+    --vscode-editorError-border: var(--jetbrains-EditorError-border);
+    --vscode-editorError-foreground: var(--jetbrains-EditorError-foreground);
+    --vscode-editorGhostText-border: var(--jetbrains-EditorGhostText-border);
+    --vscode-editorGroup-border: var(--jetbrains-EditorGroup-border);
+    --vscode-editorGroup-dropIntoPromptBackground: var(--jetbrains-EditorGroup-dropIntoPromptBackground);
+    --vscode-editorGroup-dropIntoPromptBorder: var(--jetbrains-EditorGroup-dropIntoPromptBorder);
+    --vscode-editorGroup-dropIntoPromptForeground: var(--jetbrains-EditorGroup-dropIntoPromptForeground);
+    --vscode-editorGroup-focusedEmptyBorder: var(--jetbrains-EditorGroup-focusedEmptyBorder);
+    --vscode-editorGroupHeader-border: var(--jetbrains-EditorGroupHeader-border);
+    --vscode-editorGroupHeader-noTabsBackground: var(--jetbrains-EditorGroupHeader-noTabsBackground);
+    --vscode-editorGutter-addedBackground: var(--jetbrains-EditorGutter-addedBackground);
+    --vscode-editorGutter-background: var(--jetbrains-EditorGutter-background);
+    --vscode-editorGutter-commentGlyphForeground: var(--jetbrains-EditorGutter-commentGlyphForeground);
+    --vscode-editorGutter-commentRangeForeground: var(--jetbrains-EditorGutter-commentRangeForeground);
+    --vscode-editorGutter-commentUnresolvedGlyphForeground: var(--jetbrains-EditorGutter-commentUnresolvedGlyphForeground);
+    --vscode-editorGutter-deletedBackground: var(--jetbrains-EditorGutter-deletedBackground);
+    --vscode-editorGutter-foldingControlForeground: var(--jetbrains-EditorGutter-foldingControlForeground);
+    --vscode-editorGutter-modifiedBackground: var(--jetbrains-EditorGutter-modifiedBackground);
+    --vscode-editorHint-border: var(--jetbrains-EditorHint-border);
+    --vscode-editorHoverWidget-background: var(--jetbrains-EditorHoverWidget-background);
+    --vscode-editorHoverWidget-border: var(--jetbrains-EditorHoverWidget-border);
+    --vscode-editorHoverWidget-foreground: var(--jetbrains-EditorHoverWidget-foreground);
+    --vscode-editorHoverWidget-highlightForeground: var(--jetbrains-TextField-foreground);
+    --vscode-editorHoverWidget-statusBarBackground: var(--jetbrains-StatusBar-foreground);
+    --vscode-editorIndentGuide-activeBackground: var(--jetbrains-TextPane-foreground);
+    --vscode-editorIndentGuide-activeBackground1: var(--jetbrains-TabbedPane-underlineColor);
+    --vscode-editorIndentGuide-activeBackground2: var(--jetbrains-PopupMenu-selectionForeground);
+    --vscode-editorIndentGuide-activeBackground3: var(--jetbrains-Table-selectionForeground);
+    --vscode-editorIndentGuide-activeBackground4: var(--jetbrains-Tree-textForeground);
+    --vscode-editorIndentGuide-activeBackground5: var(--jetbrains-Menu-selectionForeground);
+    --vscode-editorIndentGuide-activeBackground6: var(--jetbrains-TextPane-selectionForeground);
+    --vscode-editorIndentGuide-background: var(--jetbrains-Separator-foreground);
+    --vscode-editorIndentGuide-background1: var(--jetbrains-Scrollbar-foreground);
+    --vscode-editorIndentGuide-background2: var(--jetbrains-Scrollbar-background);
+    --vscode-editorIndentGuide-background3: var(--jetbrains-Scrollbar-thumb);
+    --vscode-editorIndentGuide-background4: var(--jetbrains-Scrollbar-thumbShadow);
+    --vscode-editorIndentGuide-background5: var(--jetbrains-Scrollbar-track);
+    --vscode-editorIndentGuide-background6: var(--jetbrains-Scrollbar-trackHighlight);
+    --vscode-editorInfo-border: var(--jetbrains-ValidationTooltip-errorBorderColor);
+    --vscode-editorInfo-foreground: var(--jetbrains-ValidatedTooltip-warningBorderColor);
+    --vscode-editorInlayHint-background: var(--jetbrains-RolloverMousePressedForeground);
+    --vscode-editorInlayHint-foreground: var(--jetbrains-RolloverMousePressedBackground);
+    --vscode-editorInlayHint-parameterBackground: var(--jetbrains-RecentLocations-colors);
+    --vscode-editorInlayHint-parameterForeground: var(--jetbrains-RecentLocations-colors);
+    --vscode-editorInlayHint-typeBackground: var(--jetbrains-RecentLocations-menuBackground);
+    --vscode-editorInlayHint-typeForeground: var(--jetbrains-RecentLocations-menuForeground);
+    --vscode-editorLightBulb-foreground: var(--jetbrains-EditorTabs-foreground);
+    --vscode-editorLightBulbAi-foreground: var(--jetbrains-EditorTabs-underlinedTabBackground);
+    --vscode-editorLightBulbAutoFix-foreground: var(--jetbrains-FormattedTextField-foreground);
+    --vscode-editorLineNumber-activeForeground: var(--jetbrains-FormattedTextField-background);
+    --vscode-editorLineNumber-foreground: var(--jetbrains-PasswordField-foreground);
+    --vscode-editorLink-activeForeground: var(--jetbrains-Popup-translucentBackground);
+    --vscode-editorMarkerNavigation-background: var(--jetbrains-ToolWindow-headerTab-selectedInactiveBackground);
+    --vscode-editorMarkerNavigationError-background: var(--jetbrains-Toolbar-darkShadow);
+    --vscode-editorMarkerNavigationInfo-background: var(--jetbrains-TabbedPane-darkShadow);
+    --vscode-editorMarkerNavigationWarning-background: var(--jetbrains-TabbedPane-foreground);
+    --vscode-editorMarkerNavigationWarning-headerBackground: var(--jetbrains-Toolbar-highlight);
+    --vscode-editorMultiCursor-primary-foreground: var(--jetbrains-Button-light);
+    --vscode-editorMultiCursor-secondary-foreground: var(--jetbrains-ToggleButton-shadow);
+    --vscode-editorOverviewRuler-addedForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-editorOverviewRuler-border: var(--jetbrains-Separator-shadow);
+    --vscode-editorOverviewRuler-bracketMatchForeground: var(--jetbrains-Scrollbar-thumbHighlight);
+    --vscode-editorOverviewRuler-commentForeground: var(--jetbrains-TextPane-foreground);
+    --vscode-editorOverviewRuler-commentUnresolvedForeground: var(--jetbrains-Button-shadow);
+    --vscode-editorOverviewRuler-commonContentForeground: var(--jetbrains-CheckBox-foreground);
+    --vscode-editorOverviewRuler-currentContentForeground: var(--jetbrains-EditorPane-selectionBackground);
+    --vscode-editorOverviewRuler-deletedForeground: var(--jetbrains-ProgressBar-failedColor);
+    --vscode-editorOverviewRuler-errorForeground: var(--jetbrains-ValidationTooltip-errorBorderColor);
+    --vscode-editorOverviewRuler-findMatchForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-editorOverviewRuler-incomingContentForeground: var(--jetbrains-ProgressBar-passedEndColor);
+    --vscode-editorOverviewRuler-infoForeground: var(--jetbrains-ToolTip-infoForeground);
+    --vscode-editorOverviewRuler-modifiedForeground: var(--jetbrains-ProgressBar-progressColor);
+    --vscode-editorOverviewRuler-rangeHighlightForeground: var(--jetbrains-TextPane-selectionForeground);
+    --vscode-editorOverviewRuler-selectionHighlightForeground: var(--jetbrains-EditorPane-background);
+    --vscode-editorOverviewRuler-warningForeground: var(--jetbrains-ValidationTooltip-warningBorderColor);
+    --vscode-editorOverviewRuler-wordHighlightForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-editorOverviewRuler-wordHighlightStrongForeground: var(--jetbrains-TextPane-selectionForeground);
+    --vscode-editorOverviewRuler-wordHighlightTextForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-editorPane-background: var(--jetbrains-EditorPane-background);
+    --vscode-editorRuler-foreground: var(--jetbrains-EditorRuler-foreground);
+    --vscode-editorStickyScroll-background: var(--jetbrains-EditorStickyScroll-background);
+    --vscode-editorStickyScroll-border: var(--jetbrains-EditorStickyScroll-border);
+    --vscode-editorSuggestWidget-background: var(--jetbrains-EditorSuggestWidget-background);
+    --vscode-editorSuggestWidget-border: var(--jetbrains-EditorSuggestWidget-border);
+    --vscode-editorSuggestWidget-focusHighlightForeground: var(--jetbrains-EditorSuggestWidget-focusHighlightForeground);
+    --vscode-editorSuggestWidget-foreground: var(--jetbrains-EditorSuggestWidget-foreground);
+    --vscode-editorSuggestWidget-highlightForeground: var(--jetbrains-EditorSuggestWidget-highlightForeground);
+    --vscode-editorSuggestWidgetStatus-foreground: var(--jetbrains-EditorSuggestWidgetStatus-foreground);
+    --vscode-editorUnicodeHighlight-border: var(--jetbrains-EditorUnicodeHighlight-border);
+    --vscode-editorUnnecessaryCode-border: var(--jetbrains-EditorUnnecessaryCode-border);
+    --vscode-editorWarning-border: var(--jetbrains-EditorWarning-border);
+    --vscode-editorWarning-foreground: var(--jetbrains-EditorWarning-foreground);
+    --vscode-editorWatermark-foreground: var(--jetbrains-EditorWatermark-foreground);
+    --vscode-editorWhitespace-foreground: var(--jetbrains-EditorWhitespace-foreground);
+    --vscode-editorWidget-background: var(--jetbrains-EditorWidget-background);
+    --vscode-editorWidget-border: var(--jetbrains-EditorWidget-border);
+    --vscode-editorWidget-foreground: var(--jetbrains-EditorWidget-foreground);
+    --vscode-errorForeground: var(--jetbrains-ErrorForeground);
+    --vscode-extensionBadge-remoteBackground: var(--jetbrains-ExtensionBadge-remoteBackground);
+    --vscode-extensionBadge-remoteForeground: var(--jetbrains-ExtensionBadge-remoteForeground);
+    --vscode-extensionButton-separator: var(--jetbrains-ExtensionButton-separator);
+    --vscode-extensionIcon-preReleaseForeground: var(--jetbrains-ExtensionIcon-preReleaseForeground);
+    --vscode-extensionIcon-starForeground: var(--jetbrains-ExtensionIcon-starForeground);
+    --vscode-extensionIcon-verifiedForeground: var(--jetbrains-ExtensionIcon-verifiedForeground);
+    --vscode-focusBorder: var(--jetbrains-FocusBorder);
+    --vscode-foreground: var(--jetbrains-Foreground);
+    --vscode-icon-foreground: var(--jetbrains-Icon-foreground);
+    --vscode-input-background: var(--jetbrains-TextField-background);
+    --vscode-input-border: var(--jetbrains-TextArea-inactiveForeground);
+    --vscode-input-foreground: var(--jetbrains-TextField-foreground);
+    --vscode-input-placeholderForeground: var(--jetbrains-TextField-inactiveForeground);
+    --vscode-inputOption-activeBackground: var(--jetbrains-TextField-highlight);
+    --vscode-inputOption-activeBorder: var(--jetbrains-TextField-borderColor);
+    --vscode-inputOption-activeForeground: var(--jetbrains-TextField-caretForeground);
+    --vscode-inputValidation-errorBackground: var(--jetbrains-InputValidation-errorBackground);
+    --vscode-inputValidation-errorBorder: var(--jetbrains-InputValidation-errorBorder);
+    --vscode-inputValidation-infoBackground: var(--jetbrains-InputValidation-infoBackground);
+    --vscode-inputValidation-infoBorder: var(--jetbrains-InputValidation-infoBorder);
+    --vscode-inputValidation-warningBackground: var(--jetbrains-InputValidation-warningBackground);
+    --vscode-inputValidation-warningBorder: var(--jetbrains-InputValidation-warningBorder);
+    --vscode-interactive-activeCodeBorder: var(--jetbrains-Interactive-activeCodeBorder);
+    --vscode-interactive-inactiveCodeBorder: var(--jetbrains-Interactive-inactiveCodeBorder);
+    --vscode-keybindingLabel-background: var(--jetbrains-KeybindingLabel-background);
+    --vscode-keybindingLabel-border: var(--jetbrains-KeybindingLabel-border);
+    --vscode-keybindingLabel-bottomBorder: var(--jetbrains-KeybindingLabel-bottomBorder);
+    --vscode-keybindingLabel-foreground: var(--jetbrains-KeybindingLabel-foreground);
+    --vscode-list-deemphasizedForeground: var(--jetbrains-List-deemphasizedForeground);
+    --vscode-list-filterMatchBorder: var(--jetbrains-List-filterMatchBorder);
+    --vscode-list-focusHighlightForeground: var(--jetbrains-List-focusHighlightForeground);
+    --vscode-list-focusOutline: var(--jetbrains-List-focusOutline);
+    --vscode-list-highlightForeground: var(--jetbrains-List-highlightForeground);
+    --vscode-list-hoverBackground: var(--jetbrains-List-hoverBackground);
+    --vscode-list-invalidItemForeground: var(--jetbrains-List-invalidItemForeground);
+    --vscode-listFilterWidget-background: var(--jetbrains-ListFilterWidget-background);
+    --vscode-listFilterWidget-noMatchesOutline: var(--jetbrains-ListFilterWidget-noMatchesOutline);
+    --vscode-listFilterWidget-outline: var(--jetbrains-ListFilterWidget-outline);
+    --vscode-menu-background: var(--jetbrains-PopupMenu-background);
+    --vscode-menu-border: var(--jetbrains-PopupMenu-selectionBackground);
+    --vscode-menu-foreground: var(--jetbrains-PopupMenu-foreground);
+    --vscode-menu-selectionBorder: var(--jetbrains-PopupMenu-selectionForeground);
+    --vscode-menu-separatorBackground: var(--jetbrains-Menu-separatorColor);
+    --vscode-menubar-selectionBorder: var(--jetbrains-Menu-separatorColor);
+    --vscode-menubar-selectionForeground: var(--jetbrains-Menu-selectionForeground);
+    --vscode-merge-border: var(--jetbrains-TextComponent-selectionBackgroundInactive);
+    --vscode-mergeEditor-change-background: var(--jetbrains-MainToolbar-Icon-pressedBackground);
+    --vscode-mergeEditor-change-word-background: var(--jetbrains-MainToolbar-Icon-background);
+    --vscode-mergeEditor-changeBase-background: var(--jetbrains-Menu-selectionForeground);
+    --vscode-mergeEditor-changeBase-word-background: var(--jetbrains-TextPane-selectionForeground);
+    --vscode-mergeEditor-conflict-handled-minimapOverViewRuler: var(--jetbrains-TextPane-inactiveForeground);
+    --vscode-mergeEditor-conflict-handledFocused-border: var(--jetbrains-TextPane-caretForeground);
+    --vscode-mergeEditor-conflict-handledUnfocused-border: var(--jetbrains-TextPane-foreground);
+    --vscode-mergeEditor-conflict-unhandled-minimapOverViewRuler: var(--jetbrains-TextPane-background);
+    --vscode-mergeEditor-conflict-unhandledFocused-border: var(--jetbrains-TextPane-inactiveBackground);
+    --vscode-mergeEditor-conflict-unhandledUnfocused-border: var(--jetbrains-TextPane-inactiveForeground);
+    --vscode-mergeEditor-conflictingLines-background: var(--jetbrains-TextPane-caretForeground);
+    --vscode-minimap-errorHighlight: var(--jetbrains-ValidationTooltip-errorBackground);
+    --vscode-minimap-findMatchHighlight: var(--jetbrains-ValidationTooltip-errorBorderColor);
+    --vscode-minimap-foregroundOpacity: var(--jetbrains-TextPane-caretForeground);
+    --vscode-minimap-infoHighlight: var(--jetbrains-Tooltip-foreground);
+    --vscode-minimap-selectionHighlight: var(--jetbrains-Tooltip-background);
+    --vscode-minimap-selectionOccurrenceHighlight: var(--jetbrains-Tooltip-Learning-foreground);
+    --vscode-minimap-warningHighlight: var(--jetbrains-Tooltip-Learning-background);
+    --vscode-minimapGutter-addedBackground: var(--jetbrains-Scrollbar-thumb);
+    --vscode-minimapGutter-deletedBackground: var(--jetbrains-Scrollbar-thumbDarkShadow);
+    --vscode-minimapGutter-modifiedBackground: var(--jetbrains-Scrollbar-track);
+    --vscode-minimapSlider-activeBackground: var(--jetbrains-Scrollbar-trackHighlight);
+    --vscode-minimapSlider-background: var(--jetbrains-Scrollbar-foreground);
+    --vscode-minimapSlider-hoverBackground: var(--jetbrains-Scrollbar-background);
+    --vscode-multiDiffEditor-border: var(--jetbrains-Component-borderColor);
+    --vscode-notebook-cellBorderColor: var(--jetbrains-TextField-foreground);
+    --vscode-notebook-cellInsertionIndicator: var(--jetbrains-Separator-foreground);
+    --vscode-notebook-cellStatusBarItemHoverBackground: var(--jetbrains-DesktopIcon-labelBackground);
+    --vscode-notebook-cellToolbarSeparator: var(--jetbrains-Toolbar-background);
+    --vscode-notebook-focusedCellBorder: var(--jetbrains-Component-warningFocusColor);
+    --vscode-notebook-focusedEditorBorder: var(--jetbrains-Component-errorFocusColor);
+    --vscode-notebook-inactiveFocusedCellBorder: var(--jetbrains-Component-inactiveErrorFocusColor);
+    --vscode-notebook-inactiveSelectedCellBorder: var(--jetbrains-Component-inactiveWarningFocusColor);
+    --vscode-notebook-selectedCellBorder: var(--jetbrains-Component-focusedBorderColor);
+    --vscode-notebookEditorOverviewRuler-runningCellForeground: var(--jetbrains-Lesson-Badge-newLessonForeground);
+    --vscode-notebookScrollbarSlider-activeBackground: var(--jetbrains-Lesson-shortcutBackground);
+    --vscode-notebookScrollbarSlider-background: var(--jetbrains-Lesson-Badge-newLessonBackground);
+    --vscode-notebookScrollbarSlider-hoverBackground: var(--jetbrains-Lesson-Badge-newLessonBackground);
+    --vscode-notebookStatusErrorIcon-foreground: var(--jetbrains-ValidationTooltip-warningBorderColor);
+    --vscode-notebookStatusRunningIcon-foreground: var(--jetbrains-ValidationTooltip-warningBackground);
+    --vscode-notebookStatusSuccessIcon-foreground: var(--jetbrains-ValidationTooltip-warningForeground);
+    --vscode-notificationCenter-border: var(--jetbrains-notificationCenterHeader-background);
+    --vscode-notificationCenterHeader-background: var(--jetbrains-notificationLink-foreground);
+    --vscode-notificationLink-foreground: var(--jetbrains-notificationToast-border);
+    --vscode-notificationToast-border: var(--jetbrains-notifications-background);
+    --vscode-notifications-background: var(--jetbrains-notifications-foreground);
+    --vscode-notifications-border: var(--jetbrains-notificationsErrorIcon-foreground);
+    --vscode-notifications-foreground: var(--jetbrains-notificationsInfoIcon-foreground);
+    --vscode-notificationsErrorIcon-foreground: var(--jetbrains-notificationsWarningIcon-foreground);
+    --vscode-panel-background: var(--jetbrains-Panel-background);
+    --vscode-panel-border: var(--jetbrains-Panel-foreground);
+    --vscode-panel-dropBorder: var(--jetbrains-Panel-background);
+    --vscode-panelInput-border: var(--jetbrains-TextField-shadow);
+    --vscode-panelSection-border: var(--jetbrains-Panel-background);
+    --vscode-panelSectionHeader-border: var(--jetbrains-Panel-background);
+    --vscode-panelStickyScroll-background: var(--jetbrains-ScrollPane-background);
+    --vscode-panelTitle-activeBorder: var(--jetbrains-TabbedPane-focusColor);
+    --vscode-panelTitle-activeForeground: var(--jetbrains-TabbedPane-underlineColor);
+    --vscode-panelTitle-inactiveForeground: var(--jetbrains-TabbedPane-foreground);
+    --vscode-peekView-border: var(--jetbrains-InternalFrame-borderLight);
+    --vscode-peekViewEditor-background: var(--jetbrains-EditorPane-background);
+    --vscode-peekViewEditor-matchHighlightBorder: var(--jetbrains-InternalFrame-borderHighlight);
+    --vscode-peekViewEditorGutter-background: var(--jetbrains-EditorPane-background);
+    --vscode-peekViewEditorStickyScroll-background: var(--jetbrains-ScrollPane-background);
+    --vscode-peekViewResult-background: var(--jetbrains-EditorPane-background);
+    --vscode-peekViewResult-fileForeground: var(--jetbrains-FileChooser-foreground);
+    --vscode-peekViewResult-lineForeground: var(--jetbrains-TextPane-inactiveForeground);
+    --vscode-peekViewResult-selectionForeground: var(--jetbrains-Menu-selectionForeground);
+    --vscode-peekViewTitle-background: var(--jetbrains-EditorPane-background);
+    --vscode-peekViewTitleDescription-foreground: var(--jetbrains-TextPane-foreground);
+    --vscode-peekViewTitleLabel-foreground: var(--jetbrains-TextPane-foreground);
+    --vscode-pickerGroup-border: var(--jetbrains-Menu-separatorColor);
+    --vscode-pickerGroup-foreground: var(--jetbrains-Menu-foreground);
+    --vscode-ports-iconRunningProcessForeground: var(--jetbrains-Text-foreground);
+    --vscode-problemsErrorIcon-foreground: var(--jetbrains-ValidationTooltip-errorBorderColor);
+    --vscode-problemsInfoIcon-foreground: var(--jetbrains-InfoText);
+    --vscode-problemsWarningIcon-foreground: var(--jetbrains-WarningText);
+    --vscode-profileBadge-background: var(--jetbrains-ProgressBar-background);
+    --vscode-profileBadge-foreground: var(--jetbrains-ProgressBar-foreground);
+    --vscode-progressBar-background: var(--jetbrains-ProgressBar-background);
+    --vscode-quickInput-background: var(--jetbrains-QuickInput-background);
+    --vscode-quickInput-foreground: var(--jetbrains-QuickInput-foreground);
+    --vscode-quickInputTitle-background: var(--jetbrains-QuickInput-background);
+    --vscode-remoteHub-decorations-addedForegroundColor: var(--jetbrains-ActionButton-hoverBackground);
+    --vscode-remoteHub-decorations-conflictForegroundColor: var(--jetbrains-ValidationTooltip-warningBorderColor);
+    --vscode-remoteHub-decorations-deletedForegroundColor: var(--jetbrains-ActionButton-pressedBackground);
+    --vscode-remoteHub-decorations-ignoredResourceForeground: var(--jetbrains-Button-foreground);
+    --vscode-remoteHub-decorations-incomingAddedForegroundColor: var(--jetbrains-ActionButton-pressedBackground);
+    --vscode-remoteHub-decorations-incomingDeletedForegroundColor: var(--jetbrains-ValidationTooltip-warningBorderColor);
+    --vscode-remoteHub-decorations-incomingModifiedForegroundColor: var(--jetbrains-ProgressBar-failedColor);
+    --vscode-remoteHub-decorations-incomingRenamedForegroundColor: var(--jetbrains-TabbedPane-selectedTabTitleShadowNormalColor);
+    --vscode-remoteHub-decorations-modifiedForegroundColor: var(--jetbrains-ProgressBar-failedColor);
+    --vscode-remoteHub-decorations-submoduleForegroundColor: var(--jetbrains-ActionButton-hoverBackground);
+    --vscode-remoteHub-decorations-workspaceRepositoriesView-hasUncommittedChangesForegroundColor: var(--jetbrains-ActionButton-pressedBackground);
+    --vscode-scm-historyItemStatisticsBorder: var(--jetbrains-VersionControl-Log-Commit-currentBranchBackground);
+    --vscode-scrollbarSlider-activeBackground: var(--jetbrains-Scrollbar-thumbDarkShadow);
+    --vscode-scrollbarSlider-background: var(--jetbrains-Scrollbar-thumb);
+    --vscode-scrollbarSlider-hoverBackground: var(--jetbrains-Scrollbar-thumbShadow);
+    --vscode-search-resultsInfoForeground: var(--jetbrains-InfoText);
+    --vscode-searchEditor-findMatchBorder: var(--jetbrains-SearchEverywhere-list-separatorColor);
+    --vscode-searchEditor-textInputBorder: var(--jetbrains-SearchEverywhere-searchField-infoForeground);
+    --vscode-selection-background: var(--jetbrains-Text-selectionBackground);
+    --vscode-settings-checkboxBackground: var(--jetbrains-Settings-checkboxBackground);
+    --vscode-settings-checkboxBorder: var(--jetbrains-Settings-checkboxBorder);
+    --vscode-settings-checkboxForeground: var(--jetbrains-Settings-checkboxForeground);
+    --vscode-settings-dropdownBackground: var(--jetbrains-ComboBox-background);
+    --vscode-settings-dropdownBorder: var(--jetbrains-ComboBox-selectionForeground);
+    --vscode-settings-dropdownForeground: var(--jetbrains-ComboBox-foreground);
+    --vscode-settings-dropdownListBorder: var(--jetbrains-ComboBox-selectionForeground);
+    --vscode-settings-focusedRowBorder: var(--jetbrains-ComboBox-selectionForeground);
+    --vscode-settings-headerBorder: var(--jetbrains-Settings-headerBorder);
+    --vscode-settings-headerForeground: var(--jetbrains-Settings-headerForeground);
+    --vscode-settings-modifiedItemIndicator: var(--jetbrains-Settings-modifiedItemIndicator);
+    --vscode-settings-numberInputBackground: var(--jetbrains-Settings-numberInputBackground);
+    --vscode-settings-numberInputBorder: var(--jetbrains-Settings-numberInputBorder);
+    --vscode-settings-numberInputForeground: var(--jetbrains-Settings-numberInputForeground);
+    --vscode-settings-sashBorder: var(--jetbrains-Settings-sashBorder);
+    --vscode-settings-settingsHeaderHoverForeground: var(--jetbrains-Settings-settingsHeaderHoverForeground);
+    --vscode-settings-textInputBackground: var(--jetbrains-ComboBox-background);
+    --vscode-settings-textInputBorder: var(--jetbrains-Settings-textInputBorder);
+    --vscode-settings-textInputForeground: var(--jetbrains-ComboBox-foreground);
+    --vscode-sideBar-background: var(--jetbrains-ScrollPane-background);
+    --vscode-sideBar-border: var(--jetbrains-ScrollPane-background);
+    --vscode-sideBarActivityBarTop-border: var(--jetbrains-Menu-borderColor);
+    --vscode-sideBarSectionHeader-border: var(--jetbrains-TabbedPane-darkShadow);
+    --vscode-sideBarStickyScroll-background: var(--jetbrains-List-selectionInactiveForeground);
+    --vscode-sideBarTitle-background: var(--jetbrains-TextField-selectionBackground);
+    --vscode-sideBarTitle-foreground: var(--jetbrains-Label-foreground);
+    --vscode-sideBySideEditor-horizontalBorder: var(--jetbrains-TabbedPane-darkShadow);
+    --vscode-sideBySideEditor-verticalBorder: var(--jetbrains-TabbedPane-darkShadow);
+    --vscode-simpleFindWidget-sashBorder: var(--jetbrains-Scrollbar-thumbShadow);
+    --vscode-statusBar-border: var(--jetbrains-Scrollbar-thumbShadow);
+    --vscode-statusBar-debuggingBackground: var(--jetbrains-ProgressBar-failedEndColor);
+    --vscode-statusBar-debuggingBorder: var(--jetbrains-ProgressBar-failedEndColor);
+    --vscode-statusBar-debuggingForeground: var(--jetbrains-ProgressBar-foreground);
+    --vscode-statusBar-foreground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBar-noFolderBorder: var(--jetbrains-Scrollbar-thumbShadow);
+    --vscode-statusBar-noFolderForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-activeBackground: var(--jetbrains-MainToolbar-icon-pressedBackground);
+    --vscode-statusBarItem-compactHoverBackground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-statusBarItem-errorForeground: var(--jetbrains-ValidationTooltip-errorForeground);
+    --vscode-statusBarItem-errorHoverBackground: var(--jetbrains-StatusBarItem-errorHoverForeground);
+    --vscode-statusBarItem-errorHoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-hoverBackground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-statusBarItem-hoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-offlineBackground: var(--jetbrains-StatusBarItem-offlineForeground);
+    --vscode-statusBarItem-offlineForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-offlineHoverBackground: var(--jetbrains-StatusBarItem-offlineHoverForeground);
+    --vscode-statusBarItem-offlineHoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-prominentBackground: var(--jetbrains-StatusBarItem-prominentForeground);
+    --vscode-statusBarItem-prominentForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-prominentHoverBackground: var(--jetbrains-StatusBarItem-prominentHoverForeground);
+    --vscode-statusBarItem-prominentHoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-remoteBackground: var(--jetbrains-StatusBarItem-remoteForeground);
+    --vscode-statusBarItem-remoteForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-remoteHoverBackground: var(--jetbrains-StatusBarItem-remoteHoverForeground);
+    --vscode-statusBarItem-remoteHoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-statusBarItem-warningForeground: var(--jetbrains-ValidationTooltip-warningForeground);
+    --vscode-statusBarItem-warningHoverBackground: var(--jetbrains-StatusBarItem-warningHoverForeground);
+    --vscode-statusBarItem-warningHoverForeground: var(--jetbrains-Scrollbar-foreground);
+    --vscode-symbolIcon-arrayForeground: var(--jetbrains-SymbolIcon-arrayForeground);
+    --vscode-symbolIcon-booleanForeground: var(--jetbrains-SymbolIcon-booleanForeground);
+    --vscode-symbolIcon-classForeground: var(--jetbrains-SymbolIcon-classForeground);
+    --vscode-symbolIcon-colorForeground: var(--jetbrains-SymbolIcon-colorForeground);
+    --vscode-symbolIcon-constantForeground: var(--jetbrains-SymbolIcon-constantForeground);
+    --vscode-symbolIcon-constructorForeground: var(--jetbrains-SymbolIcon-constructorForeground);
+    --vscode-symbolIcon-enumeratorForeground: var(--jetbrains-SymbolIcon-enumeratorForeground);
+    --vscode-symbolIcon-enumeratorMemberForeground: var(--jetbrains-SymbolIcon-enumeratorMemberForeground);
+    --vscode-symbolIcon-eventForeground: var(--jetbrains-SymbolIcon-eventForeground);
+    --vscode-symbolIcon-fieldForeground: var(--jetbrains-SymbolIcon-fieldForeground);
+    --vscode-symbolIcon-fileForeground: var(--jetbrains-SymbolIcon-fileForeground);
+    --vscode-symbolIcon-folderForeground: var(--jetbrains-SymbolIcon-folderForeground);
+    --vscode-symbolIcon-functionForeground: var(--jetbrains-SymbolIcon-functionForeground);
+    --vscode-symbolIcon-interfaceForeground: var(--jetbrains-SymbolIcon-interfaceForeground);
+    --vscode-symbolIcon-keyForeground: var(--jetbrains-SymbolIcon-keyForeground);
+    --vscode-symbolIcon-keywordForeground: var(--jetbrains-SymbolIcon-keywordForeground);
+    --vscode-symbolIcon-methodForeground: var(--jetbrains-SymbolIcon-methodForeground);
+    --vscode-symbolIcon-moduleForeground: var(--jetbrains-SymbolIcon-moduleForeground);
+    --vscode-symbolIcon-namespaceForeground: var(--jetbrains-SymbolIcon-namespaceForeground);
+    --vscode-symbolIcon-nullForeground: var(--jetbrains-SymbolIcon-nullForeground);
+    --vscode-symbolIcon-numberForeground: var(--jetbrains-SymbolIcon-numberForeground);
+    --vscode-symbolIcon-objectForeground: var(--jetbrains-SymbolIcon-objectForeground);
+    --vscode-symbolIcon-operatorForeground: var(--jetbrains-SymbolIcon-operatorForeground);
+    --vscode-symbolIcon-packageForeground: var(--jetbrains-SymbolIcon-packageForeground);
+    --vscode-symbolIcon-propertyForeground: var(--jetbrains-SymbolIcon-propertyForeground);
+    --vscode-symbolIcon-referenceForeground: var(--jetbrains-SymbolIcon-referenceForeground);
+    --vscode-symbolIcon-snippetForeground: var(--jetbrains-SymbolIcon-snippetForeground);
+    --vscode-symbolIcon-stringForeground: var(--jetbrains-SymbolIcon-stringForeground);
+    --vscode-symbolIcon-structForeground: var(--jetbrains-SymbolIcon-structForeground);
+    --vscode-symbolIcon-textForeground: var(--jetbrains-SymbolIcon-textForeground);
+    --vscode-symbolIcon-typeParameterForeground: var(--jetbrains-SymbolIcon-typeParameterForeground);
+    --vscode-symbolIcon-unitForeground: var(--jetbrains-SymbolIcon-unitForeground);
+    --vscode-symbolIcon-variableForeground: var(--jetbrains-SymbolIcon-variableForeground);
+    --vscode-tab-activeBackground: var(--jetbrains-TabbedPane-background);
+    --vscode-tab-activeForeground: var(--jetbrains-TabbedPane-foreground);
+    --vscode-tab-border: var(--jetbrains-TabbedPane-border);
+    --vscode-tab-dragAndDropBorder: var(--jetbrains-DragAndDrop-borderColor);
+    --vscode-tab-inactiveForeground: var(--jetbrains-TabbedPane-foreground);
+    --vscode-tab-inactiveModifiedBorder: var(--jetbrains-TabbedPane-selectedTabTitleShadowNormalColor);
+    --vscode-tab-lastPinnedBorder: var(--jetbrains-TabbedPane-selectedTabTitleShadowDisabledColor);
+    --vscode-tab-unfocusedActiveBackground: var(--jetbrains-TabbedPane-light);
+    --vscode-tab-unfocusedActiveForeground: var(--jetbrains-TabbedPane-selectedTabTitleShadowNormalColor);
+    --vscode-tab-unfocusedActiveModifiedBorder: var(--jetbrains-TabbedPane-focus);
+    --vscode-tab-unfocusedInactiveForeground: var(--jetbrains-TabbedPane-selectedTabTitleDisabledColor);
+    --vscode-tab-unfocusedInactiveModifiedBorder: var(--jetbrains-TabbedPane-focusColor);
+    --vscode-terminal-ansiBlack: var(--jetbrains-Text);
+    --vscode-terminal-ansiBlue: var(--jetbrains-Charts-blue);
+    --vscode-terminal-ansiBrightBlack: var(--jetbrains-TextInactiveText);
+    --vscode-terminal-ansiBrightBlue: var(--jetbrains-TextLink-foreground);
+    --vscode-terminal-ansiBrightCyan: var(--jetbrains-ActionButton-hoverBackground);
+    --vscode-terminal-ansiBrightGreen: var(--jetbrains-TextSeparator-foreground);
+    --vscode-terminal-ansiBrightMagenta: var(--jetbrains-EditorPane-caretForeground);
+    --vscode-terminal-ansiBrightRed: var(--jetbrains-ValidationTooltip-errorBackground);
+    --vscode-terminal-ansiBrightWhite: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-terminal-ansiBrightYellow: var(--jetbrains-ValidationTooltip-warningBackground);
+    --vscode-terminal-ansiCyan: var(--jetbrains-ToolbarButton-selectionBackground);
+    --vscode-terminal-ansiGreen: var(--jetbrains-ActionButton-pressedBackground);
+    --vscode-terminal-ansiMagenta: var(--jetbrains-Menu-foreground);
+    --vscode-terminal-ansiRed: var(--jetbrains-ValidationTooltip-errorBorderColor);
+    --vscode-terminal-ansiWhite: var(--jetbrains-Button-default-startBackground);
+    --vscode-terminal-ansiYellow: var(--jetbrains-ProgressBar-passedColor);
+    --vscode-terminal-border: var(--jetbrains-ProgressBar-background);
+    --vscode-terminal-findMatchBorder: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-terminal-findMatchHighlightBorder: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-terminal-foreground: var(--jetbrains-Text);
+    --vscode-terminal-hoverHighlightBackground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-terminal-inactiveSelectionBackground: var(--jetbrains-TextArea-inactiveBackground);
+    --vscode-terminal-selectionBackground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-terminal-selectionForeground: var(--jetbrains-TextHighlight);
+    --vscode-terminalCommandDecoration-defaultBackground: var(--jetbrains-TextSeparator-foreground);
+    --vscode-terminalCommandDecoration-errorBackground: var(--jetbrains-ValidationTooltip-errorBackground);
+    --vscode-terminalCommandDecoration-successBackground: var(--jetbrains-ProgressBar-passedEndColor);
+    --vscode-terminalOverviewRuler-cursorForeground: var(--jetbrains-Button-startBackground);
+    --vscode-terminalOverviewRuler-findMatchForeground: var(--jetbrains-EditorPane-selectionForeground);
+    --vscode-testing-coverCountBadgeBackground: var(--jetbrains-ToolbarComboWidget-background);
+    --vscode-testing-coverCountBadgeForeground: var(--jetbrains-ToolbarComboWidget-hoverBackground);
+    --vscode-testing-coveredBorder: var(--jetbrains-TextLink-activeForeground);
+    --vscode-testing-coveredGutterBackground: var(--jetbrains-TextCodeBlock-background);
+    --vscode-testing-iconErrored: var(--jetbrains-Button-disabledText);
+    --vscode-testing-iconErrored-retired: var(--jetbrains-Label-disabledShadow);
+    --vscode-testing-iconFailed: var(--jetbrains-Button-shadow);
+    --vscode-testing-iconFailed-retired: var(--jetbrains-Button-default-endBorderColor);
+    --vscode-testing-iconPassed: var(--jetbrains-Button-foreground);
+    --vscode-testing-iconPassed-retired: var(--jetbrains-Button-startBorderColor);
+    --vscode-testing-iconQueued: var(--jetbrains-Button-secondaryForeground);
+    --vscode-testing-iconQueued-retired: var(--jetbrains-Button-disabledBorderColor);
+    --vscode-testing-iconSkipped: var(--jetbrains-Button-endBackground);
+    --vscode-testing-iconSkipped-retired: var(--jetbrains-Button-disabledText);
+    --vscode-testing-iconUnset: var(--jetbrains-TextBlockQuote-border);
+    --vscode-testing-iconUnset-retired: var(--jetbrains-TextPreformat-foreground);
+    --vscode-testing-message-error-decorationForeground: var(--jetbrains-Button-default-foreground);
+    --vscode-testing-message-info-decorationForeground: var(--jetbrains-TextCodeBlock-background);
+    --vscode-testing-messagePeekBorder: var(--jetbrains-Button-default-startBorderColor);
+    --vscode-testing-peekBorder: var(--jetbrains-Button-default-focusColor);
+    --vscode-testing-runAction: var(--jetbrains-Toolbar-hoverOutline);
+    --vscode-testing-uncoveredBorder: var(--jetbrains-Button-secondaryForeground);
+    --vscode-testing-uncoveredGutterBackground: var(--jetbrains-Button-endBorderColor);
+    --vscode-textBlockQuote-border: var(--jetbrains-Button-shadow);
+    --vscode-textCodeBlock-background: var(--jetbrains-TextCodeBlock-background);
+    --vscode-textLink-activeForeground: var(--jetbrains-Link-hoverForeground);
+    --vscode-textLink-foreground: var(--jetbrains-Hyperlink-linkColor);
+    --vscode-textPreformat-background: var(--jetbrains-TextPreformat-background);
+    --vscode-textPreformat-foreground: var(--jetbrains-TextPreformat-foreground);
+    --vscode-textSeparator-foreground: var(--jetbrains-TextSeparator-foreground);
+    --vscode-titleBar-activeBackground: var(--jetbrains-TitleBar-activeBackground);
+    --vscode-titleBar-activeForeground: var(--jetbrains-TitleBar-activeForeground);
+    --vscode-titleBar-border: var(--jetbrains-TitleBar-border);
+    --vscode-toolbar-hoverOutline: var(--jetbrains-Toolbar-hoverOutline);
+    --vscode-tree-inactiveIndentGuidesStroke: var(--jetbrains-Tree-inactiveIndentGuidesStroke);
+    --vscode-tree-indentGuidesStroke: var(--jetbrains-Tree-indentGuidesStroke);
+    --vscode-welcomePage-progress-background: var(--jetbrains-WelcomePage-progress-background);
+    --vscode-welcomePage-progress-foreground: var(--jetbrains-WelcomePage-progress-foreground);
+    --vscode-welcomePage-tileBackground: var(--jetbrains-WelcomePage-tileBackground);
+    --vscode-welcomePage-tileBorder: var(--jetbrains-WelcomePage-tileBorder);
+    --vscode-widget-border: var(--jetbrains-Widget-border);
+    --vscode-window-activeBorder: var(--jetbrains-Window-activeBorder);
+    --vscode-window-inactiveBorder: var(--jetbrains-Window-inactiveBorder);
+    --button-icon-background: var(--jetbrains-Button-iconBackground);
+    --foreground: var(--jetbrains-Button-foreground);
+}
+
+@font-face {
+    font-family: cody-icons;
+    font-display: block;
+    src: url('data:font/woff;base64,d09GRgABAAAAAA10AAsAAAAAE6QAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADsAAABUIIslek9TLzIAAAFEAAAAQgAAAGBWY2NuY21hcAAAAYgAAACGAAAB7hiuEV1nbHlmAAACEAAACVkAAA0EVY2rcWhlYWQAAAtsAAAAMQAAADYnrpe0aGhlYQAAC6AAAAAeAAAAJAfcA+lobXR4AAALwAAAABUAAAAsJxH//mxvY2EAAAvYAAAAGAAAABgOhhKQbWF4cAAAC/AAAAAfAAAAIAEqAYxuYW1lAAAMEAAAATAAAAIuQyhKznBvc3QAAA1AAAAANAAAAE9jQF8veJxjYGRgYOBiMGCwY2BycfMJYeDLSSzJY5BiYGGAAJA8MpsxJzM9kYEDxgPKsYBpDiBmg4gCACY7BUgAeJxjYGHuZZzAwMrAwFTFtIeBgaEHQjM+YDBkZAKKMrAyM2AFAWmuKQwHGBwZvJhfALlRLE4MjECaEUUREwArKQmDAAB4nMXR2Q0CMQwE0MmxuUQpfNLAwi7HVsEXtdD1MramA5Cw9CzFsiPFATABSHSkDIQXAiyerAavJwyvZ5y8J3t923fm2XOwSebI3swbCyoaus8VfB8hpjyV2vr4wWV/iIPnt072iFlsk2eJdBH7kUVst6vYb13FNnuTSndp9JBOm4wPWJ8NKgAAeJxtVm+sHFUVn3PvzJ07f3fn/+z/3Zn99/q2u+/t7M5QXrvLS3lAW2tpkVpjKQFEg5VGIpH4ocEQQtKkRBNN/VI+EGMiRENAw5f3vmliMAQJ4YPxg8QPxkJEJTTEIG/rnZl9FZWZuTPnnHvvOffcc+5vDoc5duGTeD+ncD63xXEQBt1JvAFj17G9oHsIJvHYrYFNcNDr9roj6M7A9WzPze9xEuf3dAZeHcRAJOkNV66a5ZJ11a5fs+uNbqPxu0fumQ19m5cK3UCmctGptPqjb4z6rYpTlKkU2KYqAPFLo0N3ozONbqnqDjoV74rZrLrPmaXFpW5tvdwiZmjqNtaMomPYiqYptuEUDQ2zuVLLltqlUbWTupP59CC+4/99ssln+JTe00+7Nb7pEvPIzj1iPv34pWoYVl+qBsEHtSA4EAS/P7aZDLs1t6DI5mhN0gy/tW/65GS16RdVaW1kykrBrXWHySY6kw4/EMyC6p6OxSXLqPtNv2Ty/pplerzhmmXdMPSy6RYFz7TWfN4ssQF1w7rp09s4ZhThdI6TIJIg8TBEScuLAE1A+8Hiw0V89uwLi+tXEvCTK4vrON69Hz2/eOT99+FHu/c/+yx6PlVDOe7GDfwhfpcLuYi7nTvNfY37DneJ+x7bqXiIxSEEOog6dj1Sx0kdxjNIZrgLQbeXzGBqeOne6dAZMvvueA6OXQAyhB5m4xzbbYBIRjBEcSL0krgBdUREpm866SZp+gQFmE7mENfTfBF6AYvGDKKx67FBjpd4jtjDPzeUW858fdr+yqMPHTGmX4rVoGOqCZN0Hrrw0JFifCZRWotzwaz8JpXuheiLi6mhkjepQT+C1wcPnylPi1FDoh/dC+j15tCWLbTz0b0IXm8NLckyWNdxjH8rmuno/Q+fKRnq7p9PMy2TFlMoSsMLjz56AZ2Izt8399SV1cGJSJmfO//VfnT+3CwXTORUsCh7zrf5IoXSGqBr0enoZ7XN5hM8/+wDCB4vw/oAflHbp7wvFfjL6wCPmxt3HWs+vySPHG3mfU8h9C025UHIp9Rue2M905WrfnU2uzifpzFzsvhfw6+x+IssrwucxXlchWuwGPa4VW7EIplwG9ycO8zdyR3jTnD3sGhGTthhrcXaOmu9/2nry/7Op+i9OQlrQmSERuSspjIx6zNCvH97e9fc3kZ/22bXzs7Ozff2NjyRt+WI8c7O7htZN1yfs2t7NtuZzxeX5nP8WjplZ+/aXqrKdW7vLC7hF1k3s/HJ6TRfb9xgvr+L3+N+w73DXQcT1uEL8Ag8yXFWllqEQZUbZqdUBy9LQEbYbkrWcybLy6jHUjaes/xj2drNmCSepMd/hpJ47LksvffwjHFenWeimKWp52YKU4DLTkYNUpggBbA3/qMj2qOGMMqk3RwwgyW1XCmDHAaSwXTCxrGH6WwgdqDEkB2MIOx1szWMhTrK2VXoTSe5DHIHRWJnSxovV7unyM2knqvnHgfZSnLXkni5MWOb2HWIvHRuN05fvW5qmI0MetnupToyrdMkXbTAnPSqmd7MXKYy+INj+KEoSgjkutdXEABtUuTLGCFMbSog3qUI8QKcxCqSJYuCQDVqElWxNK0tCfZo3qFlaqiixIuaUQ378j55YySYIpVExSiXR8fNIvVFX7NdjIuKUBCAWpKMVNTv88DMSB4PpC4DiCpWecTMAyCl7zERkkAqdqvhykwjSNy8vCkiokzbgqvIDuER0QqVsgYAksxEGKNmwSeE8Vq5UtBU4sgYL/7kq5VSL5IQUk4dUO9Wh0dNyiOknruNtuqDUHKJxrNfg244heYRZVRRFAy8XNHDVSdkynCRAC8QJCm8yAtI0KhAecIMYknU3iuxfQL206pZMkmnsYj93ZGZW0S2arTIiwg7RaHITrusJe1GsxtQ0SgNYrktr3Uoru8rGvuMQqciExA6K1pBN1wd88ZGs1JRKTMhyFrt851mUfbl2mp9FjV5AMxjKqqqoRuEbV6TNySdMhnmxaQfbFUl05eNIx1/RSWyhAWqViqNW00eJKEodum0L4jBBp2I3TKxmKLOGltKPCgZIg1OtA5WHIQOH2ARx7UaRtSNNlkwNkjT0iS3bhcERMYjvy+yHU+2QoKEgt0PrCZBiyssR2R9WKVV2l4XAPiwrKmM6d/K4tHHplAkRUv0HSoJbPNFRzI1YpqeaGIUI5mXKBYKvIiZd7LBrGgKRgSBAKeILWi8XMCCLqo823jCFsHsMoLnVVEXkExkRbd54GCJLdcYlnKQ/+nDvCaY5kgQ5ZUOvvb0YxcOb1FEtw5feOzp/2Lgw88Q5kwK22iJ3ecZireYFc8Ipy2DQfw8A9beNOwZCYRO5ETTaBpOQ/y5xmzXvNp4xn3u+69Mn2s0sH7x4ow9+Hxj8ZePF2rzm8/I81fcqw0UNXbfmF+8OL/ITJDMzov4BHcH90PuJ9yr3K+4N5m9wp5f6XvJ5AjWgITBiJf6maLissBLX/kejBAby+CKCUTXc4joLZExYaWA663tVYFehjm9OFfUSw0EqRZx2S1mUBTvYet67AUkh7HxEsCSPVzbE4jMDCu92CImSRzlTJAxcLlken6z1q4AqJKggGOYiorbZ+8amoNDTx0amMO7zrZ5TTENBxRBUgEq7VrT98ySLvCDowN2MlnBdOckmJyMz8Yn2fdOfHKMVMksGrICelRv9wua5li6Sld0q3zq7VNlS1+hqm45ml7st+uRDopsFE1JReMnzIZsWXIjbMi2LTdeM/Lvkv0r5illIMBef+RvkvhEevJkzXBBKcolYf3g1uHjm5TOBi0ExzXtOKDWYEbp5vHDWwfXhZJcVMA1NFlkJ7ZjGoQYpr6ORTCb01ZBlgutadNUij3s2PsPHJxvbbg93RDLApFUSsWRoqrttqoqI5FSVSJCWTT0nruxNT94YL/t4N6vTb18JK890w+A8WnenBO5rjCoUeoySUkho1iq8Vm+vYPfYhXIChdzs7Qq9RI3WtbPrMgbwl7CiSQMeuxvHI3jQ5Dg9c6EFYSrEBDb3QBWcrJ/TwPwK588O/jpA9/98rH5WliihCjWaE0Bdsy95r749qO3gig2rFLng38uPm6XXyp3OuVfvqz3LN9SNPzWJ5f3v3BLzVupt1VF9dccy8OC6FrVguODaNid8n3/2P3gXxixaZP2ywVK5TXf57h/A/Z2/4sAAAB4nGNgZGBgAOKqlvaEeH6brwzczC+AIgyP/FYWw+j/QMD8mfkVkMvBwAQSBQCBuw7+AAAAeJxjYGRgYH7BwAAi/////5X5MwMjAyrgBgCe6gbMAAB4nGNgYGBgfoEN//8PwQgxAP7SDSsAAAAAAAAAAGoA1AD6AdQCUgSABLIE5gYeBoJ4nGNgZGBg4GZsYBBlAAEmIOYCQgaG/2A+AwAX8AG4AHicbZE9TsMwGIbf9A/RSggEYmHxAgtq+jN2ZGj3Dt3TxElTJXHkuBW9AyfgEByCgTNwCA7BW/NJlVBtKX6+x+9nKwmAa3whwHEE6PvncbRwweqP26Qb4Q75QbiLAR6Fe/Rj4T6eMRMe4BaaJwSdS5o7vAq3cIU34Tb9u3CH/CHcxT0+hXv038J9rPAjPMBT8BKb5DDMY1M1S53tisiexIlW2ja5qdQkHJ/kQlfaRk4nan1QzT6bOpeq1JpSzU3ldFEYVVuz1bELN87Vs9EoFR/GpkQMgwQHDJF7rtBgyffNsEOBCPZs4pxbsctyzX2tMEHI73kuuWCy8ukIjmvC9JoZxb09b57SOqSsU2YMStLc9x7TBaehqf3eliamD7HxXTX/24gz/ZcP/e3lL6+ZZCx4nG3BxwGAIBAAsAt2cCnFvv9APvyaRIpPjn9F0mh1eoPRJCvmsFhVm93hdLk9ES8w8QMx') format('woff');
+}
+
+:root {
+    /* Our syntax highlighter expects a dark code background color, regardless of the VS Code color
+    theme. */
+    --code-background: #222222;
+    --code-foreground: #ffffff;
+}
+
+#root {
+    height: 100%;
+    margin: 0 auto;
+    font-family: var(--vscode-font-family);
+    color: var(--vscode-sideBar-foreground);
+    background-color: var(--vscode-sideBar-background);
+    /* Override VS Code Webview Toolkit elements */
+    --border-width: none;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    height: 100%;
+}
+
+a {
+    font-weight: 500;
+    color: var(--vscode-textLink-foreground);
+    text-decoration: inherit;
+}
+
+a:hover {
+    color: var(--vscode-textLink-activeForeground);
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.cody-chat-error {
+    color: var(--vscode-input-foreground);
+    background-color: var(--vscode-inputValidation-errorBackground);
+    padding: 0.5rem;
+}
+
+.cody-chat-error > span {
+    font-weight: bold;
+}
+
+.placeholder\:tw-text-muted-foreground::placeholder {
+	color: var(--vscode-input-placeholderForeground);
+}
+
+.empty\:tw-hidden:empty {
+	display: none;
+}
+
+.hover\:tw-bg-accent:hover {
+	background-color: var(--vscode-list-activeSelectionBackground);
+}
+
+.hover\:tw-bg-button-background-hover:hover {
+	background-color: var(--vscode-button-hoverBackground);
+}
+
+.hover\:tw-bg-button-secondary-background-hover:hover {
+	background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.hover\:tw-bg-muted-transparent:hover {
+	background-color: color-mix(in lch, currentColor 15%, transparent);
+}
+
+.hover\:tw-bg-transparent:hover {
+	background-color: transparent;
+}
+
+.hover\:\!tw-text-accent-foreground:hover {
+	color: var(--vscode-list-activeSelectionForeground) !important;
+}
+
+.hover\:tw-text-accent-foreground:hover {
+	color: var(--vscode-list-activeSelectionForeground);
+}
+
+.hover\:tw-text-foreground:hover {
+	color: var(--vscode-foreground);
+}
+
+.hover\:tw-text-link-hover:hover {
+	color: var(--vscode-textLink-activeForeground);
+}
+
+.hover\:tw-underline:hover {
+	text-decoration-line: underline;
+}
+
+.hover\:tw-opacity-100:hover {
+	opacity: 1;
+}
+
+.focus\:tw-outline-none:focus {
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.focus\:tw-ring-2:focus {
+	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.focus\:tw-ring-ring:focus {
+	--tw-ring-color: var(--vscode-focusBorder);
+}
+
+.focus\:tw-ring-offset-2:focus {
+	--tw-ring-offset-width: 2px;
+}
+
+.focus-visible\:tw-border-ring:focus-visible {
+	border-color: var(--vscode-focusBorder);
+}
+
+.focus-visible\:tw-outline-none:focus-visible {
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.disabled\:tw-pointer-events-none:disabled {
+	pointer-events: none;
+}
+
+.disabled\:tw-cursor-not-allowed:disabled {
+	cursor: not-allowed;
+}
+
+.disabled\:tw-bg-current-25:disabled {
+	background-color: color-mix(in lch, currentColor 25%, transparent);
+}
+
+.disabled\:tw-text-current:disabled {
+	color: currentColor;
+}
+
+.disabled\:tw-opacity-50:disabled {
+	opacity: 0.5;
+}
+
+.disabled\:tw-opacity-75:disabled {
+	opacity: 0.75;
+}
+
+.tw-group\/\[cmdk-item\]:hover .group-hover\/\[cmdk-item\]\:tw-visible {
+	visibility: visible;
+}
+
+.tw-group:hover .group-hover\:tw-opacity-100 {
+	opacity: 1;
+}
+
+.tw-group\/\[cmdk-item\][aria-selected="true"] .group-\[\[aria-selected\=\"true\"\]\]\/\[cmdk-item\]\:tw-visible {
+	visibility: visible;
+}
+
+.aria-selected\:tw-bg-accent[aria-selected="true"] {
+	background-color: var(--vscode-list-activeSelectionBackground);
+}
+
+.aria-selected\:\!tw-text-accent-foreground[aria-selected="true"] {
+	color: var(--vscode-list-activeSelectionForeground) !important;
+}
+
+.aria-selected\:tw-text-accent-foreground[aria-selected="true"] {
+	color: var(--vscode-list-activeSelectionForeground);
+}
+
+.data-\[disabled\=true\]\:tw-pointer-events-none[data-disabled=true] {
+	pointer-events: none;
+}
+
+@keyframes tw-accordion-up {
+
+	from {
+		height: var(--radix-accordion-content-height);
+	}
+
+	to {
+		height: 0;
+	}
+}
+
+.data-\[state\=closed\]\:tw-animate-accordion-up[data-state=closed] {
+	animation: tw-accordion-up 0.15s ease-out;
+}
+
+@keyframes tw-collapsible-up {
+
+	from {
+		height: var(--radix-collapsible-content-height);
+	}
+
+	to {
+		height: 0;
+	}
+}
+
+.data-\[state\=closed\]\:tw-animate-collapsible-up[data-state=closed] {
+	animation: tw-collapsible-up 0.15s ease-out;
+}
+
+@keyframes tw-accordion-down {
+
+	from {
+		height: 0;
+	}
+
+	to {
+		height: var(--radix-accordion-content-height);
+	}
+}
+
+.data-\[state\=open\]\:tw-animate-accordion-down[data-state=open] {
+	animation: tw-accordion-down 0.15s ease-out;
+}
+
+@keyframes tw-collapsible-down {
+
+	from {
+		height: 0;
+	}
+
+	to {
+		height: var(--radix-collapsible-content-height);
+	}
+}
+
+.data-\[state\=open\]\:tw-animate-collapsible-down[data-state=open] {
+	animation: tw-collapsible-down 0.15s ease-out;
+}
+
+.data-\[disabled\=true\]\:tw-opacity-50[data-disabled=true] {
+	opacity: 0.5;
+}
+
+body[data-vscode-theme-kind="vscode-high-contrast"] .high-contrast-dark\:tw-border-button-border {
+	border-color: var(--vscode-button-border, transparent);
+}
+
+body[data-vscode-theme-kind="vscode-high-contrast"] .high-contrast-dark\:tw-border-e-transparent {
+	border-inline-end-color: transparent;
+}
+
+@media (min-width: 640px) {
+
+	.sm\:tw-pl-21 {
+		padding-left: 44px;
+	}
+}
+
+@media (min-width: 768px) {
+
+	.md\:tw-inline {
+		display: inline;
+	}
+
+	.md\:tw-hidden {
+		display: none;
+	}
+}
+
+.\[\&\:not\(\:last-child\)\]\:tw-border-b:not(:last-child) {
+	border-bottom-width: 1px;
+}
+
+.\[\&\:not\(\:last-child\)\]\:tw-border-border:not(:last-child) {
+	border-color: var(--vscode-dropdown-border);
+}
+
+.\[\&\[data-state\=open\]\>svg\]\:tw-rotate-90[data-state=open]>svg {
+	--tw-rotate: 90deg;
+	transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw--mx-2 [cmdk-group-heading] {
+	margin-left: -4px;
+	margin-right: -4px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-mb-2 [cmdk-group-heading] {
+	margin-bottom: 4px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-flex [cmdk-group-heading] {
+	display: flex;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:\!tw-h-\[30px\] [cmdk-group-heading] {
+	height: 30px !important;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:\!tw-min-h-\[30px\] [cmdk-group-heading] {
+	min-height: 30px !important;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-items-center [cmdk-group-heading] {
+	align-items: center;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-gap-2 [cmdk-group-heading] {
+	gap: 4px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-bg-muted [cmdk-group-heading] {
+	background-color: var(--vscode-input-background);
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:\!tw-p-3 [cmdk-group-heading] {
+	padding: 6px !important;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-px-2 [cmdk-group-heading] {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-px-4 [cmdk-group-heading] {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-py-1\.5 [cmdk-group-heading] {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:\!tw-text-md [cmdk-group-heading] {
+	font-size: var(--vscode-font-size) !important;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-text-xs [cmdk-group-heading] {
+	font-size: calc(calc(11/13)*var(--vscode-font-size));
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-font-medium [cmdk-group-heading] {
+	font-weight: 500;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:\!tw-leading-\[1\.2\] [cmdk-group-heading] {
+	line-height: 1.2 !important;
+}
+
+.\[\&_\[cmdk-group-heading\]\]\:tw-text-muted-foreground [cmdk-group-heading] {
+	color: var(--vscode-input-placeholderForeground);
+}
+
+.\[\&_\[cmdk-group\]\]\:\!tw-border-0 [cmdk-group] {
+	border-width: 0px !important;
+}
+
+.\[\&_\[cmdk-group\]\]\:tw-pt-0 [cmdk-group] {
+	padding-top: 0px;
+}
+
+.\[\&_\[cmdk-item\]\]\:tw-whitespace-nowrap [cmdk-item] {
+	white-space: nowrap;
+}
+
+.\[\&_kbd\]\:-tw-mr-1 kbd {
+	margin-right: -2px;
+}
+
+.\[\&_kbd\]\:tw-mb-\[-4px\] kbd {
+	margin-bottom: -4px;
+}
+
+.\[\&_kbd\]\:tw-ml-3 kbd {
+	margin-left: 6px;
+}
+
+.\[\&_kbd\]\:tw-mt-\[-4px\] kbd {
+	margin-top: -4px;
+}
+
