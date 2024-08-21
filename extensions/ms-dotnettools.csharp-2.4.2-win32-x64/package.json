@@ -1,0 +1,5021 @@
+{
+	"name": "csharp",
+	"publisher": "ms-dotnettools",
+	"version": "2.4.2",
+	"description": "Base language support for C#",
+	"displayName": "C#",
+	"author": "Microsoft Corporation",
+	"license": "SEE LICENSE IN RuntimeLicenses/license.txt",
+	"qna": "https://github.com/dotnet/vscode-csharp/issues",
+	"icon": "images/csharpIcon.png",
+	"preview": false,
+	"bugs": {
+		"url": "https://github.com/dotnet/vscode-csharp"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dotnet/vscode-csharp"
+	},
+	"categories": [
+		"Debuggers",
+		"Programming Languages",
+		"Linters",
+		"Snippets"
+	],
+	"keywords": [
+		"multi-root ready",
+		".NET",
+		"ASP.NET",
+		".NET Core",
+		"dotnet",
+		"coreclr"
+	],
+	"capabilities": {
+		"virtualWorkspaces": false,
+		"untrustedWorkspaces": {
+			"supported": false
+		}
+	},
+	"defaults": {
+		"roslyn": "4.8.0-3.23470.7",
+		"omniSharp": "1.39.7",
+		"razor": "7.0.0-preview.23456.2",
+		"razorOmnisharp": "7.0.0-preview.23363.1"
+	},
+	"main": "./dist/extension",
+	"l10n": "./l10n",
+	"brokeredServices": [
+		{
+			"moniker": {
+				"name": "Microsoft.CodeAnalysis.LanguageClient.SolutionSnapshotProvider",
+				"version": "0.1"
+			}
+		}
+	],
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./ && webpack --mode production",
+		"l10nDevGenerateLocalizationBundle": "npx @vscode/l10n-dev export --outDir ./l10n ./src",
+		"compile": "tsc -p ./ && npx eslint ./ && npm run l10nDevGenerateLocalizationBundle && npm run compile:razorTextMate",
+		"compile:razorTextMate": "npx js-yaml src/razor/syntaxes/aspnetcorerazor.tmLanguage.yml > src/razor/syntaxes/aspnetcorerazor.tmLanguage.json",
+		"compileDev": "tsc -p ./ && npx eslint ./ && webpack --mode development && npm run l10nDevGenerateLocalizationBundle",
+		"watch": "tsc -watch -p ./",
+		"tdd": "mocha --config ./.mocharc.jsonc --watch --watch-extensions ts omnisharptest/omnisharpUnitTests/**/*.test.ts*",
+		"test": "tsc -p ./ && gulp test",
+		"test:integration": "tsc -p ./ && gulp test:integration",
+		"test:razor": "tsc -p ./ && npm run compile:razorTextMate && gulp test:razor",
+		"omnisharptest": "tsc -p ./ && gulp omnisharptest",
+		"omnisharptest:unit": "tsc -p ./ && gulp omnisharptest:unit",
+		"omnisharptest:feature": "tsc -p ./ && gulp omnisharptest:feature",
+		"omnisharptest:integration": "tsc -p ./ && gulp omnisharptest:integration",
+		"omnisharptest:integration:singleCsproj": "tsc -p ./ && gulp omnisharptest:integration:singleCsproj",
+		"omnisharptest:integration:slnWithCsproj": "tsc -p ./ && gulp omnisharptest:integration:slnWithCsproj",
+		"omnisharptest:integration:slnFilterWithCsproj": "tsc -p ./ && gulp omnisharptest:integration:slnFilterWithCsproj",
+		"omnisharptest:artifacts": "tsc -p ./ && mocha out/omnisharptest/omnisharpArtifactTests/**/*.test.js",
+		"unpackage:vsix": "gulp vsix:release:unpackage",
+		"updatePackageDependencies": "gulp updatePackageDependencies",
+		"l10nDevGenerateXlf": "npx @vscode/l10n-dev generate-xlf ./package.nls.json ./l10n/bundle.l10n.json --outFile ./loc/vscode-csharp.xlf",
+		"l10nDevImportXlf": "npx @vscode/l10n-dev import-xlf ./loc/vscode-csharp.*.xlf --outDir ./l10n && move l10n\\package.nls.*.json ."
+	},
+	"extensionDependencies": [
+		"ms-dotnettools.vscode-dotnet-runtime"
+	],
+	"dependencies": {
+		"@microsoft/servicehub-framework": "4.2.99-beta",
+		"@octokit/rest": "^20.0.1",
+		"@types/cross-spawn": "6.0.2",
+		"@vscode/debugprotocol": "1.56.0",
+		"@vscode/extension-telemetry": "0.6.2",
+		"@vscode/js-debug-browsers": "^1.1.0",
+		"async-file": "2.0.2",
+		"cross-spawn": "6.0.5",
+		"execa": "4.0.0",
+		"fs-extra": "9.1.0",
+		"http-proxy-agent": "4.0.1",
+		"https-proxy-agent": "5.0.0",
+		"jsonc-parser": "3.0.0",
+		"microsoft.aspnetcore.razor.vscode": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/0af42abab690d5de903a4a814d6aedc1/microsoft.aspnetcore.razor.vscode-7.0.0-preview.23363.1.tgz",
+		"nerdbank-gitversioning": "^3.6.79-alpha",
+		"node-machine-id": "1.1.12",
+		"ps-list": "7.2.0",
+		"request-light": "0.4.0",
+		"rxjs": "6.6.7",
+		"semver": "5.7.2",
+		"stream": "0.0.2",
+		"strip-bom": "5.0.0",
+		"strip-bom-buf": "2.0.0",
+		"tmp": "0.0.33",
+		"uuid": "^9.0.0",
+		"vscode-html-languageservice": "^5.0.1",
+		"vscode-jsonrpc": "8.2.0-next.0",
+		"vscode-languageclient": "8.2.0-next.1",
+		"vscode-languageserver-protocol": "3.17.4-next.1",
+		"vscode-languageserver-textdocument": "^1.0.5",
+		"vscode-nls": "5.0.1",
+		"yauzl": "2.10.0"
+	},
+	"devDependencies": {
+		"@jest/globals": "^29.6.2",
+		"@types/archiver": "5.1.0",
+		"@types/chai": "4.2.16",
+		"@types/chai-arrays": "2.0.0",
+		"@types/chai-as-promised": "7.1.3",
+		"@types/chai-string": "1.4.2",
+		"@types/del": "3.0.1",
+		"@types/fs-extra": "5.0.4",
+		"@types/gulp": "4.0.5",
+		"@types/minimist": "1.2.1",
+		"@types/mocha": "5.2.5",
+		"@types/node": "16.11.38",
+		"@types/semver": "5.5.0",
+		"@types/tmp": "0.0.33",
+		"@types/unzipper": "^0.9.1",
+		"@types/uuid": "^9.0.1",
+		"@types/vscode": "1.73.0",
+		"@types/yauzl": "2.10.0",
+		"@typescript-eslint/eslint-plugin": "^5.61.0",
+		"@typescript-eslint/parser": "^5.61.0",
+		"@vscode/test-electron": "2.3.4",
+		"archiver": "5.3.0",
+		"chai": "4.3.4",
+		"chai-arrays": "2.2.0",
+		"chai-as-promised": "7.1.1",
+		"chai-fs": "2.0.0",
+		"chai-string": "1.5.0",
+		"del": "3.0.0",
+		"eslint": "^8.43.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-config-standard-with-typescript": "^35.0.0",
+		"eslint-plugin-header": "^3.1.1",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-n": "^15.7.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-promise": "^6.1.1",
+		"eslint-plugin-unicorn": "^47.0.0",
+		"find-versions": "4.0.0",
+		"get-port": "5.1.1",
+		"glob-promise": "4.1.0",
+		"gulp": "4.0.2",
+		"jest": "^29.6.2",
+		"jest-cli": "^29.6.4",
+		"js-yaml": ">=3.13.1",
+		"minimatch": "3.0.5",
+		"mocha": "10.0.0",
+		"mock-fs": "^4.13.0",
+		"mock-http-server": "1.4.2",
+		"octokit": "^3.1.0",
+		"prettier": "2.8.8",
+		"rimraf": "2.6.3",
+		"source-map-support": "^0.5.21",
+		"ts-jest": "^29.1.1",
+		"ts-loader": "9.0.0",
+		"ts-node": "9.1.1",
+		"typescript": "^5.1.6",
+		"unzipper": "0.10.11",
+		"vsce": "2.9.2",
+		"vscode-oniguruma": "^1.6.1",
+		"vscode-textmate": "^6.0.0",
+		"vscode-uri": "^3.0.7",
+		"webpack": "5.76.0",
+		"webpack-cli": "4.6.0"
+	},
+	"runtimeDependencies": [
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 4.7.2 / x86)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-x86-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/OmniSharp.exe",
+			"platformId": "win-x86",
+			"isFramework": true,
+			"integrity": "04535972281731CA7F7E857D6ABBB9D726DC7E9FA4D8A96573169AA97D3C30FA"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 6 / x86)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-x86-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "win-x86",
+			"isFramework": false,
+			"integrity": "7F52CCF77D53513CF3073496123E84ED0D4983908404299D0E697947CEAC495D"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 4.7.2 / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-x64-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/OmniSharp.exe",
+			"platformId": "win-x64",
+			"isFramework": true,
+			"integrity": "2A389B3055EA5D928A950A60853857582FDA2C3B7E1659158578E0C9CD951FEC"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 6 / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-x64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "win-x64",
+			"isFramework": false,
+			"integrity": "ADC15D4997A64B274783A9F1F7FC3EA1CDEC7E353A060D0D0FA2691FD051D682"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 4.7.2 / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-arm64-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/OmniSharp.exe",
+			"platformId": "win-arm64",
+			"isFramework": true,
+			"integrity": "4C1BA44B1E9FE56F01813DBA588A1B715804D061A4758C0E5910FCE175CBB8CF"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Windows (.NET 6 / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-win-arm64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "win-arm64",
+			"isFramework": false,
+			"integrity": "4569F777A71C8E63BA09630EFD0DFEB397BE5E4F1528142E09F3005F7BA007FA"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for OSX (Mono / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-osx-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"x86_64",
+				"arm64"
+			],
+			"binaries": [
+				"./mono.osx",
+				"./run"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/run",
+			"platformId": "osx",
+			"isFramework": true,
+			"integrity": "9137C09D69252ACD5E9B518A725D12660002FC1CDC958A4654AAE3F922540651"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for OSX (.NET 6 / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-osx-x64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "osx-x64",
+			"isFramework": false,
+			"integrity": "26F4FA6CD2A6153FD16829FDFCFAE1BB34289E7B96AC833B8BE0A559EFE5656B"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for OSX (.NET 6 / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-osx-arm64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "osx-arm64",
+			"isFramework": false,
+			"integrity": "8239FA8712EC0D5CEFFFA3B3DBFA1E788864938FAECDBFA8C9D59F55647BC4B2"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux (Mono / x86)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-x86-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86",
+				"i686"
+			],
+			"binaries": [
+				"./mono.linux-x86",
+				"./run"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/run",
+			"platformId": "linux-x86",
+			"isFramework": true,
+			"integrity": "1ABB15DCBA71D16D78D718D4A225A2BD2E7F54805389B7810A72F4091554C906"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux (Mono / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-x64-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./mono.linux-x86_64",
+				"./run"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/run",
+			"platformId": "linux-x64",
+			"isFramework": true,
+			"integrity": "AE83C428FACAB366E18AE02043588F989C79C8FBF49D3FC56A0BC368DFF1CC94"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux (.NET 6 / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-x64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "linux-x64",
+			"isFramework": false,
+			"integrity": "A5830FA3F9D20546AD791071EBDE3B7A2A8D11FDCD30728DABEE6BB3041C9F7F"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux (Mono / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-arm64-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./mono.linux-arm64",
+				"./run"
+			],
+			"installTestPath": "./.omnisharp/1.39.7/run",
+			"platformId": "linux-arm64",
+			"isFramework": true,
+			"integrity": "479F1E3E1A70B6E3FEAC6324715042025FB93BE8F8355CE0B750A52C1F9960F5"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux (.NET 6 / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-arm64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "linux-arm64",
+			"isFramework": false,
+			"integrity": "9EFE06FD38A5B78D968B627BFE1276B8193B7EDF659624EACF43F89D8560ADE0"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux musl (.NET 6 / x64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-musl-x64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "linux-musl-x64",
+			"isFramework": false,
+			"integrity": "613EE930F72AF3C26514670AAD06B26C88A4D9233C60408ABD323406F4265807"
+		},
+		{
+			"id": "OmniSharp",
+			"description": "OmniSharp for Linux musl (.NET 6 / arm64)",
+			"url": "https://roslynomnisharp.blob.core.windows.net/releases/1.39.7/omnisharp-linux-musl-arm64-net6.0-1.39.7.zip",
+			"installPath": ".omnisharp/1.39.7-net6.0",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.omnisharp/1.39.7-net6.0/OmniSharp.dll",
+			"platformId": "linux-musl-arm64",
+			"isFramework": false,
+			"integrity": "9A5A66AA312B99A55BC57E5FC05985C7AD0916B60B9E22B2E4F456AC68929CE4"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (Windows / x64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-win7-x64.zip",
+			"installPath": ".debugger/x86_64",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86_64",
+				"arm64"
+			],
+			"installTestPath": "./.debugger/x86_64/vsdbg-ui.exe",
+			"integrity": "5DB21D3C7C34E8E4A7029AF48FF9A20E6FBECB689626D559C0FA3C8C92CABAC1"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (Windows / ARM64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-win10-arm64.zip",
+			"installPath": ".debugger/arm64",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"installTestPath": "./.debugger/arm64/vsdbg-ui.exe",
+			"integrity": "A3CFF7D47EF5EEDE664E3011EC3B66221E0F7C24CE11D882EAA03B797B014605"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (macOS / x64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-osx-x64.zip",
+			"installPath": ".debugger/x86_64",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"x86_64",
+				"arm64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/x86_64/vsdbg-ui",
+			"integrity": "EC2FFB22EC3449F9318CF38049AB394B0E759F8431AB93992A18EF8FF1601D0D"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (macOS / arm64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-osx-arm64.zip",
+			"installPath": ".debugger/arm64",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/arm64/vsdbg-ui",
+			"integrity": "2EB2AE4DDED16D725B5CF2536885E7D7E923CB42E8FB41AA166F78461B7E8AAE"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (linux / ARM)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-linux-arm.zip",
+			"installPath": ".debugger",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/vsdbg-ui",
+			"integrity": "9EDC86E00498E06EB82BC7C9B586F7213B22A9A4AE30C3F5A52D773CE7E8FDDA"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (linux / ARM64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-linux-arm64.zip",
+			"installPath": ".debugger",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/vsdbg-ui",
+			"integrity": "F62995DA4AEDCE091AA1AE119BB948F6898EDAFA2EA9F99C9F1B0DD747E8B0C3"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (linux musl / x64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-linux-musl-x64.zip",
+			"installPath": ".debugger",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/vsdbg-ui",
+			"integrity": "FD711DC673870AF23B33C6C1AB933F5B7A9D943E1D58B6082B051172352141EE"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (linux musl / ARM64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-linux-musl-arm64.zip",
+			"installPath": ".debugger",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/vsdbg-ui",
+			"integrity": "DA5A39BA645BF15374AE1BD87ADA5532C79578BC82451A99E2D67D5CD65008EE"
+		},
+		{
+			"id": "Debugger",
+			"description": ".NET Core Debugger (linux / x64)",
+			"url": "https://vsdebugger.azureedge.net/coreclr-debug-2-0-2/coreclr-debug-linux-x64.zip",
+			"installPath": ".debugger",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./vsdbg-ui",
+				"./vsdbg"
+			],
+			"installTestPath": "./.debugger/vsdbg-ui",
+			"integrity": "CBFBDFF84D6EFECAA4096980DF37BAE3AFA09DAEDA000AB2212F588F28A89B47"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Windows / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/258d3df59cb903ca4bcb9d42b854e28b/razorlanguageserver-win-x64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"integrity": "2776B6967DE613C03B2EFEA9490D8B82BDF23E435FE7C6167D6A3ED58EC706ED"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Windows / x86)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/d2ffb8978958712807d88ebf38914f47/razorlanguageserver-win-x86-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86"
+			],
+			"integrity": "E2040016EF17B2D181BFD5FD8D03FC2959AF8E909ADD17FABFC87370BBA42802"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Windows / ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/d279c139e3d914fec96dfab50f05f438/razorlanguageserver-win-arm64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"integrity": "FA3FD214F14C61D9E810F36060C09ED7E245697B34371EC705D275BF825E76C4"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Linux / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/86a165500517ca828227bfd0f28f7a02/razorlanguageserver-linux-x64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "1B5F1A6A74FA0ADA04B7061C243FA4CA72591A1973B992A4C25E94A0137FD3DF"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Linux ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/af4c33cdb53e85a7de39fb07195e05b2/razorlanguageserver-linux-arm64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "37EC155920952719CD76F7E8BFD65EA3D0A2738A675670B5614D23D9542D5DE8"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Linux musl / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/e5e12ac99072e02499bef77c2c5034a2/razorlanguageserver-linux-musl-x64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "F4399BCEE6192BF3DBA1A6E93DE801075DF1433DF772143B7612FBD60B078361"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (Linux musl ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/24783517c9a4729efbd7dfd2a97fe5cc/razorlanguageserver-linux-musl-arm64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "E471B4F4FB70BB22EB689A759BCAD22B12908EC7446BB98EA69EED974E28E9C7"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (macOS / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/b9ee27ddd84b0f4faf82e88589c8584f/razorlanguageserver-osx-x64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "B0C40624FE418E3C47DCDC44DDF0643C7F980A254FEEEB49BAED21A010102EB8"
+		},
+		{
+			"id": "Razor",
+			"description": "Razor Language Server (macOS ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/e5617c98-d08e-43f2-a9bf-a36fec5306b7/d61e51f223e6bfeceae821b1cce36bfc/razorlanguageserver-osx-arm64-7.0.0-preview.23456.2.zip",
+			"installPath": ".razor",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			],
+			"integrity": "C0C325C057E9392845E19F1918F9DEA56500A4188FC619B5529B2785EB2A1D65"
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Windows / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/8d42e62ea4051381c219b3e31bc4eced/razorlanguageserver-win-x64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86_64"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Windows / x86)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/e440c4f3a4a96334fe177513935fa010/razorlanguageserver-win-x86-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"x86"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Windows / ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/4ef26e45cf32fe8d51c0e7dd21f1fef6/razorlanguageserver-win-arm64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"win32"
+			],
+			"architectures": [
+				"arm64"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Linux / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/6d4e23a3c7cf0465743950a39515a716/razorlanguageserver-linux-x64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Linux ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/85deebd44647ebf65724cc291d722283/razorlanguageserver-linux-arm64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"linux"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Linux musl / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/4f0caa94ae182785655efb15eafcef23/razorlanguageserver-linux-musl-x64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (Linux musl ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/0a24828206a6f3b4bc743d058ef88ce7/razorlanguageserver-linux-musl-arm64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"linux-musl"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (macOS / x64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/2afcafaf41082989efcc10405abb9314/razorlanguageserver-osx-x64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"x86_64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		},
+		{
+			"id": "RazorOmnisharp",
+			"description": "Razor Language Server for OmniSharp (macOS ARM64)",
+			"url": "https://download.visualstudio.microsoft.com/download/pr/aee63398-023f-48db-bba2-30162c68f0c4/8bf2ed2f00d481a5987e3eb5165afddd/razorlanguageserver-osx-arm64-7.0.0-preview.23363.1.zip",
+			"installPath": ".razoromnisharp",
+			"platforms": [
+				"darwin"
+			],
+			"architectures": [
+				"arm64"
+			],
+			"binaries": [
+				"./rzls"
+			]
+		}
+	],
+	"engines": {
+		"vscode": "^1.73.0"
+	},
+	"activationEvents": [
+		"onDebugInitialConfigurations",
+		"onDebugResolve:blazorwasm",
+		"onDebugResolve:coreclr",
+		"onDebugResolve:clr",
+		"onDebugResolve:dotnet",
+		"onLanguage:csharp",
+		"onLanguage:aspnetcorerazor",
+		"onCommand:o.restart",
+		"onCommand:o.pickProjectAndStart",
+		"onCommand:o.showOutput",
+		"onCommand:dotnet.restore.project",
+		"onCommand:dotnet.restore.all",
+		"onCommand:dotnet.generateAssets",
+		"onCommand:dotnet.openSolution",
+		"onCommand:csharp.downloadDebugger",
+		"onCommand:csharp.listProcess",
+		"onCommand:csharp.listRemoteProcess",
+		"onCommand:csharp.listRemoteDockerProcess",
+		"onCommand:omnisharp.registerLanguageMiddleware",
+		"workspaceContains:project.json",
+		"workspaceContains:**/*.{csproj,sln,slnf,csx,cake}"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "Visual Studio 2019 Dark",
+				"uiTheme": "vs-dark",
+				"path": "./themes/vs2019_dark.json"
+			},
+			{
+				"label": "Visual Studio 2019 Light",
+				"uiTheme": "vs",
+				"path": "./themes/vs2019_light.json"
+			}
+		],
+		"configuration": [
+			{
+				"title": "OmniSharp",
+				"properties": {
+					"dotnet.server.useOmnisharp": {
+						"type": "boolean",
+						"default": false,
+						"description": "Switches to use the Omnisharp server for language features when enabled (requires restart). This option will not be honored with C# Dev Kit installed.",
+						"order": 0
+					},
+					"csharp.format.enable": {
+						"type": "boolean",
+						"default": true,
+						"description": "Enable/disable default C# formatter (requires restart)."
+					},
+					"csharp.suppressDotnetInstallWarning": {
+						"type": "boolean",
+						"default": false,
+						"description": "Suppress the warning that the .NET Core SDK is not on the path."
+					},
+					"csharp.suppressDotnetRestoreNotification": {
+						"type": "boolean",
+						"default": false,
+						"description": "Suppress the notification window to perform a 'dotnet restore' when dependencies can't be resolved."
+					},
+					"csharp.suppressProjectJsonWarning": {
+						"type": "boolean",
+						"default": false,
+						"description": "Suppress the warning that project.json is no longer a supported project format for .NET Core applications"
+					},
+					"csharp.suppressBuildAssetsNotification": {
+						"type": "boolean",
+						"default": false,
+						"description": "Suppress the notification window to add missing assets to build or debug the application."
+					},
+					"csharp.suppressHiddenDiagnostics": {
+						"type": "boolean",
+						"default": true,
+						"description": "Suppress 'hidden' diagnostics (such as 'unnecessary using directives') from appearing in the editor or the Problems pane."
+					},
+					"csharp.referencesCodeLens.filteredSymbols": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"default": [],
+						"description": "Array of custom symbol names for which CodeLens should be disabled."
+					},
+					"csharp.maxProjectFileCountForDiagnosticAnalysis": {
+						"type": "number",
+						"default": 1000,
+						"description": "Specifies the maximum number of files for which diagnostics are reported for the whole workspace. If this limit is exceeded, diagnostics will be shown for currently opened files only. Specify 0 or less to disable the limit completely."
+					},
+					"csharp.semanticHighlighting.enabled": {
+						"type": "boolean",
+						"default": true,
+						"description": "Enable/disable Semantic Highlighting for C# files (Razor files currently unsupported). Defaults to false. Close open files for changes to take effect.",
+						"scope": "window"
+					},
+					"csharp.showOmnisharpLogOnError": {
+						"type": "boolean",
+						"default": true,
+						"description": "Shows the OmniSharp log in the Output pane when OmniSharp reports an error."
+					},
+					"omnisharp.useModernNet": {
+						"type": "boolean",
+						"default": true,
+						"scope": "window",
+						"title": "Use .NET 6 build of OmniSharp",
+						"description": "Use OmniSharp build for .NET 6. This version _does not_ support non-SDK-style .NET Framework projects, including Unity. SDK-style Framework, .NET Core, and .NET 5+ projects should see significant performance improvements."
+					},
+					"omnisharp.sdkPath": {
+						"type": "string",
+						"scope": "window",
+						"description": "Specifies the path to a .NET SDK installation to use for project loading instead of the highest version installed. Applies when \"useModernNet\" is set to true. Example: /home/username/dotnet/sdks/6.0.300."
+					},
+					"omnisharp.sdkVersion": {
+						"type": "string",
+						"scope": "window",
+						"description": "Specifies the version of the .NET SDK to use for project loading instead of the highest version installed. Applies when \"useModernNet\" is set to true. Example: 6.0.300."
+					},
+					"omnisharp.sdkIncludePrereleases": {
+						"type": "boolean",
+						"scope": "window",
+						"default": true,
+						"description": "Specifies whether to include preview versions of the .NET SDK when determining which version to use for project loading. Applies when \"useModernNet\" is set to true."
+					},
+					"omnisharp.monoPath": {
+						"type": "string",
+						"scope": "machine",
+						"description": "Specifies the path to a mono installation to use when \"useModernNet\" is set to false, instead of the default system one. Example: \"/Library/Frameworks/Mono.framework/Versions/Current\""
+					},
+					"omnisharp.loggingLevel": {
+						"type": "string",
+						"default": "information",
+						"enum": [
+							"trace",
+							"debug",
+							"information",
+							"warning",
+							"error",
+							"critical"
+						],
+						"description": "Specifies the level of logging output from the OmniSharp server."
+					},
+					"omnisharp.autoStart": {
+						"type": "boolean",
+						"default": true,
+						"description": "Specifies whether the OmniSharp server will be automatically started or not. If false, OmniSharp can be started with the 'Restart OmniSharp' command"
+					},
+					"omnisharp.projectFilesExcludePattern": {
+						"type": "string",
+						"default": "**/node_modules/**,**/.git/**,**/bower_components/**",
+						"description": "The exclude pattern used by OmniSharp to find all project files."
+					},
+					"omnisharp.projectLoadTimeout": {
+						"type": "number",
+						"default": 60,
+						"description": "The time Visual Studio Code will wait for the OmniSharp server to start. Time is expressed in seconds."
+					},
+					"omnisharp.maxProjectResults": {
+						"type": "number",
+						"default": 250,
+						"description": "The maximum number of projects to be shown in the 'Select Project' dropdown (maximum 250)."
+					},
+					"omnisharp.useEditorFormattingSettings": {
+						"type": "boolean",
+						"default": true,
+						"description": "Specifes whether OmniSharp should use VS Code editor settings for C# code formatting (use of tabs, indentation size)."
+					},
+					"omnisharp.minFindSymbolsFilterLength": {
+						"type": "number",
+						"default": 0,
+						"description": "The minimum number of characters to enter before 'Go to Symbol in Workspace' operation shows any results."
+					},
+					"omnisharp.maxFindSymbolsItems": {
+						"type": "number",
+						"default": 1000,
+						"description": "The maximum number of items that 'Go to Symbol in Workspace' operation can show. The limit is applied only when a positive number is specified here."
+					},
+					"omnisharp.disableMSBuildDiagnosticWarning": {
+						"type": "boolean",
+						"default": false,
+						"description": "Specifies whether notifications should be shown if OmniSharp encounters warnings or errors loading a project. Note that these warnings/errors are always emitted to the OmniSharp log"
+					},
+					"omnisharp.enableMsBuildLoadProjectsOnDemand": {
+						"type": "boolean",
+						"default": false,
+						"description": "If true, MSBuild project system will only load projects for files that were opened in the editor. This setting is useful for big C# codebases and allows for faster initialization of code navigation features only for projects that are relevant to code that is being edited. With this setting enabled OmniSharp may load fewer projects and may thus display incomplete reference lists for symbols."
+					},
+					"omnisharp.enableEditorConfigSupport": {
+						"type": "boolean",
+						"default": true,
+						"description": "Enables support for reading code style, naming convention and analyzer settings from .editorconfig."
+					},
+					"omnisharp.enableDecompilationSupport": {
+						"type": "boolean",
+						"default": false,
+						"scope": "machine",
+						"description": "Enables support for decompiling external references instead of viewing metadata."
+					},
+					"omnisharp.enableLspDriver": {
+						"type": "boolean",
+						"default": false,
+						"description": "Enables support for the experimental language protocol based engine (requires reload to setup bindings correctly)"
+					},
+					"omnisharp.organizeImportsOnFormat": {
+						"type": "boolean",
+						"default": false,
+						"description": "Specifies whether 'using' directives should be grouped and sorted during document formatting."
+					},
+					"omnisharp.enableAsyncCompletion": {
+						"type": "boolean",
+						"default": false,
+						"description": "(EXPERIMENTAL) Enables support for resolving completion edits asynchronously. This can speed up time to show the completion list, particularly override and partial method completion lists, at the cost of slight delays after inserting a completion item. Most completion items will have no noticeable impact with this feature, but typing immediately after inserting an override or partial method completion, before the insert is completed, can have unpredictable results."
+					},
+					"omnisharp.dotNetCliPaths": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Paths to a local download of the .NET CLI to use for running any user code.",
+						"uniqueItems": true
+					},
+					"razor.plugin.path": {
+						"type": "string",
+						"scope": "machine",
+						"description": "Overrides the path to the Razor plugin dll."
+					},
+					"razor.devmode": {
+						"type": "boolean",
+						"default": false,
+						"description": "Forces the omnisharp-vscode extension to run in a mode that enables local Razor.VSCode deving."
+					},
+					"razor.format.enable": {
+						"type": "boolean",
+						"scope": "window",
+						"default": true,
+						"description": "Enable/disable default Razor formatter."
+					}
+				}
+			},
+			{
+				"title": "C#",
+				"properties": {
+					"dotnet.defaultSolution": {
+						"type": "string",
+						"description": "%configuration.dotnet.defaultSolution.description%",
+						"order": 0
+					},
+					"dotnet.dotnetPath": {
+						"type": "string",
+						"scope": "machine-overridable",
+						"description": "%configuration.dotnet.dotnetPath%"
+					},
+					"dotnet.server.path": {
+						"type": "string",
+						"scope": "machine-overridable",
+						"description": "%configuration.dotnet.server.path%"
+					},
+					"dotnet.server.startTimeout": {
+						"type": "number",
+						"scope": "machine-overridable",
+						"default": 30000,
+						"description": "%configuration.dotnet.server.startTimeout%"
+					},
+					"dotnet.server.waitForDebugger": {
+						"type": "boolean",
+						"scope": "machine-overridable",
+						"default": false,
+						"description": "%configuration.dotnet.server.waitForDebugger%"
+					},
+					"dotnet.server.trace": {
+						"scope": "window",
+						"type": "string",
+						"enum": [
+							"Trace",
+							"Debug",
+							"Information",
+							"Warning",
+							"Error",
+							"Critical",
+							"None"
+						],
+						"default": "Information",
+						"description": "%configuration.dotnet.server.trace%"
+					},
+					"dotnet.server.extensionPaths": {
+						"scope": "machine-overridable",
+						"type": [
+							"array",
+							null
+						],
+						"items": {
+							"type": "string"
+						},
+						"default": null,
+						"description": "%configuration.dotnet.server.extensionPaths%"
+					},
+					"dotnet.projects.binaryLogPath": {
+						"scope": "machine-overridable",
+						"type": "string",
+						"default": null,
+						"description": "Sets a path where MSBuild binary logs are written to when loading projects, to help diagnose loading errors."
+					},
+					"dotnet.preferCSharpExtension": {
+						"scope": "resource",
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.preferCSharpExtension%"
+					},
+					"dotnet.implementType.insertionBehavior": {
+						"type": "string",
+						"enum": [
+							"withOtherMembersOfTheSameKind",
+							"atTheEnd"
+						],
+						"default": "withOtherMembersOfTheSameKind",
+						"enumDescriptions": [
+							"%configuration.dotnet.implementType.insertionBehavior.withOtherMembersOfTheSameKind%",
+							"%configuration.dotnet.implementType.insertionBehavior.atTheEnd%"
+						],
+						"description": "%configuration.dotnet.implementType.insertionBehavior%",
+						"order": 10
+					},
+					"dotnet.implementType.propertyGenerationBehavior": {
+						"type": "string",
+						"enum": [
+							"preferThrowingProperties",
+							"preferAutoProperties"
+						],
+						"default": "preferThrowingProperties",
+						"enumDescriptions": [
+							"%configuration.dotnet.implementType.propertyGenerationBehavior.preferThrowingProperties%",
+							"%configuration.dotnet.implementType.propertyGenerationBehavior.preferAutoProperties%"
+						],
+						"description": "%configuration.dotnet.implementType.propertyGenerationBehavior%",
+						"order": 10
+					},
+					"dotnet.codeLens.enableReferencesCodeLens": {
+						"type": "boolean",
+						"default": true,
+						"description": "%configuration.dotnet.codeLens.enableReferencesCodeLens%"
+					},
+					"dotnet.codeLens.enableTestsCodeLens": {
+						"type": "boolean",
+						"default": true,
+						"description": "%configuration.dotnet.codeLens.enableTestsCodeLens%"
+					},
+					"dotnet.completion.showCompletionItemsFromUnimportedNamespaces": {
+						"type": "boolean",
+						"default": true,
+						"description": "%configuration.dotnet.completion.showCompletionItemsFromUnimportedNamespaces%",
+						"order": 20
+					},
+					"dotnet.completion.showNameCompletionSuggestions": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.completion.showNameCompletionSuggestions%",
+						"order": 20
+					},
+					"dotnet.completion.provideRegexCompletions": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.completion.provideRegexCompletions%",
+						"order": 20
+					},
+					"dotnet.backgroundAnalysis.analyzerDiagnosticsScope": {
+						"type": "string",
+						"enum": [
+							"openFiles",
+							"fullSolution",
+							"none"
+						],
+						"default": "openFiles",
+						"enumDescriptions": [
+							"%configuration.dotnet.backgroundAnalysis.analyzerDiagnosticsScope.openFiles%",
+							"%configuration.dotnet.backgroundAnalysis.analyzerDiagnosticsScope.fullSolution%",
+							"%configuration.dotnet.backgroundAnalysis.analyzerDiagnosticsScope.none%"
+						],
+						"description": "%configuration.dotnet.backgroundAnalysis.analyzerDiagnosticsScope%",
+						"order": 30
+					},
+					"dotnet.backgroundAnalysis.compilerDiagnosticsScope": {
+						"type": "string",
+						"enum": [
+							"openFiles",
+							"fullSolution",
+							"none"
+						],
+						"default": "openFiles",
+						"enumDescriptions": [
+							"%configuration.dotnet.backgroundAnalysis.compilerDiagnosticsScope.openFiles%",
+							"%configuration.dotnet.backgroundAnalysis.compilerDiagnosticsScope.fullSolution%",
+							"%configuration.dotnet.backgroundAnalysis.compilerDiagnosticsScope.none%"
+						],
+						"description": "%configuration.dotnet.backgroundAnalysis.compilerDiagnosticsScope%",
+						"order": 30
+					},
+					"dotnet.highlighting.highlightRelatedRegexComponents": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.highlighting.highlightRelatedRegexComponents%",
+						"order": 40
+					},
+					"dotnet.highlighting.highlightRelatedJsonComponents": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.highlighting.highlightRelatedJsonComponents%",
+						"order": 40
+					},
+					"csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.csharp.inlayHints.enableInlayHintsForImplicitObjectCreation%",
+						"order": 50
+					},
+					"csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.csharp.inlayHints.enableInlayHintsForImplicitVariableTypes%",
+						"order": 50
+					},
+					"csharp.inlayHints.enableInlayHintsForLambdaParameterTypes": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.csharp.inlayHints.enableInlayHintsForLambdaParameterTypes%",
+						"order": 50
+					},
+					"csharp.inlayHints.enableInlayHintsForTypes": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.csharp.inlayHints.enableInlayHintsForTypes%",
+						"order": 50
+					},
+					"dotnet.inlayHints.enableInlayHintsForIndexerParameters": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.csharp.inlayHints.enableInlayHintsForIndexerParameters%",
+						"order": 50
+					},
+					"dotnet.inlayHints.enableInlayHintsForLiteralParameters": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.enableInlayHintsForLiteralParameters%",
+						"order": 50
+					},
+					"dotnet.inlayHints.enableInlayHintsForObjectCreationParameters": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.enableInlayHintsForObjectCreationParameters%",
+						"order": 50
+					},
+					"dotnet.inlayHints.enableInlayHintsForOtherParameters": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.enableInlayHintsForOtherParameters%",
+						"order": 50
+					},
+					"dotnet.inlayHints.enableInlayHintsForParameters": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.enableInlayHintsForParameters%",
+						"order": 50
+					},
+					"dotnet.inlayHints.suppressInlayHintsForParametersThatDifferOnlyBySuffix": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.suppressInlayHintsForParametersThatDifferOnlyBySuffix%",
+						"order": 50
+					},
+					"dotnet.inlayHints.suppressInlayHintsForParametersThatMatchArgumentName": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.suppressInlayHintsForParametersThatMatchArgumentName%",
+						"order": 50
+					},
+					"dotnet.inlayHints.suppressInlayHintsForParametersThatMatchMethodIntent": {
+						"type": "boolean",
+						"default": false,
+						"description": "%configuration.dotnet.inlayHints.suppressInlayHintsForParametersThatMatchMethodIntent%",
+						"order": 50
+					},
+					"dotnet.navigation.navigateToDecompiledSources": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.navigation.navigateToDecompiledSources%",
+						"order": 60
+					},
+					"dotnet.quickInfo.showRemarksInQuickInfo": {
+						"type": "boolean",
+						"default": "true",
+						"description": "%configuration.dotnet.quickInfo.showRemarksInQuickInfo%",
+						"order": 70
+					},
+					"dotnet.symbolSearch.searchReferenceAssemblies": {
+						"type": "boolean",
+						"default": true,
+						"description": "%configuration.dotnet.symbolSearch.searchReferenceAssemblies%",
+						"order": 80
+					},
+					"dotnet.unitTests.runSettingsPath": {
+						"type": "string",
+						"description": "Path to the .runsettings file which should be used when running unit tests. (Previously `omnisharp.testRunSettings`)"
+					},
+					"dotnet.unitTestDebuggingOptions": {
+						"type": "object",
+						"description": "%configuration.dotnet.unitTestDebuggingOptions%",
+						"default": {},
+						"properties": {
+							"sourceFileMap": {
+								"type": "object",
+								"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+								"additionalProperties": {
+									"type": "string"
+								}
+							},
+							"justMyCode": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+								"default": true
+							},
+							"requireExactSource": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+								"default": true
+							},
+							"enableStepFiltering": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+								"default": true
+							},
+							"logging": {
+								"description": "%generateOptionsSchema.logging.description%",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"exceptions": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+										"default": true
+									},
+									"moduleLoad": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+										"default": true
+									},
+									"programOutput": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+										"default": true
+									},
+									"threadExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+										"default": false
+									},
+									"processExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+										"default": true
+									}
+								}
+							},
+							"suppressJITOptimizations": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+								"default": false
+							},
+							"symbolOptions": {
+								"description": "%generateOptionsSchema.symbolOptions.description%",
+								"default": {
+									"searchPaths": [],
+									"searchMicrosoftSymbolServer": false,
+									"searchNuGetOrgSymbolServer": false
+								},
+								"type": "object",
+								"properties": {
+									"searchPaths": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+										"default": []
+									},
+									"searchMicrosoftSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+										"default": false
+									},
+									"searchNuGetOrgSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+										"default": false
+									},
+									"cachePath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+										"default": ""
+									},
+									"moduleFilter": {
+										"description": "%generateOptionsSchema.symbolOptions.moduleFilter.description%",
+										"default": {
+											"mode": "loadAllButExcluded",
+											"excludedModules": []
+										},
+										"type": "object",
+										"required": [
+											"mode"
+										],
+										"properties": {
+											"mode": {
+												"type": "string",
+												"enum": [
+													"loadAllButExcluded",
+													"loadOnlyIncluded"
+												],
+												"enumDescriptions": [
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+												],
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+												"default": "loadAllButExcluded"
+											},
+											"excludedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+												"default": []
+											},
+											"includedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+												"default": []
+											},
+											"includeSymbolsNextToModules": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+												"default": true
+											}
+										}
+									}
+								}
+							},
+							"sourceLinkOptions": {
+								"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.markdownDescription%",
+								"default": {
+									"*": {
+										"enabled": true
+									}
+								},
+								"type": "object",
+								"additionalItems": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"title": "boolean",
+											"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.additionalItems.enabled.markdownDescription%",
+											"default": "true"
+										}
+									}
+								}
+							},
+							"allowFastEvaluate": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+								"default": true
+							},
+							"targetArchitecture": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.targetArchitecture.markdownDescription%",
+								"enum": [
+									"x86_64",
+									"arm64"
+								]
+							},
+							"type": {
+								"type": "string",
+								"enum": [
+									"coreclr",
+									"clr"
+								],
+								"description": "Type type of code to debug. Can be either 'coreclr' for .NET Core debugging, or 'clr' for Desktop .NET Framework. 'clr' only works on Windows as the Desktop framework is Windows-only.",
+								"default": "coreclr"
+							},
+							"debugServer": {
+								"type": "number",
+								"description": "For debug extension development only: if a port is specified VS Code tries to connect to a debug adapter running in server mode",
+								"default": 4711
+							}
+						}
+					},
+					"razor.languageServer.directory": {
+						"type": "string",
+						"scope": "machine-overridable",
+						"description": "%configuration.razor.languageServer.directory%",
+						"order": 90
+					},
+					"razor.languageServer.debug": {
+						"type": "boolean",
+						"scope": "machine-overridable",
+						"default": false,
+						"description": "%configuration.razor.languageServer.debug%",
+						"order": 90
+					},
+					"razor.trace": {
+						"type": "string",
+						"default": "Off",
+						"enum": [
+							"Off",
+							"Messages",
+							"Verbose"
+						],
+						"enumDescriptions": [
+							"%configuration.razor.trace.off%",
+							"%configuration.razor.trace.messages%",
+							"%configuration.razor.trace.verbose%"
+						],
+						"description": "%configuration.razor.trace%",
+						"order": 90
+					},
+					"csharp.debug.stopAtEntry": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.stopAtEntry.markdownDescription%",
+						"default": false
+					},
+					"csharp.debug.console": {
+						"type": "string",
+						"enum": [
+							"internalConsole",
+							"integratedTerminal",
+							"externalTerminal"
+						],
+						"enumDescriptions": [
+							"%generateOptionsSchema.console.internalConsole.enumDescription%",
+							"%generateOptionsSchema.console.integratedTerminal.enumDescription%",
+							"%generateOptionsSchema.console.externalTerminal.enumDescription%"
+						],
+						"markdownDescription": "%generateOptionsSchema.console.settingsDescription%",
+						"default": "internalConsole"
+					},
+					"csharp.debug.sourceFileMap": {
+						"type": "object",
+						"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+						"additionalProperties": {
+							"type": "string"
+						},
+						"default": {}
+					},
+					"csharp.debug.justMyCode": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.requireExactSource": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.enableStepFiltering": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.logging.exceptions": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.logging.moduleLoad": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.logging.programOutput": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.logging.engineLogging": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.engineLogging.markdownDescription%",
+						"default": false
+					},
+					"csharp.debug.logging.browserStdOut": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.browserStdOut.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.logging.elapsedTiming": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.elapsedTiming.markdownDescription%",
+						"default": false
+					},
+					"csharp.debug.logging.threadExit": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+						"default": false
+					},
+					"csharp.debug.logging.processExit": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+						"default": true
+					},
+					"csharp.debug.suppressJITOptimizations": {
+						"type": "boolean",
+						"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+						"default": false
+					},
+					"csharp.debug.symbolOptions.searchPaths": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+						"default": []
+					},
+					"csharp.debug.symbolOptions.searchMicrosoftSymbolServer": {
+						"type": "boolean",
+						"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+						"default": false
+					},
+					"csharp.debug.symbolOptions.searchNuGetOrgSymbolServer": {
+						"type": "boolean",
+						"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+						"default": false
+					},
+					"csharp.debug.symbolOptions.cachePath": {
+						"type": "string",
+						"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+						"default": ""
+					},
+					"csharp.debug.symbolOptions.moduleFilter.mode": {
+						"type": "string",
+						"enum": [
+							"loadAllButExcluded",
+							"loadOnlyIncluded"
+						],
+						"enumDescriptions": [
+							"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+							"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+						],
+						"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+						"default": "loadAllButExcluded"
+					},
+					"csharp.debug.symbolOptions.moduleFilter.excludedModules": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+						"default": []
+					},
+					"csharp.debug.symbolOptions.moduleFilter.includedModules": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+						"default": []
+					},
+					"csharp.debug.symbolOptions.moduleFilter.includeSymbolsNextToModules": {
+						"type": "boolean",
+						"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+						"default": true
+					},
+					"csharp.debug.allowFastEvaluate": {
+						"type": "boolean",
+						"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+						"default": true
+					}
+				}
+			}
+		],
+		"jsonValidation": [
+			{
+				"fileMatch": [
+					"appsettings.json",
+					"appsettings.*.json"
+				],
+				"url": "https://json.schemastore.org/appsettings"
+			},
+			{
+				"fileMatch": "project.json",
+				"url": "http://json.schemastore.org/project"
+			},
+			{
+				"fileMatch": "omnisharp.json",
+				"url": "http://json.schemastore.org/omnisharp"
+			},
+			{
+				"fileMatch": "global.json",
+				"url": "http://json.schemastore.org/global"
+			},
+			{
+				"fileMatch": "launchSettings.json",
+				"url": "https://json.schemastore.org/launchsettings.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "o.restart",
+				"title": "Restart OmniSharp",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "o.pickProjectAndStart",
+				"title": "Select Project",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "dotnet.openSolution",
+				"title": "Open Solution",
+				"category": ".NET",
+				"enablement": "!config.dotnet.server.useOmnisharp && dotnet.server.activatedStandalone"
+			},
+			{
+				"command": "o.fixAll.solution",
+				"title": "Fix all occurrences of a code issue within solution",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "o.fixAll.project",
+				"title": "Fix all occurrences of a code issue within project",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "o.fixAll.document",
+				"title": "Fix all occurrences of a code issue within document",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "o.reanalyze.allProjects",
+				"title": "Analyze all projects",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "o.reanalyze.currentProject",
+				"title": "Analyze current project",
+				"category": "OmniSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "dotnet.generateAssets",
+				"title": "Generate Assets for Build and Debug",
+				"category": ".NET"
+			},
+			{
+				"command": "dotnet.restore.project",
+				"title": "Restore Project",
+				"category": ".NET",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "dotnet.restore.all",
+				"title": "Restore All Projects",
+				"category": ".NET",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "csharp.downloadDebugger",
+				"title": "Download .NET Core Debugger",
+				"category": "Debug"
+			},
+			{
+				"command": "csharp.listProcess",
+				"title": "List process for attach",
+				"category": "CSharp"
+			},
+			{
+				"command": "csharp.listRemoteProcess",
+				"title": "List processes on remote connection for attach",
+				"category": "CSharp"
+			},
+			{
+				"command": "csharp.listRemoteDockerProcess",
+				"title": "List processes on Docker connection",
+				"category": "CSharp"
+			},
+			{
+				"command": "csharp.attachToProcess",
+				"title": "Attach to a .NET 5+ or .NET Core process",
+				"category": "Debug"
+			},
+			{
+				"command": "csharp.reportIssue",
+				"title": "Report an issue",
+				"category": "CSharp"
+			},
+			{
+				"command": "csharp.showDecompilationTerms",
+				"title": "Show the decompiler terms agreement",
+				"category": "CSharp",
+				"enablement": "config.dotnet.server.useOmnisharp"
+			},
+			{
+				"command": "extension.showRazorCSharpWindow",
+				"title": "Show Razor CSharp",
+				"category": "Razor"
+			},
+			{
+				"command": "extension.showRazorHtmlWindow",
+				"title": "Show Razor Html",
+				"category": "Razor"
+			},
+			{
+				"command": "razor.reportIssue",
+				"title": "Report a Razor issue",
+				"category": "Razor"
+			},
+			{
+				"command": "dotnet.test.runTestsInContext",
+				"title": "Run Tests in Context",
+				"category": ".NET",
+				"enablement": "dotnet.server.activatedStandalone"
+			},
+			{
+				"command": "dotnet.test.debugTestsInContext",
+				"title": "Debug Tests in Context",
+				"category": ".NET",
+				"enablement": "dotnet.server.activatedStandalone"
+			},
+			{
+				"command": "dotnet.restartServer",
+				"title": "Restart Language Server",
+				"category": ".NET",
+				"enablement": "!config.dotnet.server.useOmnisharp"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "o.showOutput",
+				"key": "Ctrl+Shift+F9",
+				"mac": "Cmd+Shift+F9"
+			}
+		],
+		"snippets": [
+			{
+				"language": "csharp",
+				"path": "./snippets/csharp.json"
+			}
+		],
+		"breakpoints": [
+			{
+				"language": "csharp"
+			},
+			{
+				"language": "razor"
+			},
+			{
+				"language": "qsharp"
+			},
+			{
+				"language": "aspnetcorerazor"
+			}
+		],
+		"debuggers": [
+			{
+				"type": "coreclr",
+				"label": ".NET 5+ and .NET Core",
+				"languages": [
+					"csharp",
+					"razor",
+					"qsharp",
+					"aspnetcorerazor"
+				],
+				"variables": {
+					"pickProcess": "csharp.listProcess",
+					"pickRemoteProcess": "csharp.listRemoteProcess",
+					"pickRemoteDockerProcess": "csharp.listRemoteDockerProcess"
+				},
+				"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+				"configurationAttributes": {
+					"launch": {
+						"type": "object",
+						"required": [
+							"program"
+						],
+						"properties": {
+							"program": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.program.markdownDescription%",
+								"default": "${workspaceFolder}/bin/Debug/<insert-target-framework-here>/<insert-project-name-here>.dll"
+							},
+							"cwd": {
+								"type": "string",
+								"description": "%generateOptionsSchema.cwd.description%",
+								"default": "${workspaceFolder}"
+							},
+							"args": {
+								"anyOf": [
+									{
+										"type": "array",
+										"description": "%generateOptionsSchema.args.0.description%",
+										"items": {
+											"type": "string"
+										},
+										"default": []
+									},
+									{
+										"type": "string",
+										"description": "%generateOptionsSchema.args.1.description%",
+										"default": ""
+									}
+								]
+							},
+							"stopAtEntry": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.stopAtEntry.markdownDescription%",
+								"default": false
+							},
+							"launchBrowser": {
+								"description": "%generateOptionsSchema.launchBrowser.description%",
+								"default": {
+									"enabled": true
+								},
+								"type": "object",
+								"required": [
+									"enabled"
+								],
+								"properties": {
+									"enabled": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.launchBrowser.enabled.description%",
+										"default": true
+									},
+									"args": {
+										"type": "string",
+										"description": "%generateOptionsSchema.launchBrowser.args.description%",
+										"default": "${auto-detect-url}"
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.launchBrowser.osx.description%",
+										"default": {
+											"command": "open",
+											"args": "${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.osx.command.description%",
+												"default": "open"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.osx.args.description%",
+												"default": "${auto-detect-url}"
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.launchBrowser.linux.description%",
+										"default": {
+											"command": "xdg-open",
+											"args": "${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.linux.command.description%",
+												"default": "xdg-open"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.linux.args.description%",
+												"default": "${auto-detect-url}"
+											}
+										}
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.launchBrowser.windows.description%",
+										"default": {
+											"command": "cmd.exe",
+											"args": "/C start ${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.windows.command.description%",
+												"default": "cmd.exe"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.windows.args.description%",
+												"default": "/C start ${auto-detect-url}"
+											}
+										}
+									}
+								}
+							},
+							"env": {
+								"type": "object",
+								"additionalProperties": {
+									"type": "string"
+								},
+								"description": "%generateOptionsSchema.env.description%",
+								"default": {}
+							},
+							"envFile": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.envFile.markdownDescription%",
+								"default": "${workspaceFolder}/.env"
+							},
+							"console": {
+								"type": "string",
+								"enum": [
+									"internalConsole",
+									"integratedTerminal",
+									"externalTerminal"
+								],
+								"enumDescriptions": [
+									"%generateOptionsSchema.console.internalConsole.enumDescription%",
+									"%generateOptionsSchema.console.integratedTerminal.enumDescription%",
+									"%generateOptionsSchema.console.externalTerminal.enumDescription%"
+								],
+								"markdownDescription": "%generateOptionsSchema.console.markdownDescription%",
+								"settingsDescription": "%generateOptionsSchema.console.settingsDescription%",
+								"default": "internalConsole"
+							},
+							"externalConsole": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.externalConsole.markdownDescription%",
+								"default": false
+							},
+							"launchSettingsFilePath": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.launchSettingsFilePath.markdownDescription%",
+								"default": "${workspaceFolder}/Properties/launchSettings.json"
+							},
+							"launchSettingsProfile": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								],
+								"description": "%generateOptionsSchema.launchSettingsProfile.description%",
+								"default": "<insert-profile-name>"
+							},
+							"sourceFileMap": {
+								"type": "object",
+								"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+								"additionalProperties": {
+									"type": "string"
+								},
+								"default": {}
+							},
+							"justMyCode": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+								"default": true
+							},
+							"requireExactSource": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+								"default": true
+							},
+							"enableStepFiltering": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+								"default": true
+							},
+							"logging": {
+								"description": "%generateOptionsSchema.logging.description%",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"exceptions": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+										"default": true
+									},
+									"moduleLoad": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+										"default": true
+									},
+									"programOutput": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+										"default": true
+									},
+									"engineLogging": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.engineLogging.markdownDescription%",
+										"default": false
+									},
+									"browserStdOut": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.browserStdOut.markdownDescription%",
+										"default": true
+									},
+									"elapsedTiming": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.elapsedTiming.markdownDescription%",
+										"default": false
+									},
+									"threadExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+										"default": false
+									},
+									"processExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+										"default": true
+									}
+								}
+							},
+							"pipeTransport": {
+								"description": "%generateOptionsSchema.pipeTransport.description%",
+								"type": "object",
+								"required": [
+									"debuggerPath"
+								],
+								"default": {
+									"pipeCwd": "${workspaceFolder}",
+									"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+									"pipeArgs": [],
+									"debuggerPath": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+								},
+								"properties": {
+									"pipeCwd": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeCwd.description%",
+										"default": "${workspaceFolder}"
+									},
+									"pipeProgram": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeProgram.description%",
+										"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+									},
+									"pipeArgs": {
+										"anyOf": [
+											{
+												"type": "array",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.0.description%",
+												"items": {
+													"type": "string"
+												},
+												"default": []
+											},
+											{
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.1.description%",
+												"default": ""
+											}
+										],
+										"default": []
+									},
+									"debuggerPath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.debuggerPath.description%",
+										"default": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+									},
+									"pipeEnv": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.pipeTransport.pipeEnv.description%",
+										"default": {}
+									},
+									"quoteArgs": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.pipeTransport.quoteArgs.description%",
+										"default": true
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.pipeTransport.windows.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example 'c:\\tools\\plink.exe'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.windows.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.pipeTransport.osx.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.osx.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.pipeTransport.linux.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.linux.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									}
+								}
+							},
+							"suppressJITOptimizations": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+								"default": false
+							},
+							"symbolOptions": {
+								"description": "%generateOptionsSchema.symbolOptions.description%",
+								"default": {
+									"searchPaths": [],
+									"searchMicrosoftSymbolServer": false,
+									"searchNuGetOrgSymbolServer": false
+								},
+								"type": "object",
+								"properties": {
+									"searchPaths": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+										"default": []
+									},
+									"searchMicrosoftSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+										"default": false
+									},
+									"searchNuGetOrgSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+										"default": false
+									},
+									"cachePath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+										"default": ""
+									},
+									"moduleFilter": {
+										"description": "%generateOptionsSchema.symbolOptions.moduleFilter.description%",
+										"default": {
+											"mode": "loadAllButExcluded",
+											"excludedModules": []
+										},
+										"type": "object",
+										"required": [
+											"mode"
+										],
+										"properties": {
+											"mode": {
+												"type": "string",
+												"enum": [
+													"loadAllButExcluded",
+													"loadOnlyIncluded"
+												],
+												"enumDescriptions": [
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+												],
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+												"default": "loadAllButExcluded"
+											},
+											"excludedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+												"default": []
+											},
+											"includedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+												"default": []
+											},
+											"includeSymbolsNextToModules": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+												"default": true
+											}
+										}
+									}
+								}
+							},
+							"sourceLinkOptions": {
+								"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.markdownDescription%",
+								"default": {
+									"*": {
+										"enabled": true
+									}
+								},
+								"type": "object",
+								"additionalItems": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"title": "boolean",
+											"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.additionalItems.enabled.markdownDescription%",
+											"default": "true"
+										}
+									}
+								}
+							},
+							"allowFastEvaluate": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+								"default": true
+							},
+							"targetOutputLogPath": {
+								"type": "string",
+								"description": "%generateOptionsSchema.targetOutputLogPath.description%",
+								"default": ""
+							},
+							"targetArchitecture": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.targetArchitecture.markdownDescription%",
+								"enum": [
+									"x86_64",
+									"arm64"
+								]
+							},
+							"checkForDevCert": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.checkForDevCert.description%",
+								"default": true
+							}
+						}
+					},
+					"attach": {
+						"type": "object",
+						"required": [],
+						"properties": {
+							"processName": {
+								"type": "string",
+								"default": "",
+								"markdownDescription": "%generateOptionsSchema.processName.markdownDescription%"
+							},
+							"processId": {
+								"anyOf": [
+									{
+										"type": "string",
+										"markdownDescription": "%generateOptionsSchema.processId.0.markdownDescription%",
+										"default": ""
+									},
+									{
+										"type": "integer",
+										"markdownDescription": "%generateOptionsSchema.processId.1.markdownDescription%",
+										"default": 0
+									}
+								]
+							},
+							"sourceFileMap": {
+								"type": "object",
+								"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+								"additionalProperties": {
+									"type": "string"
+								}
+							},
+							"justMyCode": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+								"default": true
+							},
+							"requireExactSource": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+								"default": true
+							},
+							"enableStepFiltering": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+								"default": true
+							},
+							"logging": {
+								"description": "%generateOptionsSchema.logging.description%",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"exceptions": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+										"default": true
+									},
+									"moduleLoad": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+										"default": true
+									},
+									"programOutput": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+										"default": true
+									},
+									"engineLogging": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.engineLogging.markdownDescription%",
+										"default": false
+									},
+									"browserStdOut": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.browserStdOut.markdownDescription%",
+										"default": true
+									},
+									"elapsedTiming": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.elapsedTiming.markdownDescription%",
+										"default": false
+									},
+									"threadExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+										"default": false
+									},
+									"processExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+										"default": true
+									}
+								}
+							},
+							"pipeTransport": {
+								"description": "%generateOptionsSchema.pipeTransport.description%",
+								"type": "object",
+								"required": [
+									"debuggerPath"
+								],
+								"default": {
+									"pipeCwd": "${workspaceFolder}",
+									"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+									"pipeArgs": [],
+									"debuggerPath": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+								},
+								"properties": {
+									"pipeCwd": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeCwd.description%",
+										"default": "${workspaceFolder}"
+									},
+									"pipeProgram": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeProgram.description%",
+										"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+									},
+									"pipeArgs": {
+										"anyOf": [
+											{
+												"type": "array",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.0.description%",
+												"items": {
+													"type": "string"
+												},
+												"default": []
+											},
+											{
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.1.description%",
+												"default": ""
+											}
+										],
+										"default": []
+									},
+									"debuggerPath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.debuggerPath.description%",
+										"default": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+									},
+									"pipeEnv": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.pipeTransport.pipeEnv.description%",
+										"default": {}
+									},
+									"quoteArgs": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.pipeTransport.quoteArgs.description%",
+										"default": true
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.pipeTransport.windows.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example 'c:\\tools\\plink.exe'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.windows.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.pipeTransport.osx.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.osx.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.pipeTransport.linux.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.linux.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									}
+								}
+							},
+							"suppressJITOptimizations": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+								"default": false
+							},
+							"symbolOptions": {
+								"description": "%generateOptionsSchema.symbolOptions.description%",
+								"default": {
+									"searchPaths": [],
+									"searchMicrosoftSymbolServer": false,
+									"searchNuGetOrgSymbolServer": false
+								},
+								"type": "object",
+								"properties": {
+									"searchPaths": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+										"default": []
+									},
+									"searchMicrosoftSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+										"default": false
+									},
+									"searchNuGetOrgSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+										"default": false
+									},
+									"cachePath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+										"default": ""
+									},
+									"moduleFilter": {
+										"description": "%generateOptionsSchema.symbolOptions.moduleFilter.description%",
+										"default": {
+											"mode": "loadAllButExcluded",
+											"excludedModules": []
+										},
+										"type": "object",
+										"required": [
+											"mode"
+										],
+										"properties": {
+											"mode": {
+												"type": "string",
+												"enum": [
+													"loadAllButExcluded",
+													"loadOnlyIncluded"
+												],
+												"enumDescriptions": [
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+												],
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+												"default": "loadAllButExcluded"
+											},
+											"excludedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+												"default": []
+											},
+											"includedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+												"default": []
+											},
+											"includeSymbolsNextToModules": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+												"default": true
+											}
+										}
+									}
+								}
+							},
+							"sourceLinkOptions": {
+								"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.markdownDescription%",
+								"default": {
+									"*": {
+										"enabled": true
+									}
+								},
+								"type": "object",
+								"additionalItems": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"title": "boolean",
+											"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.additionalItems.enabled.markdownDescription%",
+											"default": "true"
+										}
+									}
+								}
+							},
+							"allowFastEvaluate": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+								"default": true
+							},
+							"targetArchitecture": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.targetArchitecture.markdownDescription%",
+								"enum": [
+									"x86_64",
+									"arm64"
+								]
+							}
+						}
+					}
+				},
+				"configurationSnippets": [
+					{
+						"label": ".NET: Launch .NET Core Console App",
+						"description": "Launch a .NET Core Console App with a debugger.",
+						"body": {
+							"name": ".NET Core Launch (console)",
+							"type": "coreclr",
+							"request": "launch",
+							"preLaunchTask": "build",
+							"program": "^\"\\${workspaceFolder}/bin/Debug/${1:<target-framework>}/${2:<project-name.dll>}\"",
+							"args": [],
+							"cwd": "^\"\\${workspaceFolder}\"",
+							"stopAtEntry": false,
+							"console": "internalConsole"
+						}
+					},
+					{
+						"label": ".NET: Attach to local .NET Core Console App",
+						"description": "Attach a debugger to a .NET Core Console App.",
+						"body": {
+							"name": ".NET Core Attach",
+							"type": "coreclr",
+							"request": "attach"
+						}
+					},
+					{
+						"label": ".NET: Launch a local .NET Core Web App",
+						"description": "Launch a .NET Core Web App with both a browser and a debugger.",
+						"body": {
+							"name": ".NET Core Launch (web)",
+							"type": "coreclr",
+							"request": "launch",
+							"preLaunchTask": "build",
+							"program": "^\"\\${workspaceFolder}/bin/Debug/${1:<target-framework>}/${2:<project-name.dll>}\"",
+							"args": [],
+							"cwd": "^\"\\${workspaceFolder}\"",
+							"stopAtEntry": false,
+							"serverReadyAction": {
+								"action": "openExternally",
+								"pattern": "\\\\bNow listening on:\\\\s+(https?://\\\\S+)"
+							},
+							"env": {
+								"ASPNETCORE_ENVIRONMENT": "Development"
+							},
+							"sourceFileMap": {
+								"/Views": "^\"\\${workspaceFolder}/Views\""
+							}
+						}
+					},
+					{
+						"label": ".NET: Launch a remote .NET Core Console App",
+						"description": "Launch a .NET Core Console App on a remote machine.",
+						"body": {
+							"name": ".NET Core Launch (console)",
+							"type": "coreclr",
+							"request": "launch",
+							"preLaunchTask": "build",
+							"program": "^\"\\${workspaceFolder}/bin/Debug/${1:<target-framework>}/${2:<project-name.dll>}\"",
+							"args": [],
+							"cwd": "^\"\\${workspaceFolder}\"",
+							"stopAtEntry": false,
+							"console": "internalConsole",
+							"pipeTransport": {
+								"pipeCwd": "^\"\\${workspaceFolder}\"",
+								"pipeProgram": "^\"${3:enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'}\"",
+								"pipeArgs": [],
+								"debuggerPath": "^\"${4:enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg}\""
+							}
+						}
+					},
+					{
+						"label": ".NET: Attach to remote .NET Core Console App",
+						"description": "Attach a debugger to a .NET Core Console App on a remote machine.",
+						"body": {
+							"name": ".NET Core Attach",
+							"type": "coreclr",
+							"request": "attach",
+							"pipeTransport": {
+								"pipeCwd": "^\"\\${workspaceFolder}\"",
+								"pipeProgram": "^\"${1:enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'}\"",
+								"pipeArgs": [],
+								"debuggerPath": "^\"${2:enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg}\""
+							}
+						}
+					},
+					{
+						"label": ".NET: Launch and Debug Hosted Blazor WebAssembly App",
+						"description": "Launches a Hosted Blazor WebAssembly App with a debugger",
+						"body": {
+							"name": "Launch and Debug Hosted Blazor WebAssembly App",
+							"type": "blazorwasm",
+							"request": "launch",
+							"hosted": true,
+							"program": "^\"\\${workspaceFolder}/bin/Debug/${1:<target-framework>}/${2:<project-name.dll>}\"",
+							"cwd": "^\"\\${workspaceFolder}\""
+						}
+					},
+					{
+						"label": ".NET: Launch and Debug Standalone Blazor WebAssembly App",
+						"description": "Launches Standalone Blazor WebAssembly App with a debugger",
+						"body": {
+							"name": "Launch and Debug Standalone Blazor WebAssembly App",
+							"type": "blazorwasm",
+							"request": "launch",
+							"cwd": "^\"\\${workspaceFolder}\""
+						}
+					}
+				]
+			},
+			{
+				"type": "clr",
+				"when": "workspacePlatform == windows",
+				"label": ".NET Framework 4.x",
+				"languages": [
+					"csharp",
+					"razor",
+					"qsharp",
+					"aspnetcorerazor"
+				],
+				"variables": {
+					"pickProcess": "csharp.listProcess",
+					"pickRemoteProcess": "csharp.listRemoteProcess",
+					"pickRemoteDockerProcess": "csharp.listRemoteDockerProcess"
+				},
+				"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+				"configurationAttributes": {
+					"launch": {
+						"type": "object",
+						"required": [
+							"program"
+						],
+						"properties": {
+							"program": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.program.markdownDescription%",
+								"default": "${workspaceFolder}/bin/Debug/<insert-target-framework-here>/<insert-project-name-here>.dll"
+							},
+							"cwd": {
+								"type": "string",
+								"description": "%generateOptionsSchema.cwd.description%",
+								"default": "${workspaceFolder}"
+							},
+							"args": {
+								"anyOf": [
+									{
+										"type": "array",
+										"description": "%generateOptionsSchema.args.0.description%",
+										"items": {
+											"type": "string"
+										},
+										"default": []
+									},
+									{
+										"type": "string",
+										"description": "%generateOptionsSchema.args.1.description%",
+										"default": ""
+									}
+								]
+							},
+							"stopAtEntry": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.stopAtEntry.markdownDescription%",
+								"default": false
+							},
+							"launchBrowser": {
+								"description": "%generateOptionsSchema.launchBrowser.description%",
+								"default": {
+									"enabled": true
+								},
+								"type": "object",
+								"required": [
+									"enabled"
+								],
+								"properties": {
+									"enabled": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.launchBrowser.enabled.description%",
+										"default": true
+									},
+									"args": {
+										"type": "string",
+										"description": "%generateOptionsSchema.launchBrowser.args.description%",
+										"default": "${auto-detect-url}"
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.launchBrowser.osx.description%",
+										"default": {
+											"command": "open",
+											"args": "${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.osx.command.description%",
+												"default": "open"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.osx.args.description%",
+												"default": "${auto-detect-url}"
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.launchBrowser.linux.description%",
+										"default": {
+											"command": "xdg-open",
+											"args": "${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.linux.command.description%",
+												"default": "xdg-open"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.linux.args.description%",
+												"default": "${auto-detect-url}"
+											}
+										}
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.launchBrowser.windows.description%",
+										"default": {
+											"command": "cmd.exe",
+											"args": "/C start ${auto-detect-url}"
+										},
+										"type": "object",
+										"required": [
+											"command"
+										],
+										"properties": {
+											"command": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.windows.command.description%",
+												"default": "cmd.exe"
+											},
+											"args": {
+												"type": "string",
+												"description": "%generateOptionsSchema.launchBrowser.windows.args.description%",
+												"default": "/C start ${auto-detect-url}"
+											}
+										}
+									}
+								}
+							},
+							"env": {
+								"type": "object",
+								"additionalProperties": {
+									"type": "string"
+								},
+								"description": "%generateOptionsSchema.env.description%",
+								"default": {}
+							},
+							"envFile": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.envFile.markdownDescription%",
+								"default": "${workspaceFolder}/.env"
+							},
+							"console": {
+								"type": "string",
+								"enum": [
+									"internalConsole",
+									"integratedTerminal",
+									"externalTerminal"
+								],
+								"enumDescriptions": [
+									"%generateOptionsSchema.console.internalConsole.enumDescription%",
+									"%generateOptionsSchema.console.integratedTerminal.enumDescription%",
+									"%generateOptionsSchema.console.externalTerminal.enumDescription%"
+								],
+								"markdownDescription": "%generateOptionsSchema.console.markdownDescription%",
+								"settingsDescription": "%generateOptionsSchema.console.settingsDescription%",
+								"default": "internalConsole"
+							},
+							"externalConsole": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.externalConsole.markdownDescription%",
+								"default": false
+							},
+							"launchSettingsFilePath": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.launchSettingsFilePath.markdownDescription%",
+								"default": "${workspaceFolder}/Properties/launchSettings.json"
+							},
+							"launchSettingsProfile": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								],
+								"description": "%generateOptionsSchema.launchSettingsProfile.description%",
+								"default": "<insert-profile-name>"
+							},
+							"sourceFileMap": {
+								"type": "object",
+								"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+								"additionalProperties": {
+									"type": "string"
+								},
+								"default": {}
+							},
+							"justMyCode": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+								"default": true
+							},
+							"requireExactSource": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+								"default": true
+							},
+							"enableStepFiltering": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+								"default": true
+							},
+							"logging": {
+								"description": "%generateOptionsSchema.logging.description%",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"exceptions": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+										"default": true
+									},
+									"moduleLoad": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+										"default": true
+									},
+									"programOutput": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+										"default": true
+									},
+									"engineLogging": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.engineLogging.markdownDescription%",
+										"default": false
+									},
+									"browserStdOut": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.browserStdOut.markdownDescription%",
+										"default": true
+									},
+									"elapsedTiming": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.elapsedTiming.markdownDescription%",
+										"default": false
+									},
+									"threadExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+										"default": false
+									},
+									"processExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+										"default": true
+									}
+								}
+							},
+							"pipeTransport": {
+								"description": "%generateOptionsSchema.pipeTransport.description%",
+								"type": "object",
+								"required": [
+									"debuggerPath"
+								],
+								"default": {
+									"pipeCwd": "${workspaceFolder}",
+									"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+									"pipeArgs": [],
+									"debuggerPath": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+								},
+								"properties": {
+									"pipeCwd": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeCwd.description%",
+										"default": "${workspaceFolder}"
+									},
+									"pipeProgram": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeProgram.description%",
+										"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+									},
+									"pipeArgs": {
+										"anyOf": [
+											{
+												"type": "array",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.0.description%",
+												"items": {
+													"type": "string"
+												},
+												"default": []
+											},
+											{
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.1.description%",
+												"default": ""
+											}
+										],
+										"default": []
+									},
+									"debuggerPath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.debuggerPath.description%",
+										"default": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+									},
+									"pipeEnv": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.pipeTransport.pipeEnv.description%",
+										"default": {}
+									},
+									"quoteArgs": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.pipeTransport.quoteArgs.description%",
+										"default": true
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.pipeTransport.windows.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example 'c:\\tools\\plink.exe'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.windows.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.pipeTransport.osx.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.osx.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.pipeTransport.linux.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.linux.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									}
+								}
+							},
+							"suppressJITOptimizations": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+								"default": false
+							},
+							"symbolOptions": {
+								"description": "%generateOptionsSchema.symbolOptions.description%",
+								"default": {
+									"searchPaths": [],
+									"searchMicrosoftSymbolServer": false,
+									"searchNuGetOrgSymbolServer": false
+								},
+								"type": "object",
+								"properties": {
+									"searchPaths": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+										"default": []
+									},
+									"searchMicrosoftSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+										"default": false
+									},
+									"searchNuGetOrgSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+										"default": false
+									},
+									"cachePath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+										"default": ""
+									},
+									"moduleFilter": {
+										"description": "%generateOptionsSchema.symbolOptions.moduleFilter.description%",
+										"default": {
+											"mode": "loadAllButExcluded",
+											"excludedModules": []
+										},
+										"type": "object",
+										"required": [
+											"mode"
+										],
+										"properties": {
+											"mode": {
+												"type": "string",
+												"enum": [
+													"loadAllButExcluded",
+													"loadOnlyIncluded"
+												],
+												"enumDescriptions": [
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+												],
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+												"default": "loadAllButExcluded"
+											},
+											"excludedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+												"default": []
+											},
+											"includedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+												"default": []
+											},
+											"includeSymbolsNextToModules": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+												"default": true
+											}
+										}
+									}
+								}
+							},
+							"sourceLinkOptions": {
+								"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.markdownDescription%",
+								"default": {
+									"*": {
+										"enabled": true
+									}
+								},
+								"type": "object",
+								"additionalItems": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"title": "boolean",
+											"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.additionalItems.enabled.markdownDescription%",
+											"default": "true"
+										}
+									}
+								}
+							},
+							"allowFastEvaluate": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+								"default": true
+							},
+							"targetOutputLogPath": {
+								"type": "string",
+								"description": "%generateOptionsSchema.targetOutputLogPath.description%",
+								"default": ""
+							},
+							"targetArchitecture": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.targetArchitecture.markdownDescription%",
+								"enum": [
+									"x86_64",
+									"arm64"
+								]
+							},
+							"checkForDevCert": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.checkForDevCert.description%",
+								"default": true
+							}
+						}
+					},
+					"attach": {
+						"type": "object",
+						"required": [],
+						"properties": {
+							"processName": {
+								"type": "string",
+								"default": "",
+								"markdownDescription": "%generateOptionsSchema.processName.markdownDescription%"
+							},
+							"processId": {
+								"anyOf": [
+									{
+										"type": "string",
+										"markdownDescription": "%generateOptionsSchema.processId.0.markdownDescription%",
+										"default": ""
+									},
+									{
+										"type": "integer",
+										"markdownDescription": "%generateOptionsSchema.processId.1.markdownDescription%",
+										"default": 0
+									}
+								]
+							},
+							"sourceFileMap": {
+								"type": "object",
+								"markdownDescription": "%generateOptionsSchema.sourceFileMap.markdownDescription%",
+								"additionalProperties": {
+									"type": "string"
+								}
+							},
+							"justMyCode": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.justMyCode.markdownDescription%",
+								"default": true
+							},
+							"requireExactSource": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.requireExactSource.markdownDescription%",
+								"default": true
+							},
+							"enableStepFiltering": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.enableStepFiltering.markdownDescription%",
+								"default": true
+							},
+							"logging": {
+								"description": "%generateOptionsSchema.logging.description%",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"exceptions": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.exceptions.markdownDescription%",
+										"default": true
+									},
+									"moduleLoad": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.moduleLoad.markdownDescription%",
+										"default": true
+									},
+									"programOutput": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.programOutput.markdownDescription%",
+										"default": true
+									},
+									"engineLogging": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.engineLogging.markdownDescription%",
+										"default": false
+									},
+									"browserStdOut": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.browserStdOut.markdownDescription%",
+										"default": true
+									},
+									"elapsedTiming": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.elapsedTiming.markdownDescription%",
+										"default": false
+									},
+									"threadExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.threadExit.markdownDescription%",
+										"default": false
+									},
+									"processExit": {
+										"type": "boolean",
+										"markdownDescription": "%generateOptionsSchema.logging.processExit.markdownDescription%",
+										"default": true
+									}
+								}
+							},
+							"pipeTransport": {
+								"description": "%generateOptionsSchema.pipeTransport.description%",
+								"type": "object",
+								"required": [
+									"debuggerPath"
+								],
+								"default": {
+									"pipeCwd": "${workspaceFolder}",
+									"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+									"pipeArgs": [],
+									"debuggerPath": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+								},
+								"properties": {
+									"pipeCwd": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeCwd.description%",
+										"default": "${workspaceFolder}"
+									},
+									"pipeProgram": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.pipeProgram.description%",
+										"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+									},
+									"pipeArgs": {
+										"anyOf": [
+											{
+												"type": "array",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.0.description%",
+												"items": {
+													"type": "string"
+												},
+												"default": []
+											},
+											{
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.pipeArgs.1.description%",
+												"default": ""
+											}
+										],
+										"default": []
+									},
+									"debuggerPath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.pipeTransport.debuggerPath.description%",
+										"default": "enter the path for the debugger on the target machine, for example ~/vsdbg/vsdbg"
+									},
+									"pipeEnv": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.pipeTransport.pipeEnv.description%",
+										"default": {}
+									},
+									"quoteArgs": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.pipeTransport.quoteArgs.description%",
+										"default": true
+									},
+									"windows": {
+										"description": "%generateOptionsSchema.pipeTransport.windows.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example 'c:\\tools\\plink.exe'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.windows.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.windows.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.windows.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"osx": {
+										"description": "%generateOptionsSchema.pipeTransport.osx.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.osx.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.osx.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.osx.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									},
+									"linux": {
+										"description": "%generateOptionsSchema.pipeTransport.linux.description%",
+										"default": {
+											"pipeCwd": "${workspaceFolder}",
+											"pipeProgram": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'",
+											"pipeArgs": []
+										},
+										"type": "object",
+										"properties": {
+											"pipeCwd": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeCwd.description%",
+												"default": "${workspaceFolder}"
+											},
+											"pipeProgram": {
+												"type": "string",
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeProgram.description%",
+												"default": "enter the fully qualified path for the pipe program name, for example '/usr/bin/ssh'"
+											},
+											"pipeArgs": {
+												"anyOf": [
+													{
+														"type": "array",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.0.description%",
+														"items": {
+															"type": "string"
+														},
+														"default": []
+													},
+													{
+														"type": "string",
+														"description": "%generateOptionsSchema.pipeTransport.linux.pipeArgs.1.description%",
+														"default": ""
+													}
+												],
+												"default": []
+											},
+											"quoteArgs": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.pipeTransport.linux.quoteArgs.description%",
+												"default": true
+											},
+											"pipeEnv": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.pipeTransport.linux.pipeEnv.description%",
+												"default": {}
+											}
+										}
+									}
+								}
+							},
+							"suppressJITOptimizations": {
+								"type": "boolean",
+								"markdownDescription": "%generateOptionsSchema.suppressJITOptimizations.markdownDescription%",
+								"default": false
+							},
+							"symbolOptions": {
+								"description": "%generateOptionsSchema.symbolOptions.description%",
+								"default": {
+									"searchPaths": [],
+									"searchMicrosoftSymbolServer": false,
+									"searchNuGetOrgSymbolServer": false
+								},
+								"type": "object",
+								"properties": {
+									"searchPaths": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "%generateOptionsSchema.symbolOptions.searchPaths.description%",
+										"default": []
+									},
+									"searchMicrosoftSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchMicrosoftSymbolServer.description%",
+										"default": false
+									},
+									"searchNuGetOrgSymbolServer": {
+										"type": "boolean",
+										"description": "%generateOptionsSchema.symbolOptions.searchNuGetOrgSymbolServer.description%",
+										"default": false
+									},
+									"cachePath": {
+										"type": "string",
+										"description": "%generateOptionsSchema.symbolOptions.cachePath.description%",
+										"default": ""
+									},
+									"moduleFilter": {
+										"description": "%generateOptionsSchema.symbolOptions.moduleFilter.description%",
+										"default": {
+											"mode": "loadAllButExcluded",
+											"excludedModules": []
+										},
+										"type": "object",
+										"required": [
+											"mode"
+										],
+										"properties": {
+											"mode": {
+												"type": "string",
+												"enum": [
+													"loadAllButExcluded",
+													"loadOnlyIncluded"
+												],
+												"enumDescriptions": [
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadAllButExcluded.enumDescription%",
+													"%generateOptionsSchema.symbolOptions.moduleFilter.mode.loadOnlyIncluded.enumDescription%"
+												],
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.mode.description%",
+												"default": "loadAllButExcluded"
+											},
+											"excludedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.excludedModules.description%",
+												"default": []
+											},
+											"includedModules": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												},
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includedModules.description%",
+												"default": []
+											},
+											"includeSymbolsNextToModules": {
+												"type": "boolean",
+												"description": "%generateOptionsSchema.symbolOptions.moduleFilter.includeSymbolsNextToModules.description%",
+												"default": true
+											}
+										}
+									}
+								}
+							},
+							"sourceLinkOptions": {
+								"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.markdownDescription%",
+								"default": {
+									"*": {
+										"enabled": true
+									}
+								},
+								"type": "object",
+								"additionalItems": {
+									"type": "object",
+									"properties": {
+										"enabled": {
+											"title": "boolean",
+											"markdownDescription": "%generateOptionsSchema.sourceLinkOptions.additionalItems.enabled.markdownDescription%",
+											"default": "true"
+										}
+									}
+								}
+							},
+							"allowFastEvaluate": {
+								"type": "boolean",
+								"description": "%generateOptionsSchema.allowFastEvaluate.description%",
+								"default": true
+							},
+							"targetArchitecture": {
+								"type": "string",
+								"markdownDescription": "%generateOptionsSchema.targetArchitecture.markdownDescription%",
+								"enum": [
+									"x86_64",
+									"arm64"
+								]
+							}
+						}
+					}
+				}
+			},
+			{
+				"type": "blazorwasm",
+				"label": "Blazor WebAssembly Debug",
+				"initialConfigurations": [
+					{
+						"type": "blazorwasm",
+						"name": "Launch and Debug Blazor WebAssembly Application",
+						"request": "launch"
+					}
+				],
+				"configurationAttributes": {
+					"launch": {
+						"properties": {
+							"cwd": {
+								"type": "string",
+								"description": "The directory of the Blazor WebAssembly app, defaults to the workspace folder.",
+								"default": "${workspaceFolder}"
+							},
+							"url": {
+								"type": "string",
+								"description": "The URL of the application",
+								"default": "https://localhost:5001"
+							},
+							"browser": {
+								"type": "string",
+								"description": "The debugging browser to launch (Edge or Chrome)",
+								"default": "edge",
+								"enum": [
+									"chrome",
+									"edge"
+								]
+							},
+							"trace": {
+								"type": [
+									"boolean",
+									"string"
+								],
+								"default": "true",
+								"enum": [
+									"verbose",
+									true
+								],
+								"description": "If true, verbose logs from JS debugger are sent to log file. If 'verbose', send logs to console."
+							},
+							"hosted": {
+								"type": "boolean",
+								"default": "false",
+								"description": "True if the app is a hosted Blazor WebAssembly app, false otherwise."
+							},
+							"webRoot": {
+								"type": "string",
+								"default": "${workspaceFolder}",
+								"description": "Specifies the absolute path to the webserver root."
+							},
+							"timeout": {
+								"type": "number",
+								"default": 30000,
+								"description": "Retry for this number of milliseconds to connect to browser."
+							},
+							"program": {
+								"type": "string",
+								"default": "${workspaceFolder}/Server/bin/Debug/<target-framework>/<target-dll>",
+								"description": "The path of the DLL to execute when launching a hosted server app"
+							},
+							"env": {
+								"type": "object",
+								"description": "Environment variables passed to dotnet. Only valid for hosted apps."
+							},
+							"dotNetConfig": {
+								"description": "Options passed to the underlying .NET debugger. For more info, see https://github.com/dotnet/vscode-csharp/blob/main/debugger.md.",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"justMyCode": {
+										"type": "boolean",
+										"description": "Optional flag to only show user code.",
+										"default": true
+									},
+									"logging": {
+										"description": "Optional flags to determine what types of messages should be logged to the output window. Applicable only for the app server of hosted Blazor WASM apps.",
+										"type": "object",
+										"required": [],
+										"default": {},
+										"properties": {
+											"exceptions": {
+												"type": "boolean",
+												"description": "Optional flag to determine whether exception messages should be logged to the output window.",
+												"default": true
+											},
+											"moduleLoad": {
+												"type": "boolean",
+												"description": "Optional flag to determine whether module load events should be logged to the output window.",
+												"default": true
+											},
+											"programOutput": {
+												"type": "boolean",
+												"description": "Optional flag to determine whether program output should be logged to the output window when not using an external console.",
+												"default": true
+											},
+											"engineLogging": {
+												"type": "boolean",
+												"description": "Optional flag to determine whether diagnostic engine logs should be logged to the output window.",
+												"default": false
+											},
+											"browserStdOut": {
+												"type": "boolean",
+												"description": "Optional flag to determine if stdout text from the launching the web browser should be logged to the output window.",
+												"default": true
+											},
+											"elapsedTiming": {
+												"type": "boolean",
+												"description": "If true, engine logging will include `adapterElapsedTime` and `engineElapsedTime` properties to indicate the amount of time, in microseconds, that a request took.",
+												"default": false
+											},
+											"threadExit": {
+												"type": "boolean",
+												"description": "Controls if a message is logged when a thread in the target process exits. Default: `false`.",
+												"default": false
+											},
+											"processExit": {
+												"type": "boolean",
+												"description": "Controls if a message is logged when the target process exits, or debugging is stopped. Default: `true`.",
+												"default": true
+											}
+										}
+									},
+									"sourceFileMap": {
+										"type": "object",
+										"description": "Optional source file mappings passed to the debug engine. Example: '{ \"C:\\foo\":\"/home/user/foo\" }'",
+										"additionalProperties": {
+											"type": "string"
+										},
+										"default": {
+											"<insert-source-path-here>": "<insert-target-path-here>"
+										}
+									}
+								}
+							},
+							"browserConfig": {
+								"description": "Options based to the underlying JavaScript debugger. For more info, see https://github.com/microsoft/vscode-js-debug/blob/master/OPTIONS.md.",
+								"type": "object",
+								"required": [],
+								"default": {},
+								"properties": {
+									"outputCapture": {
+										"enum": [
+											"console",
+											"std"
+										],
+										"description": "From where to capture output messages: the default debug API if set to `console`, or stdout/stderr streams if set to `std`.",
+										"default": "console"
+									}
+								}
+							}
+						}
+					},
+					"attach": {
+						"properties": {
+							"url": {
+								"type": "string",
+								"description": "The URL of the application",
+								"default": "https://localhost:5001"
+							},
+							"cwd": {
+								"type": "string",
+								"description": "The directory of the Blazor WebAssembly app, defaults to the workspace folder.",
+								"default": "${workspaceFolder}"
+							},
+							"browser": {
+								"type": "string",
+								"description": "The debugging browser to launch (Edge or Chrome)",
+								"default": "chrome",
+								"enum": [
+									"chrome",
+									"edge"
+								]
+							},
+							"trace": {
+								"type": [
+									"boolean",
+									"string"
+								],
+								"default": "true",
+								"enum": [
+									"verbose",
+									true
+								],
+								"description": "If true, verbose logs from JS debugger are sent to log file. If 'verbose', send logs to console."
+							},
+							"webRoot": {
+								"type": "string",
+								"default": "${workspaceFolder}",
+								"description": "Specifies the absolute path to the webserver root."
+							},
+							"timeout": {
+								"type": "number",
+								"default": 30000,
+								"description": "Retry for this number of milliseconds to connect to browser."
+							}
+						}
+					}
+				}
+			},
+			{
+				"type": "dotnet",
+				"label": "C#",
+				"languages": [
+					"csharp",
+					"razor",
+					"aspnetcorerazor"
+				],
+				"variables": {},
+				"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+				"configurationAttributes": {
+					"launch": {
+						"type": "object",
+						"required": [
+							"projectPath"
+						],
+						"properties": {
+							"projectPath": {
+								"type": "string",
+								"description": "%debuggers.dotnet.launch.projectPath.description%",
+								"default": "${workspaceFolder}/<insert-project-name-here>.csproj"
+							},
+							"launchConfigurationId": {
+								"type": "string",
+								"description": "%debuggers.dotnet.launch.launchConfigurationId.description%"
+							}
+						}
+					}
+				},
+				"configurationSnippets": []
+			}
+		],
+		"semanticTokenTypes": [
+			{
+				"id": "razorComponentElement",
+				"description": "A Razor component element"
+			},
+			{
+				"id": "razorComponentAttribute",
+				"description": "A Razor component attribute"
+			},
+			{
+				"id": "razorTagHelperElement",
+				"description": "A Razor TagHelper Element"
+			},
+			{
+				"id": "razorTagHelperAttribute",
+				"description": "A Razor TagHelper Attribute"
+			},
+			{
+				"id": "razorTransition",
+				"description": "A Razor transition"
+			},
+			{
+				"id": "razorDirectiveAttribute",
+				"description": "A Razor Directive Attribute"
+			},
+			{
+				"id": "razorDirectiveColon",
+				"description": "A colon between directive attribute parameters"
+			},
+			{
+				"id": "razorDirective",
+				"description": "A Razor directive such as 'code' or 'function'"
+			},
+			{
+				"id": "razorComment",
+				"description": "A Razor comment"
+			},
+			{
+				"id": "markupCommentPunctuation",
+				"description": "The '@' or '*' of a Razor comment."
+			},
+			{
+				"id": "markupTagDelimiter",
+				"description": "Markup delimiters like '<', '>', and '/'."
+			},
+			{
+				"id": "markupOperator",
+				"description": "Delimiter for Markup Attribute Key-Value pairs."
+			},
+			{
+				"id": "markupElement",
+				"description": "The name of a Markup element."
+			},
+			{
+				"id": "markupAttribute",
+				"description": "The name of a Markup attribute."
+			},
+			{
+				"id": "markupComment",
+				"description": "The contents of a Markup comment."
+			},
+			{
+				"id": "markupCommentPunctuation",
+				"description": "The begining or ending punctuation of a Markup comment."
+			},
+			{
+				"id": "excludedCode",
+				"description": "A token that represents inactive code."
+			},
+			{
+				"id": "controlKeyword",
+				"description": "A token that represents a control-flow keyword.",
+				"superType": "keyword"
+			},
+			{
+				"id": "operatorOverloaded",
+				"description": "A declaration or reference to an overloaded operator."
+			},
+			{
+				"id": "whitespace",
+				"description": "A token that represents whitespace."
+			},
+			{
+				"id": "text",
+				"description": "A token that represents text."
+			},
+			{
+				"id": "preprocessorText",
+				"description": "Text associated with a preprocessor directive."
+			},
+			{
+				"id": "punctuation",
+				"description": "A token that represents punctuation."
+			},
+			{
+				"id": "stringVerbatim",
+				"superType": "string",
+				"description": "A token that represents a verbatim string."
+			},
+			{
+				"id": "stringEscapeCharacter",
+				"superType": "string",
+				"description": "An escape character within a string."
+			},
+			{
+				"id": "recordClass",
+				"superType": "class",
+				"description": "A definition or reference to a record class type."
+			},
+			{
+				"id": "delegate",
+				"superType": "method",
+				"description": "A definition or reference to a delegate type."
+			},
+			{
+				"id": "module",
+				"superType": "namespace",
+				"description": "A definition or reference to a module name."
+			},
+			{
+				"id": "recordStruct",
+				"superType": "struct",
+				"description": "A definition or reference to a record struct type."
+			},
+			{
+				"id": "field",
+				"superType": "property",
+				"description": "A definition or reference to a field."
+			},
+			{
+				"id": "constant",
+				"superType": "variable",
+				"description": "A definition or reference to a constant."
+			},
+			{
+				"id": "extensionMethod",
+				"superType": "method",
+				"description": "A definition or reference to an extension method"
+			},
+			{
+				"id": "xmlDocCommentAttributeName",
+				"description": "A token that represents an attribute in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentAttributeQuotes",
+				"description": "A token that represents an attribute quote in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentAttributeValue",
+				"description": "A token that represents an attribute value in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentCDataSection",
+				"description": "A token that represents a CDATA section in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentComment",
+				"description": "A token that represents a comment in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentDelimiter",
+				"description": "A token that represents a delimeter in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentEntityReference",
+				"description": "A token that represents reference to an entity in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentName",
+				"description": "A token that represents a name in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentProcessingInstruction",
+				"description": "A token that represents a processing instruction in an XML documentation comment"
+			},
+			{
+				"id": "xmlDocCommentText",
+				"description": "A token that represents text in an XML documentation comment"
+			},
+			{
+				"id": "xmlLiteralAttributeName",
+				"description": "A token that represents an attribute name in an XML literal"
+			},
+			{
+				"id": "xmlLiteralAttributeQuotes",
+				"description": "A token that represents an attribute quote in an XML literal"
+			},
+			{
+				"id": "xmlLiteralAttributeValue",
+				"description": "A token that represents an attribute value in an XML literal"
+			},
+			{
+				"id": "xmlLiteralCDataSection",
+				"description": "A token that represents a CDATA section in an XML literal"
+			},
+			{
+				"id": "xmlLiteralComment",
+				"description": "A token that represents a comment in an XML literal"
+			},
+			{
+				"id": "xmlLiteralDelimiter",
+				"description": "A token that represents a delimiter in an XML literal"
+			},
+			{
+				"id": "xmlLiteralEmbeddedExpression",
+				"description": "A token that represents an emebedded expression in an XML literal"
+			},
+			{
+				"id": "xmlLiteralEntityReference",
+				"description": "A token that represents a reference to an entity in an XML literal"
+			},
+			{
+				"id": "xmlLiteralName",
+				"description": "A token that represents a name in an XML literal"
+			},
+			{
+				"id": "xmlLiteralProcessingInstruction",
+				"description": "A token that represents a processing instruction in an XML literal"
+			},
+			{
+				"id": "xmlLiteralText",
+				"description": "A token that represents text in an XML literal"
+			},
+			{
+				"id": "regexComment",
+				"description": "A token that represents a comment in a regex string"
+			},
+			{
+				"id": "regexCharacterClass",
+				"description": "A token that represents a character class in a regex string"
+			},
+			{
+				"id": "regexAnchor",
+				"description": "A token that represents an anchor in a regex string"
+			},
+			{
+				"id": "regexQuantifier",
+				"description": "A token that represents a quantifier in a regex string"
+			},
+			{
+				"id": "regexGrouping",
+				"description": "A token that represents a group in a regex string"
+			},
+			{
+				"id": "regexAlternation",
+				"description": "A token that represents an alternation in a regex string"
+			},
+			{
+				"id": "regexText",
+				"description": "A token that represents text in a regex string"
+			},
+			{
+				"id": "regexSelfEscapedCharacter",
+				"description": "A token that represents a self escaped character in a regex string"
+			},
+			{
+				"id": "regexOtherEscape",
+				"description": "A token that represents an escape in a regex string"
+			},
+			{
+				"id": "jsonComment",
+				"description": "A token that represents a comment in a JSON string"
+			},
+			{
+				"id": "jsonNumber",
+				"description": "A token that represents a number in a JSON string"
+			},
+			{
+				"id": "jsonString",
+				"description": "A token that represents a string in a JSON string"
+			},
+			{
+				"id": "jsonKeyword",
+				"description": "A token that represents a keyword in a JSON string"
+			},
+			{
+				"id": "jsonText",
+				"description": "A token that represents text in a JSON string"
+			},
+			{
+				"id": "jsonOperator",
+				"description": "A token that represents an operator in a JSON string"
+			},
+			{
+				"id": "jsonPunctuation",
+				"description": "A token that represents punctuation in a JSON string"
+			},
+			{
+				"id": "jsonArray",
+				"description": "A token that represents an array in a JSON string"
+			},
+			{
+				"id": "jsonObject",
+				"description": "A token that represents an object in a JSON string"
+			},
+			{
+				"id": "jsonPropertyName",
+				"description": "A token that represents a property name in a JSON string"
+			},
+			{
+				"id": "jsonConstructorName",
+				"description": "A token that represents a constructor in a JSON string"
+			}
+		],
+		"semanticTokenModifiers": [],
+		"semanticTokenScopes": [
+			{
+				"language": "aspnetcorerazor",
+				"scopes": {
+					"razorComponentElement": [
+						"entity.name.class.element.component"
+					],
+					"razorComponentAttribute": [
+						"entity.name.class.attribute.component"
+					],
+					"razorTagHelperElement": [
+						"entity.name.class.element.taghelper"
+					],
+					"razorTagHelperAttribute": [
+						"entity.name.class.attribute.taghelper"
+					],
+					"razorTransition": [
+						"keyword.control.razor.transition"
+					],
+					"razorDirectiveAttribute": [
+						"keyword.control.razor.directive.attribute",
+						"keyword.control.cshtml.directive.attribute"
+					],
+					"razorDirectiveColon": [
+						"keyword.control.razor.directive.colon",
+						"keyword.control.cshtml.directive.colon"
+					],
+					"razorDirective": [
+						"keyword.control.razor.directive",
+						"keyword.control.cshtml.directive"
+					],
+					"razorComment": [
+						"comment.block.razor"
+					],
+					"razorCommentTransition": [
+						"meta.comment.razor",
+						"keyword.control.cshtml.transition"
+					],
+					"razorCommentStar": [
+						"keyword.control.razor.comment.star",
+						"meta.comment.razor"
+					],
+					"angleBracket": [
+						"punctuation.definition.tag"
+					],
+					"forwardSlash": [
+						"punctuation.definition.tag"
+					],
+					"equals": [
+						"punctuation.separator.key-value.html"
+					],
+					"markupElement": [
+						"entity.name.tag.html"
+					],
+					"markupAttribute": [
+						"entity.other.attribute-name.html"
+					],
+					"markupComment": [
+						"comment.block.html"
+					],
+					"markupCommentPunctuation": [
+						"punctuation.definition.comment.html",
+						"comment.block.html"
+					]
+				}
+			},
+			{
+				"language": "csharp",
+				"scopes": {
+					"typeParameter": [
+						"entity.name.type.type-parameter"
+					],
+					"keyword": [
+						"keyword.cs"
+					],
+					"excludedCode": [
+						"support.other.excluded.cs"
+					],
+					"controlKeyword": [
+						"keyword.control.cs"
+					],
+					"operatorOverloaded": [
+						"entity.name.function.member.overload.cs"
+					],
+					"preprocessorText": [
+						"meta.preprocessor.string.cs"
+					],
+					"punctuation": [
+						"punctuation.cs"
+					],
+					"stringVerbatim": [
+						"string.verbatim.cs"
+					],
+					"stringEscapeCharacter": [
+						"constant.character.escape.cs"
+					],
+					"delegate": [
+						"entity.name.type.delegate.cs"
+					],
+					"module": [
+						"entity.name.type.module.cs"
+					],
+					"field": [
+						"entity.name.variable.field.cs"
+					],
+					"constant": [
+						"variable.other.constant"
+					],
+					"extensionMethod": [
+						"entity.name.function.extension.cs"
+					],
+					"xmlDocCommentAttributeName": [
+						"comment.documentation.attribute.name.cs"
+					],
+					"xmlDocCommentAttributeQuotes": [
+						"comment.documentation.attribute.quotes.cs"
+					],
+					"xmlDocCommentAttributeValue": [
+						"comment.documentation.attribute.value.cs"
+					],
+					"xmlDocCommentCDataSection": [
+						"comment.documentation.cdata.cs"
+					],
+					"xmlDocCommentComment": [
+						"comment.documentation.comment.cs"
+					],
+					"xmlDocCommentDelimiter": [
+						"comment.documentation.delimiter.cs"
+					],
+					"xmlDocCommentEntityReference": [
+						"comment.documentation.entityReference.cs"
+					],
+					"xmlDocCommentName": [
+						"comment.documentation.name.cs"
+					],
+					"xmlDocCommentProcessingInstruction": [
+						"comment.documentation.processingInstruction.cs"
+					],
+					"xmlDocCommentText": [
+						"comment.documentation.cs"
+					],
+					"xmlLiteralAttributeName": [
+						"entity.other.attribute-name.localname.xml"
+					],
+					"xmlLiteralAttributeQuotes": [
+						"string.quoted.double.xml"
+					],
+					"xmlLiteralAttributeValue": [
+						"meta.tag.xml"
+					],
+					"xmlLiteralCDataSection": [
+						"string.quoted.double.xml"
+					],
+					"xmlLiteralComment": [
+						"comment.block.xml"
+					],
+					"xmlLiteralDelimiter": [
+						"text.xml"
+					],
+					"xmlLiteralEmbeddedExpression": [
+						"meta.tag.xml"
+					],
+					"xmlLiteralEntityReference": [
+						"meta.tag.xml"
+					],
+					"xmlLiteralName": [
+						"entity.name.tag.localname.xml"
+					],
+					"xmlLiteralProcessingInstruction": [
+						"meta.tag.xml"
+					],
+					"xmlLiteralText": [
+						"text.xml"
+					],
+					"regexComment": [
+						"string.regexp.comment.cs"
+					],
+					"regexCharacterClass": [
+						"constant.character.character-class.regexp.cs"
+					],
+					"regexAnchor": [
+						"keyword.control.anchor.regexp.cs"
+					],
+					"regexQuantifier": [
+						"keyword.operator.quantifier.regexp.cs"
+					],
+					"regexGrouping": [
+						"punctuation.definition.group.regexp.cs"
+					],
+					"regexAlternation": [
+						"keyword.operator.or.regexp.cs"
+					],
+					"regexText": [
+						"string.regexp"
+					],
+					"regexSelfEscapedCharacter": [
+						"string.regexp.self-escaped-character.cs"
+					],
+					"regexOtherEscape": [
+						"string.regexp.other-escape.cs"
+					],
+					"jsonComment": [
+						"comment.line.double-slash.js"
+					],
+					"jsonNumber": [
+						"constant.numeric.json"
+					],
+					"jsonString": [
+						"string.quoted.double.json"
+					],
+					"jsonKeyword": [
+						"constant.language.json"
+					],
+					"jsonText": [
+						"string.quoted.double.json"
+					],
+					"jsonOperator": [
+						"string.quoted.double.json"
+					],
+					"jsonPunctuation": [
+						"punctuation.separator.dictionary.key-value.json"
+					],
+					"jsonArray": [
+						"punctuation.definition.array.begin.json"
+					],
+					"jsonObject": [
+						"punctuation.definition.dictionary.begin.json"
+					],
+					"jsonPropertyName": [
+						"support.type.property-name.json"
+					],
+					"jsonConstructorName": [
+						"support.type.property-name.json"
+					]
+				}
+			}
+		],
+		"languages": [
+			{
+				"id": "aspnetcorerazor",
+				"extensions": [
+					".cshtml",
+					".razor"
+				],
+				"mimetypes": [
+					"text/x-cshtml"
+				],
+				"configuration": "./src/razor/language-configuration.json",
+				"aliases": [
+					"ASP.NET Razor"
+				]
+			}
+		],
+		"grammars": [
+			{
+				"language": "aspnetcorerazor",
+				"scopeName": "text.aspnetcorerazor",
+				"path": "./src/razor/syntaxes/aspnetcorerazor.tmLanguage.json"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "dotnet.test.runTestsInContext",
+					"when": "editorLangId == csharp && dotnet.server.activatedStandalone"
+				},
+				{
+					"command": "dotnet.test.debugTestsInContext",
+					"when": "editorLangId == csharp && dotnet.server.activatedStandalone"
+				},
+				{
+					"command": "o.restart",
+					"when": "config.dotnet.server.useOmnisharp"
+				},
+				{
+					"command": "csharp.listProcess",
+					"when": "false"
+				},
+				{
+					"command": "csharp.listRemoteProcess",
+					"when": "false"
+				},
+				{
+					"command": "csharp.listRemoteDockerProcess",
+					"when": "false"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "extension.showRazorCSharpWindow",
+					"when": "resourceLangId == aspnetcorerazor"
+				},
+				{
+					"command": "extension.showRazorHtmlWindow",
+					"when": "resourceLangId == aspnetcorerazor"
+				},
+				{
+					"command": "razor.reportIssue",
+					"when": "resourceLangId == aspnetcorerazor"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "dotnet.test.runTestsInContext",
+					"when": "editorLangId == csharp && dotnet.server.activatedStandalone",
+					"group": "2_dotnet@1"
+				},
+				{
+					"command": "dotnet.test.debugTestsInContext",
+					"when": "editorLangId == csharp && dotnet.server.activatedStandalone",
+					"group": "2_dotnet@2"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "debug",
+				"contents": "%viewsWelcome.debug.contents%",
+				"when": "debugStartLanguage == csharp && !dotnet.debug.serviceBrokerAvailable"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "d0bfc4ab-1d3a-4487-8782-7cf6027b4fff",
+		"publisherId": "d05e23de-3974-4ff0-8d47-23ee77830092",
+		"publisherDisplayName": "Microsoft",
+		"targetPlatform": "win32-x64",
+		"isApplicationScoped": false,
+		"updated": true,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1724205925323,
+		"pinned": true,
+		"preRelease": false,
+		"source": "gallery"
+	}
+}

@@ -15,3 +15,9 @@ extensions/ms-toolsai.jupyter-2022.4.1021342353/pythonFiles/vscode_datascience_h
 extensions/ms-toolsai.jupyter-2022.4.1021342353/pythonFiles/vscode_datascience_helpers/daemon/__pycache__
 test
 extensions/ms-python.python-2022.8.1/pythonFiles/lib/python/debugpy
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/CPS/platforms/win32-x64/node_modules/@microsoft
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/roslyn-visualstudio-languageservices-devkit/node_modules/@microsoft
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/VSDebugCore/platforms/win32-x64/node_modules/@microsoft
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/vs-green-server/platforms/win32-x64/node_modules/@microsoft
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/VSUnitTesting/platforms/win32-x64/node_modules/@microsoft
+extensions/ms-dotnettools.csdevkit-1.7.27-win32-x64/components/WebTools/node_modules/@microsoft
