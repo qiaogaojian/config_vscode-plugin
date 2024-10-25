@@ -1,0 +1,34 @@
+{
+    "resources": [
+        {
+            "internal": true,
+            "title": "Isaac Sim (docs)",
+            "description": "Simulation platform for robotics and automation",
+            "url": "https://docs.omniverse.nvidia.com/isaacsim"
+        },
+        {
+            "internal": false,
+            "title": "Isaac Sim (forum)",
+            "description": "Discussions, news and information about the NVIDIA Isaac Sim",
+            "url": "https://forums.developer.nvidia.com/c/agx-autonomous-machines/isaac/simulation/69"
+        },
+        {
+            "internal": true,
+            "title": "Extensions API (homepage)",
+            "description": "Isaac Sim: Extensions API",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim"
+        },
+        {
+            "internal": true,
+            "title": "Core",
+            "description": "Isaac Sim core API [omni.isaac.core]",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.core/docs/index.html"
+        },
+        {
+            "internal": true,
+            "title": "SimulationApp",
+            "description": "This extension provides convenience functions when running in pure python mode",
+            "url": "https://docs.omniverse.nvidia.com/py/isaacsim/source/extensions/omni.isaac.kit/docs/index.html"
+        }
+    ]
+}

@@ -1,0 +1,87 @@
+{
+	"name": "platform-settings",
+	"displayName": "platform-settings",
+	"publisher": "runarsf",
+	"author": "runarsf",
+	"license": "ISC",
+	"description": "Platform-specific VSCode settings.",
+	"version": "1.0.0",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.refreshSettings",
+				"title": "Refresh platform settings."
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Platform Settings",
+			"properties": {
+				"platformSettings.platforms": {
+					"type": "object",
+					"title": "Platform definitions.",
+					"markdownDescription": "Define each platform. Supports operating system (`linux`, `win32`, `darwin`, `freebsd`, and `sunos`), computer `hostname`, and custom NodeJS condition if `platformSettings.condition` is specified. Each platform supports `nodes{}` and `remove[]`."
+				},
+				"platformSettings.autoLoad": {
+					"type": "boolean",
+					"title": "Automatically load platform settings.",
+					"markdownDescription": "Specifies whether platform-settings should be applied automatically on startup.",
+					"default": false
+				},
+				"platformSettings.placebo": {
+					"type": "string",
+					"title": "Used for testing."
+				},
+				"platformSettings.condition": {
+					"type": "string",
+					"title": "Custom condition.",
+					"markdownDescription": "Specify a custom NodeJS condition. For example `os.release()`."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"test": "node ./test/runTest.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/runarsf/platform-settings.git"
+	},
+	"bugs": {
+		"url": "https://github.com/runarsf/platform-settings/issues"
+	},
+	"homepage": "https://github.com/runarsf/platform-settings",
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.38.0",
+		"eslint": "^5.13.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"vscode-test": "^1.2.0"
+	},
+	"__metadata": {
+		"id": "0ef57579-c0cb-4d43-9d4f-c53c5590836f",
+		"publisherId": "107019cd-6582-4697-9c60-e5a9d0e6b5b1",
+		"publisherDisplayName": "runarsf",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1729825020603,
+		"pinned": true,
+		"source": "gallery"
+	}
+}

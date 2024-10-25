@@ -1,0 +1,22 @@
+{
+    "resources": [
+        {
+            "internal": true,
+            "title": "Isaac Lab (docs)",
+            "description": "Unified and modular framework for robot learning",
+            "url": "https://isaac-sim.github.io/IsaacLab"
+        },
+        {
+            "internal": false,
+            "title": "Isaac Lab (repo)",
+            "description": "Isaac Lab - GitHub repository",
+            "url": "https://github.com/isaac-sim/IsaacLab"
+        },
+        {
+            "internal": false,
+            "title": "Isaac Lab (Isaac Sim forum)",
+            "description": "Discussions, news and information about the NVIDIA Isaac Sim",
+            "url": "https://forums.developer.nvidia.com/c/agx-autonomous-machines/isaac/simulation/69"
+        }
+    ]
+}
